@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clip Player</title>
+</head>
+
+<body>
+    <h1 id="channelName">Undefinded</h1>
+    <h2 id="SOChannelName">Undefind</h2>
+    <div id="container">
+        <iframe id="refreshingIframe" src="" width='400' height='300' allowfullscreen frameborder="0">
+        </iframe>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        let channel = window.location.pathname.split('/')[2];
+        const socket = io(`/clip/${channel}`);
+
+        const channelNameDoc = document.getElementById('channelName');
+        channelNameDoc.innerText = channel;
+        const clipPlayer = document.getElementById('refreshingIframe');
+        const SOChannelName = document.getElementById('SOChannelName');
+        const container = document.getElementById('container');
+
+        const second = 1000;
+
+        socket.on('play-clip', (data) => {
+            const clipLink = data.clip;
+            let duration = Number(data.duration);
+
+            container.style.display = 'block';
+
+            SOChannelName.innerText = data.channel;
+            clipPlayer.src = `${clipLink}&parent=localhost&preload=auto&autoplay=true&muted=false`;
+
+            setTimeout(() => {
+                container.style.display = 'none';
+            }, (second * duration) + (second * 3));
+        })
+    </script>
+</body>
+
+</html>

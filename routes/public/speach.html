@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speach Chat </title>
+</head>
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        let channel = window.location.pathname.split('/')[2];
+        const socket = io(`/speach/${channel}`);
+
+        const synth = window.speechSynthesis;
+        let speach = new SpeechSynthesisUtterance();
+        speach.lang = 'es-US';
+
+        socket.on('speach', (data) => {
+            let msg = data.message;
+            speach.text = msg;
+            synth.speak(speach);
+            console.table(speach)
+        });
+    </script>
+</body>
+
+</html>
