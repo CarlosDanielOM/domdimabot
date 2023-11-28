@@ -20,7 +20,7 @@
         const socket = io(`/clip/${channel}`);
 
         const channelNameDoc = document.getElementById('channelName');
-        channelNameDoc.innerText = channel;
+        //channelNameDoc.innerText = channel;
         const clipPlayer = document.getElementById('refreshingIframe');
         const SOChannelName = document.getElementById('SOChannelName');
         const container = document.getElementById('container');
@@ -33,7 +33,7 @@
 
             container.style.display = 'block';
 
-            SOChannelName.innerText = data.channel;
+            //SOChannelName.innerText = data.channel;
             clipPlayer.src = `${clipLink}&parent=localhost&preload=auto&autoplay=true&muted=false`;
 
             setTimeout(() => {

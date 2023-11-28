@@ -2,12 +2,25 @@ require('dotenv').config();
 const tmi = require('tmi.js');
 const axios = require('axios');
 
+const mongoose = require('mongoose');
+const ChatLog = require('./schemas/chat_log.schema');
+
 const modID = '698614112';
 
 const botToken = process.env.UNIX_TOKEN;
 const commandsRegex = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?$/);
 
 const URI = 'https://api.twitch.tv/helix/';
+const mongoURI = process.env.MONGO_URI;
+
+mongoose.connect(mongoURI)
+.then(() => {
+    console.log('Connected to database');
+})
+.catch((error) => {
+    console.log(error);
+});
+
 const headers = {
     'Authorization': `Bearer ${process.env.UNIX_TOKEN}`,
     'Client-ID': process.env.ClientID,
@@ -22,7 +35,7 @@ channels = [
     'CDOM201',
 ]
 
-//channels = ['CDOM201','sleeples_panda','ElKenozVT','d0jiart','MarcVT_','SaoriMaferVT'];
+channels = ['CDOM201','sleeples_panda','ElKenozVT','d0jiart','MarcVT_','SaoriMaferVT'];
 
 const options = {
     options: {
@@ -46,13 +59,12 @@ const client = new tmi.Client(options);
 client.connect().catch(console.error);
 
 client.on('connected', (address, port) => {
-    console.log('connected');
+    console.log('bot connected');
 });
 
 client.on('join', (channel, username, self) => {
     if(self) return;
     if(channel === '#d0jiart') return;
-    
 });
 
 let fcounter = 0;
@@ -175,6 +187,10 @@ client.on('subscription', (channel, username, method, message, userstate) => {
 
 client.on('timeout', (channel, username, reason, duration, tags) => {
     client.say(channel, `Se fusilaron a ${username} por ${duration} segundos. Por pelele.`);
+});
+
+client.on('redeem', (channel, username, rewardType, tags, message) => {
+
 });
 
 client.on('message', (channel, tags, message, self) => {
@@ -831,7 +847,7 @@ client.on('message', (channel, tags, message, self) => {
                 
                 axios({
                     method: 'post',
-                    url: `http://localhost:3000/speach/${streamer}`,
+                    url: `https://domdimabot.com/speach/${streamer}`,
                     data: {
                         speach: msg
                     }
@@ -872,6 +888,25 @@ client.on('message', (channel, tags, message, self) => {
         client.say(channel, `La crush de @iKela_ `)
         setTimeout(() => {crushMSGSent = false}, 1000 * 60 * 5);
     }
+
+    if(message.toLowerCase().includes('panda')) {
+        client.say(channel, `Panda? Donde?`);
+    }
+
+    if(channel !== '#d0jiart') {
+        ChatLog.create({
+            channel: channel,
+            message: message,
+            username: tags['display-name'],
+            timestamp: new Date()
+        })
+        .then((res) => {
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    };
+    
 });
 
 client.on('cheer', (channel, tags, message) => {
@@ -917,7 +952,7 @@ function showClip(streamer, user = undefined) {
         let duration = clip['duration'];
         axios({
             method: 'post',
-            url: `http://localhost:3000/clip/${channel.replace('#', '')}`,
+            url: `https://domdimabot.com/clip/${channel.replace('#', '')}`,
             data: {
                 clip_url: url,
                 duration
