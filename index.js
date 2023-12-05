@@ -1,9 +1,11 @@
-require('dotenv').config();
+async function Bot() {
+    require('dotenv').config();
 const tmi = require('tmi.js');
 const axios = require('axios');
 
 const mongoose = require('mongoose');
 const ChatLog = require('./schemas/chat_log.schema');
+const Channel = require('./schemas/channel.schema');
 
 const modID = '698614112';
 
@@ -13,7 +15,7 @@ const commandsRegex = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?$/);
 const URI = 'https://api.twitch.tv/helix/';
 const mongoURI = process.env.MONGO_URI;
 
-mongoose.connect(mongoURI)
+await mongoose.connect(mongoURI)
 .then(() => {
     console.log('Connected to database');
 })
@@ -27,15 +29,17 @@ const headers = {
     'Content-Type': 'application/json'
 }
 
+let client;
+
 let streamerHeader;
 
 let channels = []
 
-channels = [
-    'CDOM201',
-]
+let Channels = await Channel.find({actived: true}, 'name').exec();
 
-channels = ['CDOM201','sleeples_panda','ElKenozVT','d0jiart','MarcVT_','SaoriMaferVT'];
+Channels.forEach(channel => {
+    channels.push(`#${channel.name}`);
+});
 
 const options = {
     options: {
@@ -48,15 +52,15 @@ const options = {
     channels: channels,
 };
 
+client = new tmi.Client(options);
+
+client.connect().catch(console.error);
+
 let onlyEmotes = false;
 
 let users = [];
 
 let crushMSGSent = false;
-
-const client = new tmi.Client(options);
-
-client.connect().catch(console.error);
 
 client.on('connected', (address, port) => {
     console.log('bot connected');
@@ -249,7 +253,6 @@ client.on('message', (channel, tags, message, self) => {
         }
     }
     
-
     const commands = {
         predi: {
             response: (argument) => {
@@ -1034,10 +1037,25 @@ function sendDiscordLink() {
     client.say('#cdom201', `Unete al discord del canal! https://discord.gg/XxT67QJkDT`) 
 }
 
+function checkPoll() {
+    axios({
+        method: 'get',
+        url: `${URI}polls?broadcaster_id=${broadcasterID}`,
+        headers
+    })
+    .then()
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
 setInterval(() => {
-    sendDiscordLink
+    sendDiscordLink()
 }, 1000 * 60 * 15);
 
 //getUserIdbyName('elkenozvt')
 
 //validateOAuth();
+}
+
+Bot();
