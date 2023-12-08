@@ -5,7 +5,7 @@ const sumimetroSchema = new Schema({
     channel: String,
     username: String,
     dominant: Number,
-    submisive: Number,
+    submissive: Number,
     timestamp: Date
 });
 

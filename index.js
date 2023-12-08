@@ -1,3 +1,5 @@
+const SumimetroSupremo = require('./schemas/sumimetro_supremo.schema');
+
 async function Bot() {
     require('dotenv').config();
 const tmi = require('tmi.js');
@@ -36,6 +38,14 @@ let streamerHeader;
 let channels = []
 
 let Channels = await Channel.find({actived: true}, 'name').exec();
+
+let sumisos = await SumimetroSupremo.find({ channel: 'UnOsitoPolar', type: 'sumiso' }, 'username timestamp').sort({_id: -1}).limit(1).exec();
+
+//console.table(sumisos.map(sumiso => sumiso._doc.timestamp));
+console.log(sumisos[0]._doc.timestamp);
+
+
+let pandaSent = false;
 
 Channels.forEach(channel => {
     channels.push(`#${channel.name}`);
@@ -864,6 +874,21 @@ client.on('message', (channel, tags, message, self) => {
                 
             }
         },
+        sumitest: {
+            response: (argument) => {
+                let user = argument || tags['display-name'];
+                axios({
+                    method: 'get',
+                    url: `http://localhost:3000/sumimetro/CDOM201/${user}`
+                })
+                .then((res) => {
+                    client.say(channel, res.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            }
+        }
     }
 
     const [raw, command, argument] = message.match(commandsRegex) || [];
@@ -892,8 +917,10 @@ client.on('message', (channel, tags, message, self) => {
         setTimeout(() => {crushMSGSent = false}, 1000 * 60 * 5);
     }
 
-    if(message.toLowerCase().includes('panda')) {
+    if(message.toLowerCase().includes('panda') && !pandaSent && channel !== '#d0jiart') {
         client.say(channel, `Panda? Donde?`);
+        pandaSent = true;
+        setTimeout(() => {pandaSent = false}, 1000 * 30);
     }
 
     if(channel !== '#d0jiart') {

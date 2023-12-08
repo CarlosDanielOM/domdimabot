@@ -8,20 +8,15 @@
 </head>
 
 <body>
+    <h1 id="sumiso"></h1>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script>
         let channel = window.location.pathname.split('/')[2];
-        const socket = io(`/speach/${channel}`);
+        const socket = io(`/sumiso/${channel}`);
+        const sumisoH1 = document.getElementById('sumiso');
 
-        const synth = window.speechSynthesis;
-        let speach = new SpeechSynthesisUtterance();
-        speach.lang = 'es-US';
-
-        socket.on('speach', (data) => {
-            let msg = data.message;
-            speach.text = msg;
-            synth.speak(speach);
-            console.table(speach)
+        socket.on('sumiso_supremo', (data) => {
+            sumisoH1.innerHTML = data.username;
         });
     </script>
 </body>
