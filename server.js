@@ -3,7 +3,11 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const socketio = require('socket.io');
 const http = require('http');
+const fs = require('fs');
+const https = require('https');
 const moongoose = require('mongoose');
+
+const downloadPath = `${__dirname}/routes/public/downloads/`;
 
 const SumimetroSchema = require('./schemas/sumimetro.schema');
 const SupremoSchema = require('./schemas/sumimetro_supremo.schema');
@@ -86,19 +90,44 @@ app.get('/sumiso/:channel', (req, res) => {
 
 app.get('/clip/:channel', (req, res) => {
   const channel = req.params.channel;
-  res.status(200).sendFile(`${__dirname}/public/clip.html`);
+  res.status(200).sendFile(`${__dirname}/routes/public/clip.html`);
 })
 
-app.post('/clip/:channel', (req, res) => {
+app.post('/clip/:channel', async (req, res) => {
   const streamer = req.params.channel;
   const channel = req.body.channel;
-  const clip = req.body.clip_url;
+  //const clip = req.body.clip_url;
+  const thumbnail = req.body.thumbnail;
   const duration = req.body.duration;
 
-  io.of(`/clip/${streamer}`).emit('play-clip', {clip, channel, duration});
+  let clip = getVideoURL(thumbnail);
+
+  let fileName = `${streamer}-clip.mp4`;
+
+  let path = `${downloadPath}${fileName}`;
+  let file = fs.createWriteStream(path);
+
+  https.get(clip, (response) => {
+      response.pipe(file);
+  });
+
+  file.on('finish', () => {
+      file.close();
+      io.of(`/clip/${streamer}`).emit('play-clip', {channel, duration});
+  });
+
+  file.on('error', (err) => {
+    console.error(err);
+    return false;
+  });
 
   res.status(200).json({ message: `Playing clip on ${streamer} channel` });
   
+});
+
+app.get('/video/:channel', (req, res) => {
+  const channel = req.params.channel;
+  res.status(200).sendFile(`${__dirname}/routes/public/downloads/${channel}-clip.mp4`);
 });
 
 app.get('/speach/:channel', (req, res) => {
@@ -168,3 +197,38 @@ moongoose.connect(process.env.MONGO_URI)
 })
 .catch(err => console.error(err));
 
+function getVideoURL(thumbnailUrl) {
+  let firstPart = `${thumbnailUrl.split('tv/')[0]}tv/`;
+
+  let clipPart = thumbnailUrl.split('tv/')[1];
+
+  let clipId = clipPart.split('-preview')[0];
+  let extension = clipPart.split('.')[1]
+
+  if(extension === 'jpg' || extension === 'png' || extension === 'jpeg') {
+      extension = 'mp4';
+  }
+
+  let finalUrl = `${firstPart}${clipId}.${extension}`;
+
+  return finalUrl;
+}
+
+async function downloadVideo(url, fileName) {
+  let path = `${downloadPath}${fileName}`;
+  let file = fs.createWriteStream(path);
+
+  https.get(url, (response) => {
+      response.pipe(file);
+  });
+
+  file.on('finish', () => {
+      file.close();
+      return true;
+  });
+
+  file.on('error', (err) => {
+    console.error(err);
+    return false;
+  });
+}

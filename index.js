@@ -39,10 +39,10 @@ let channels = []
 
 let Channels = await Channel.find({actived: true}, 'name').exec();
 
-let sumisos = await SumimetroSupremo.find({ channel: 'UnOsitoPolar', type: 'sumiso' }, 'username timestamp').sort({_id: -1}).limit(1).exec();
+//let sumisos = await SumimetroSupremo.find({ channel: 'UnOsitoPolar', type: 'sumiso' }, 'username timestamp').sort({_id: -1}).limit(1).exec();
 
 //console.table(sumisos.map(sumiso => sumiso._doc.timestamp));
-console.log(sumisos[0]._doc.timestamp);
+//console.log(sumisos[0]._doc.timestamp);
 
 
 let pandaSent = false;
@@ -50,6 +50,7 @@ let pandaSent = false;
 Channels.forEach(channel => {
     channels.push(`#${channel.name}`);
 });
+
 
 const options = {
     options: {
@@ -980,12 +981,14 @@ function showClip(streamer, user = undefined) {
         let clip = data[random];
         let url = clip['embed_url'];
         let duration = clip['duration'];
+        let thumbnail = clip['thumbnail_url'];
         axios({
             method: 'post',
-            url: `https://domdimabot.com/clip/${channel.replace('#', '')}`,
+            //url: `https://domdimabot.com/clip/${channel.replace('#', '')}`,
+            url: `http://localhost:3000/clip/${channel.replace('#', '')}`,
             data: {
-                clip_url: url,
-                duration
+                duration,
+                thumbnail
             }
         })
         .then((res) => {

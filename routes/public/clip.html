@@ -8,38 +8,44 @@
 </head>
 
 <body>
-    <div id="container">
-        <iframe id="refreshingIframe" src="" width='400' height='300' allowfullscreen frameborder="0">
-        </iframe>
-    </div>
+
+    <div id="container"></div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script>
+
+        const container = document.getElementById('container');
+
         let channel = window.location.pathname.split('/')[2];
         const socket = io(`/clip/${channel}`);
-
-        const channelNameDoc = document.getElementById('channelName');
-        //channelNameDoc.innerText = channel;
-        const clipPlayer = document.getElementById('refreshingIframe');
-        const SOChannelName = document.getElementById('SOChannelName');
-        const container = document.getElementById('container');
 
         const second = 1000;
 
         socket.on('play-clip', (data) => {
-            const clipLink = data.clip;
             let duration = Number(data.duration);
 
-            container.style.display = 'block';
+            let clipLink = `http://localhost:3000/video/${channel}`;
 
-            //SOChannelName.innerText = data.channel;
-            clipPlayer.src = `${clipLink}&parent=localhost&preload=auto&autoplay=true&muted=false`;
+            const videoPlayer = document.createElement('video');
+
+            const videoSource = document.createElement('source');
+            videoSource.setAttribute('src', clipLink);
+            videoSource.setAttribute('type', 'video/mp4');
+            videoPlayer.appendChild(videoSource);
+
+            videoPlayer.setAttribute('width', '400px');
+            videoPlayer.setAttribute('height', '300px');
+            videoPlayer.setAttribute('autoplay', 'true');
+
+            container.appendChild(videoPlayer);
+
+
 
             setTimeout(() => {
-                container.style.display = 'none';
+                videoPlayer.remove();
             }, (second * duration) + (second * 3));
         })
     </script>
 </body>
 
 </html>
-
