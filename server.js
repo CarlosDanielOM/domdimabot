@@ -12,6 +12,8 @@ const downloadPath = `${__dirname}/routes/public/downloads/`;
 const SumimetroSchema = require('./schemas/sumimetro.schema');
 const SupremoSchema = require('./schemas/sumimetro_supremo.schema');
 
+let soSent = [];
+
 //* Routes *//
 
 
@@ -99,10 +101,16 @@ app.post('/clip/:channel', async (req, res) => {
   //const clip = req.body.clip_url;
   const thumbnail = req.body.thumbnail;
   const duration = req.body.duration;
+  const clipNumber = Math.floor(Math.random() * 25);
+
+  if(soSent.includes(streamer)) {
+    res.status(400).json({ message: `Clip already playing on ${streamer} channel` });
+    return false;
+  }
 
   let clip = getVideoURL(thumbnail);
 
-  let fileName = `${streamer}-clip.mp4`;
+  let fileName = `${streamer}-clip-${clipNumber}.mp4`;
 
   let path = `${downloadPath}${fileName}`;
   let file = fs.createWriteStream(path);
@@ -113,7 +121,11 @@ app.post('/clip/:channel', async (req, res) => {
 
   file.on('finish', () => {
       file.close();
-      io.of(`/clip/${streamer}`).emit('play-clip', {channel, duration});
+      io.of(`/clip/${streamer}`).emit('play-clip', {channel, duration, clipNumber});
+      soSent.push(streamer);
+      setTimeout(() => { 
+        soSent = soSent.filter(so => so !== streamer);
+       }, 1000 * Number(duration));
   });
 
   file.on('error', (err) => {
@@ -125,9 +137,9 @@ app.post('/clip/:channel', async (req, res) => {
   
 });
 
-app.get('/video/:channel', (req, res) => {
-  const channel = req.params.channel;
-  res.status(200).sendFile(`${__dirname}/routes/public/downloads/${channel}-clip.mp4`);
+app.get('/video/:channel/:clipNumber', (req, res) => {
+  const {channel, clipNumber} = req.params;
+  res.status(200).sendFile(`${__dirname}/routes/public/downloads/${channel}-clip-${clipNumber}.mp4`);
 });
 
 app.get('/speach/:channel', (req, res) => {

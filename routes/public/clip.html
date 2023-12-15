@@ -24,7 +24,7 @@
         socket.on('play-clip', (data) => {
             let duration = Number(data.duration);
 
-            let clipLink = `http://localhost:3000/video/${channel}`;
+            let clipLink = `http://localhost:3000/video/${channel}/${data.clipNumber}`;
 
             const videoPlayer = document.createElement('video');
 
@@ -39,11 +39,12 @@
 
             container.appendChild(videoPlayer);
 
+            console.log('clip started');
 
 
             setTimeout(() => {
                 videoPlayer.remove();
-            }, (second * duration) + (second * 3));
+            }, (second * duration) + (second));
         })
     </script>
 </body>
