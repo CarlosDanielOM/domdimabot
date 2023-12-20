@@ -87,6 +87,9 @@ let fcounter = 0;
 let predisData = [];
 let pollsData = [];
 
+
+let soSent = [];
+
 let sent = false;
 
 client.on('raided', (channel, username, viewers) => {
@@ -114,6 +117,10 @@ client.on('raided', (channel, username, viewers) => {
             broadcasterID = '787543986';
             streamertoken = process.env.MARC_TOKEN;
             break;
+        case '#raccher2':
+            broadcasterID = '128348267';
+            streamertoken = process.env.RACCHER2_TOKEN;
+            break;
     }
     let user = username || undefined;
     if(user === undefined) return client.say(channel, `Hubo un error al enviar el SO, el usario no existe`);
@@ -135,17 +142,21 @@ client.on('raided', (channel, username, viewers) => {
             let game = data.game_name;
             let title = data.title;
             let message = `Vayan a apoyar a ${user} en https://twitch.tv/${user} ! Estaba jugando a ${game} y nos trajeron ${viewers} personitas!`;
+            showClip(channel, id);
+            if(soSent.includes(channel)) return makeAnnouncement(broadcasterID, message);
             axios({
                 method: 'post',
                 url: `${URI}chat/shoutouts?from_broadcaster_id=${broadcasterID}&to_broadcaster_id=${id}&moderator_id=${modID}`,
                 headers,
             })
             .then((res) => {
-                if (channel === '#elkenozvt') {
-                    client.say(channel, `!so ${user}`);
-                }
-                makeAnnouncement(broadcasterID, message);
-                showClip(channel, id);
+                makeAnnouncement(broadcasterID, message)
+                soSent.push(channel);
+                
+                setTimeout(() => {
+                    soSent = soSent.filter(so => so !== channel);
+                }, 1000 * 60 * 2);
+                
             })
             .catch((error) => {
                 console.log(error);
@@ -201,7 +212,8 @@ client.on('subscription', (channel, username, method, message, userstate) => {
 })
 
 client.on('timeout', (channel, username, reason, duration, tags) => {
-    client.say(channel, `Se fusilaron a ${username} por ${duration} segundos. Por pelele.`);
+    let reasonMSG = reason || 'pelele.';
+    client.say(channel, `Se fusilaron a ${username} por ${duration} segundos. Por ${reasonMSG}`);
 });
 
 client.on('redeem', (channel, username, rewardType, tags, message) => {
@@ -244,6 +256,10 @@ client.on('message', (channel, tags, message, self) => {
         case '#marcvt_':
             broadcasterID = '787543986';
             streamertoken = process.env.MARC_TOKEN;
+            break;
+        case '#raccher2':
+            broadcasterID = '128348267';
+            streamertoken = process.env.RACCHER2_TOKEN;
             break;
     }
 
@@ -626,15 +642,22 @@ client.on('message', (channel, tags, message, self) => {
                         let data = res.data.data[0];
                         let game = data.game_name;
                         let title = data.title;
+                        let message = `Vayan a apoyar a ${user} en https://twitch.tv/${user} ! Estaba jugando a ${game}`;
+                        
+                        showClip(channel, id);
+                        if(soSent.includes(channel)) return makeAnnouncement(broadcasterID, message);
+                        
                         axios({
                             method: 'post',
                             url: `${URI}chat/shoutouts?from_broadcaster_id=${broadcasterID}&to_broadcaster_id=${id}&moderator_id=${modID}`,
                             headers,
                         })
                         .then((res) => {
-                            let message = `Vayan a apoyar a ${user} en https://twitch.tv/${user} ! Estaba jugando a ${game}`;
                             makeAnnouncement(broadcasterID, message);
-                            showClip(channel, id);
+                            soSent.push(channel);
+                            setTimeout(() => {
+                                soSent = soSent.filter(so => so !== channel);
+                            }, 1000 * 60 * 2);
                         })
                         .catch((error) => {
                             let data = error.data;
@@ -889,7 +912,21 @@ client.on('message', (channel, tags, message, self) => {
                     console.log(error);
                 });
             }
-        }
+        },
+        ruletarusa: {
+            response: () => {
+                if(isMod) return client.say(channel, `No puedes disparar te como un mod, no seas pendejo.`);
+                let user = tags['display-name'];
+                let probability = Math.floor(Math.random() * 100) + 1;
+                if(probability % 4 === 0) {
+                    client.say(channel, `La ruleta rusa ha sido disparada! ${user} ha muerto.`);
+                    let user_id = tags['user-id'];
+                    timeoutUser(broadcasterID, user_id, 180, 'la Ruleta Rusa');
+                } else {
+                    client.say(channel, `La ruleta rusa ha sido disparada! ${user} ha sobrevivido.`);
+                }
+            }
+        },
     }
 
     const [raw, command, argument] = message.match(commandsRegex) || [];
@@ -984,8 +1021,8 @@ function showClip(streamer, user = undefined) {
         let thumbnail = clip['thumbnail_url'];
         axios({
             method: 'post',
-            //url: `https://domdimabot.com/clip/${channel.replace('#', '')}`,
-            url: `http://localhost:3000/clip/${channel.replace('#', '')}`,
+            url: `https://domdimabot.com/clip/${channel.replace('#', '')}`,
+            //url: `http://localhost:3000/clip/${channel.replace('#', '')}`,
             data: {
                 duration,
                 thumbnail
@@ -1083,7 +1120,45 @@ setInterval(() => {
     sendDiscordLink()
 }, 1000 * 60 * 15);
 
-//getUserIdbyName('elkenozvt')
+function getUserIdbyName(user) {
+    axios({
+        method: 'get',
+        url: `${URI}users?login=${user}`,
+        headers
+    })
+    .then((res) => {
+        let data = res.data.data[0];
+        let id = data.id;
+        return id;
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+
+}
+
+function timeoutUser(broadcaster_id, user, duration, reason = null) {
+    axios({
+        method: 'post',
+        url: `${URI}moderation/bans?broadcaster_id=${broadcaster_id}&moderator_id=${modID}`,
+        headers,
+        data: {
+            data: {
+                user_id: user,
+                duration,
+                reason
+            }
+        }
+    })
+    .then((res) => {
+        console.log(res);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+//getUserIdbyName('raccher2')
 
 //validateOAuth();
 }
