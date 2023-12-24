@@ -87,6 +87,9 @@ let fcounter = 0;
 let predisData = [];
 let pollsData = [];
 
+let sumisosSupremos = [];
+let dominantesSupremos = [];
+
 
 let soSent = [];
 
@@ -543,6 +546,21 @@ client.on('message', (channel, tags, message, self) => {
                 let user = argument || tags['display-name'];
                 let dominante = Math.floor(Math.random() * 100) + 1;
                 let sumiso = 100 - dominante;
+                let sumisoSupremo = getUserSupremo(channel, 'sumiso');
+                let dominanteSupremo = getUserSupremo(channel, 'dominante');
+
+                if(sumisoSupremo !== null) {
+                    addSumisoSupremo(channel, user, sumiso);
+                } else {
+                    if(sumiso > sumisoSupremo.percent) {
+                        addSumisoSupremo(channel, user, sumiso);
+                    }
+                }
+
+                if(dominanteSupremo !== null) {
+                    addDominanteSupremo(channel, user, dominante);
+                }
+                
                 client.say(channel, `Los lectores del sumimetro reflejan que ${user} tiene ${sumiso}% de sumiso y ${dominante}% de dominante`);
             }
         },
@@ -915,15 +933,16 @@ client.on('message', (channel, tags, message, self) => {
         },
         ruletarusa: {
             response: () => {
+                if(channel === '#marcvt_' && tags.username === 'cdom201') {isMod = false;}
                 if(isMod) return client.say(channel, `No puedes disparar te como un mod, no seas pendejo.`);
                 let user = tags['display-name'];
-                let probability = Math.floor(Math.random() * 100) + 1;
-                if(probability % 4 === 0) {
+                let probability = Math.floor(Math.random() * 120) + 1;
+                if(probability % 3 === 0) {
                     client.say(channel, `La ruleta rusa ha sido disparada! ${user} ha muerto.`);
                     let user_id = tags['user-id'];
                     timeoutUser(broadcasterID, user_id, 180, 'la Ruleta Rusa');
                 } else {
-                    client.say(channel, `La ruleta rusa ha sido disparada! ${user} ha sobrevivido.`);
+                    client.say(channel, `La ruleta rusa no ha sido disparada! ${user} ha sobrevivido.`);
                 }
             }
         },
@@ -1101,7 +1120,7 @@ function makeAnnouncement(streamer, message, color = 'purple') {
 }
 
 function sendDiscordLink() {
-    client.say('#cdom201', `Unete al discord del canal! https://discord.gg/XxT67QJkDT`) 
+    client.say('#cdom201', `Unete al discord del canal! https://discord.cdom201.com`) 
 }
 
 function checkPoll() {
@@ -1118,7 +1137,7 @@ function checkPoll() {
 
 setInterval(() => {
     sendDiscordLink()
-}, 1000 * 60 * 15);
+}, 1000 * 60 * 30);
 
 function getUserIdbyName(user) {
     axios({
@@ -1158,9 +1177,119 @@ function timeoutUser(broadcaster_id, user, duration, reason = null) {
     });
 }
 
-//getUserIdbyName('raccher2')
+//? ----------------- SUMIMETRO ----------------- ?//
 
-//validateOAuth();
+function addDominanteSupremo(channel, user, percentage) {
+    let dominanteSupremo = {
+        channel,
+        user,
+        percentage
+    }
+    dominantesSupremos.push(dominanteSupremo);
+
+}
+
+function addSumisoSupremo(channel, user, percentage) {
+    let sumisoSupremo = {
+        channel,
+        user,
+        percentage
+    }
+    sumisosSupremos.push(sumisoSupremo);
+}
+
+function getUserSupremo(channel, type) {
+    let supremo = null;
+    if(type === 'dominante') {
+        supremo = dominantesSupremos.find(supremo => supremo.channel === channel) || null;
+    } else if (type === 'sumiso') {
+        supremo = sumisosSupremos.find(supremo => supremo.channel === channel) || null;
+    }
+    return supremo;
+}
+
+function updateUserSupremo(channel, newUser, newPercentage, type) {
+    let supremo = null;
+    if(type === 'dominante') {
+        supremo = dominantesSupremos.find(supremo => supremo.channel === channel) || null;
+    } else if (type === 'sumiso') {
+        supremo = sumisosSupremos.find(supremo => supremo.channel === channel) || null;
+    }
+    supremo.user = newUser;
+    supremo.percentage = newPercentage;
+}
+
+function resetSupremeUsers() {
+    dominantesSupremos = [];
+    sumisosSupremos = [];
+}
+
+function getTodayDate() {
+    let today = new Date();
+    let day = today.getDate();
+    let month = today.getMonth();
+    let year = today.getFullYear();
+    let hour = today.getHours();
+    let minutes = today.getMinutes();
+    let seconds = today.getSeconds();
+
+    return {day, month, year, hour, minutes, seconds};
+}
+
+function getTargetDate() {
+    let today = getTodayDate();
+
+    today.day = today.day + 1;
+
+    //? 31 days months
+    if(today.day === 31 && today.month === (0, 2, 4, 6, 7, 9, 11)) {
+        today.day = 1;
+        today.month = today.month + 1;
+        if(today.month >= 12) {
+            today.month = 1;
+            today.year = today.year + 1;
+        }
+    }
+
+    //? 28 days month
+    if(today.day === 28 && today.month === 1 && (today.year % 4) !== 0) {
+        today.day = 1;
+        today.month = 2;
+    }
+
+    //? 30 days months
+    if(today.day === 30 && today.month === (3, 5, 8, 10)) {
+        today.day = 1;
+        today.month = today.month + 1;
+    }
+
+    //? Leap year
+    if(today.day === 29 && today.month === 1 && (today.year % 4) === 0) {
+        today.day = 1;
+        today.month = 2;
+    }
+    
+    
+    let targetDate = new Date(today.year, today.month, today.day, 0, 1, 0);
+    return targetDate;
+
+}
+
+//? Resets Supremos at 00:01:00
+function repeatTimeout() {
+    let targetDate = getTargetDate();
+    let targetTime = targetDate - Date.now();
+    setTimeout(() => {
+        console.log('Resseting Supremos');
+        resetSupremeUsers();
+        repeatTimeout();
+    }, targetTime);
+}
+
+setTimeout(() => {
+    console.log('Resseting Supremos');
+    repeatTimeout();
+}, getTargetDate() - Date.now());
 }
 
 Bot();
