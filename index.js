@@ -861,7 +861,6 @@ client.on('message', (channel, tags, message, self) => {
                         let game = data.game_name;
                         let title = data.title;
                         let message = `Vayan a apoyar a ${user} en https://twitch.tv/${user} ! Estaba jugando a ${game}`;
-                        //makeAnnouncement(broadcasterID, message)
                         client.say(channel, message);
                         showClip(channel, id);
                     })
@@ -1048,44 +1047,6 @@ function showClip(streamer, user = undefined) {
 function changeGamebyName(game) {}
 
 function changeGamebyCategorie(game) {}
-
-function makeSO(argument) {
-    let user = argument || undefined;
-    if(user === undefined) return client.say(channel, `Se te olvido poner el username`);
-    axios({
-        method: 'get',
-        url: `${URI}users?login=${user}`,
-        headers
-    })
-    .then((res) => {
-        let data = res.data.data[0];
-        let id = data.id;
-        axios({
-            method: 'get',
-            url: `${URI}channels?broadcaster_id=${id}`,
-            headers,
-        })
-        .then((res) => {
-            let data = res.data.data[0];
-            let game = data.game_name;
-            let title = data.title;
-            axios({
-                method: 'post',
-                url: `${URI}chat/shoutouts?from_broadcaster_id=${broadcasterID}&to_broadcaster_id=${id}&moderator_id=${modID}`,
-                headers,
-            })
-            .then((res) => {
-                client.say(channel, `Vayan a apoyar a ${user} en https://twitch.tv/${user} ! Estaba jugando a ${game}`); 
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        })
-    })
-    .catch((error) => {
-        console.log(error);
-    });
-}
 
 function makeAnnouncement(streamer, message, color = 'purple') {
     axios({
