@@ -1,3 +1,5 @@
+const db = require('./db');
+
 const SumimetroSupremo = require('./schemas/sumimetro_supremo.schema');
 
 async function Bot() {
@@ -11,19 +13,9 @@ const Channel = require('./schemas/channel.schema');
 
 const modID = '698614112';
 
-const botToken = process.env.UNIX_TOKEN;
 const commandsRegex = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?$/);
 
 const URI = 'https://api.twitch.tv/helix/';
-const mongoURI = process.env.MONGO_URI;
-
-await mongoose.connect(mongoURI)
-.then(() => {
-    console.log('Connected to database');
-})
-.catch((error) => {
-    console.log(error);
-});
 
 const headers = {
     'Authorization': `Bearer ${process.env.UNIX_TOKEN}`,
@@ -38,12 +30,6 @@ let streamerHeader;
 let channels = []
 
 let Channels = await Channel.find({actived: true}, 'name').exec();
-
-//let sumisos = await SumimetroSupremo.find({ channel: 'UnOsitoPolar', type: 'sumiso' }, 'username timestamp').sort({_id: -1}).limit(1).exec();
-
-//console.table(sumisos.map(sumiso => sumiso._doc.timestamp));
-//console.log(sumisos[0]._doc.timestamp);
-
 
 let pandaSent = false;
 
@@ -1291,5 +1277,7 @@ setTimeout(() => {
     repeatTimeout();
 }, getTargetDate() - Date.now());
 }
+
+await db.init();
 
 Bot();
