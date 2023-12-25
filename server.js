@@ -9,9 +9,6 @@ const moongoose = require('mongoose');
 
 const downloadPath = `${__dirname}/routes/public/downloads/`;
 
-const SumimetroSchema = require('./schemas/sumimetro.schema');
-const SupremoSchema = require('./schemas/sumimetro_supremo.schema');
-
 let soSent = [];
 
 //* Routes *//
@@ -94,22 +91,6 @@ res.status(200).json({ message: `Playing speach on ${channel} channel` });
 });
 
 app.use('/clips', clipRoute);
-
-//* Sumimetro *//
-
-let sumisoSupremo = []
-let dominanteSupremo = []
-
-let sumiso = {
-  user: '',
-  percent: 0,
-  channel: '',
-}
-let dominante = {
-  user: '',
-  percent: 0,
-  channel: '',
-}
 
 const PORT = process.env.PORT || 3000;
 

@@ -11,7 +11,6 @@ const Channel = require('./schemas/channel.schema');
 
 const modID = '698614112';
 
-const botToken = process.env.UNIX_TOKEN;
 const commandsRegex = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?$/);
 
 const URI = 'https://api.twitch.tv/helix/';
@@ -1002,6 +1001,8 @@ client.on('cheer', (channel, tags, message) => {
     client.say(channel, `Gracias por los ${tags.bits} bits ${tags['display-name']}!`)
 });
 
+}
+
 function addUser(user) {
     users.push(user);
 }
@@ -1290,6 +1291,5 @@ setTimeout(() => {
     console.log('Resseting Supremos');
     repeatTimeout();
 }, getTargetDate() - Date.now());
-}
 
 Bot();
