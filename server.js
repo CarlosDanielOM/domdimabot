@@ -92,33 +92,6 @@ module.exports = {
 
 app.use('/clips', clipRoute);
 
-//* Sumimetro *//
-
-let sumisoSupremo = []
-let dominanteSupremo = []
-
-let sumiso = {
-  user: '',
-  percent: 0,
-  channel: '',
-}
-let dominante = {
-  user: '',
-  percent: 0,
-  channel: '',
-}
-
-const PORT = process.env.PORT || 3000;
-
-moongoose.connect(process.env.MONGO_URI)
-.then(() => {
-  console.log('Connected to MongoDB');
-  server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-})
-.catch(err => console.error(err));
-
     function getVideoURL(thumbnailUrl) {
       let firstPart = `${thumbnailUrl.split('tv/')[0]}tv/`;
 
