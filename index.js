@@ -1,3 +1,5 @@
+const db = require('./db');
+
 const SumimetroSupremo = require('./schemas/sumimetro_supremo.schema');
 
 async function Bot() {
@@ -14,15 +16,6 @@ const modID = '698614112';
 const commandsRegex = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?$/);
 
 const URI = 'https://api.twitch.tv/helix/';
-const mongoURI = process.env.MONGO_URI;
-
-await mongoose.connect(mongoURI)
-.then(() => {
-    console.log('Connected to database');
-})
-.catch((error) => {
-    console.log(error);
-});
 
 const headers = {
     'Authorization': `Bearer ${process.env.UNIX_TOKEN}`,
@@ -37,12 +30,6 @@ let streamerHeader;
 let channels = []
 
 let Channels = await Channel.find({actived: true}, 'name').exec();
-
-//let sumisos = await SumimetroSupremo.find({ channel: 'UnOsitoPolar', type: 'sumiso' }, 'username timestamp').sort({_id: -1}).limit(1).exec();
-
-//console.table(sumisos.map(sumiso => sumiso._doc.timestamp));
-//console.log(sumisos[0]._doc.timestamp);
-
 
 let pandaSent = false;
 
@@ -874,7 +861,6 @@ client.on('message', (channel, tags, message, self) => {
                         let game = data.game_name;
                         let title = data.title;
                         let message = `Vayan a apoyar a ${user} en https://twitch.tv/${user} ! Estaba jugando a ${game}`;
-                        //makeAnnouncement(broadcasterID, message)
                         client.say(channel, message);
                         showClip(channel, id);
                     })
@@ -1063,44 +1049,6 @@ function showClip(streamer, user = undefined) {
 function changeGamebyName(game) {}
 
 function changeGamebyCategorie(game) {}
-
-function makeSO(argument) {
-    let user = argument || undefined;
-    if(user === undefined) return client.say(channel, `Se te olvido poner el username`);
-    axios({
-        method: 'get',
-        url: `${URI}users?login=${user}`,
-        headers
-    })
-    .then((res) => {
-        let data = res.data.data[0];
-        let id = data.id;
-        axios({
-            method: 'get',
-            url: `${URI}channels?broadcaster_id=${id}`,
-            headers,
-        })
-        .then((res) => {
-            let data = res.data.data[0];
-            let game = data.game_name;
-            let title = data.title;
-            axios({
-                method: 'post',
-                url: `${URI}chat/shoutouts?from_broadcaster_id=${broadcasterID}&to_broadcaster_id=${id}&moderator_id=${modID}`,
-                headers,
-            })
-            .then((res) => {
-                client.say(channel, `Vayan a apoyar a ${user} en https://twitch.tv/${user} ! Estaba jugando a ${game}`); 
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        })
-    })
-    .catch((error) => {
-        console.log(error);
-    });
-}
 
 function makeAnnouncement(streamer, message, color = 'purple') {
     axios({
@@ -1291,5 +1239,7 @@ setTimeout(() => {
     console.log('Resseting Supremos');
     repeatTimeout();
 }, getTargetDate() - Date.now());
+
+await db.init();
 
 Bot();
