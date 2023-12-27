@@ -1,6 +1,16 @@
 const db = require('./db');
+const fn = require('./functions');
+const command = require('./commands');
 
 const SumimetroSupremo = require('./schemas/sumimetro_supremo.schema');
+
+const URI = 'https://api.twitch.tv/helix/';
+
+const headers = {
+    'Authorization': `Bearer ${process.env.UNIX_TOKEN}`,
+    'Client-ID': process.env.ClientID,
+    'Content-Type': 'application/json'
+}
 
 async function Bot() {
     require('dotenv').config();
@@ -15,13 +25,7 @@ const modID = '698614112';
 
 const commandsRegex = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?$/);
 
-const URI = 'https://api.twitch.tv/helix/';
 
-const headers = {
-    'Authorization': `Bearer ${process.env.UNIX_TOKEN}`,
-    'Client-ID': process.env.ClientID,
-    'Content-Type': 'application/json'
-}
 
 let client;
 
@@ -1240,6 +1244,10 @@ setTimeout(() => {
     repeatTimeout();
 }, getTargetDate() - Date.now());
 
-await db.init();
+db.init();
+
+let domID = fn.getUserID('cdom201', URI, headers);
+
+console.log(domID);
 
 Bot();
