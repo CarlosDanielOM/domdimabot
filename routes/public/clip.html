@@ -9,42 +9,54 @@
 
 <body>
 
-    <div id="container"></div>
+    <div id="container">
+        <video width="400px" height="300px" id="vplayer"></video>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
     <script>
-
         const container = document.getElementById('container');
 
         let channel = window.location.pathname.split('/')[2];
-        const socket = io(`https://domdimabot.com/clip/${channel}`);
+        
+        const socket = io.connect('https://domdimabot.com/', { reconnection: true, transports: ['websocket'] });
+        const channelSocket = io(`/clip/${channel}`, { forceNew: true, transports: ['websocket'] });
 
-        const second = 1000;
-
-        socket.on('play-clip', (data) => {
+        channelSocket.on('play-clip', (data) => {
             let duration = Number(data.duration);
+            let videoPlayer = document.getElementById('vplayer');
+            if(!videoPlayer){
+                videoPlayer = document.createElement('video');
+                videoPlayer.setAttribute('width', '400px');
+                videoPlayer.setAttribute('height', '300px');
+                videoPlayer.setAttribute('id', 'vplayer');
+                container.appendChild(videoPlayer);
+            }
 
-            let clipLink = `https://domdimabot.com/video/${channel}/${data.clipNumber}`;
-
-            const videoPlayer = document.createElement('video');
+            let clipLink = `https://domdimabot.com/video/${channel}?t=${Date.now()}`;
 
             const videoSource = document.createElement('source');
-            videoSource.setAttribute('src', clipLink);
             videoSource.setAttribute('type', 'video/mp4');
+            videoSource.setAttribute('src', clipLink);
+            
             videoPlayer.appendChild(videoSource);
 
-            videoPlayer.setAttribute('width', '400px');
-            videoPlayer.setAttribute('height', '300px');
-            videoPlayer.setAttribute('autoplay', 'true');
+            videoPlayer.addEventListener('canplaythrough', () => {
+                videoPlayer.play().then(() => {
+                    setTimeout(() => {
+                        videoSource.setAttribute('src', ' ');
+                        videoSource.remove();
+                        videoPlayer.remove();
+                        console.log('Clip Finished');
+                    }, (1000 * duration) + (1000));
+                });
+            });
 
-            container.appendChild(videoPlayer);
+            console.log('Clip Started');
+        })
 
-            console.log('clip started');
-
-
-            setTimeout(() => {
-                videoPlayer.remove();
-            }, (second * duration) + (second));
+        channelSocket.on('prepare-clips', (data) => {
+            console.log('Clips Prepared');
         })
     </script>
 </body>

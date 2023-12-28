@@ -64,7 +64,7 @@ module.exports = {
         })
 
         app.listen(port, () => {
-            console.log(`Example app listening at http://localhost:${port}`)
+            console.log(`App listening on port ${port}`)
         });
         function getSecret() {
             return process.env.TWITCH_EVENTSUB_SECRET;

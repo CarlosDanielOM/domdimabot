@@ -1,5 +1,6 @@
 require('dotenv').config();
 const bodyParser = require('body-parser');
+const fetch = require('node-fetch');
 const express = require('express');
 const socketio = require('socket.io');
 const fs = require('fs');
@@ -9,18 +10,18 @@ const http = require('http');
 const downloadPath = `${__dirname}/routes/public/downloads/`;
 const htmlPath = `${__dirname}/routes/public/`;
 
-function init() {
+async function init() {
   const PORT = process.env.PORT || 3000;
     
     const app = express();
     const server = http.createServer(app);
-    const io = socketio(server);
+    const io = await socketio(server);
 
-    io.on('connection', (streamer) => {
-      io.of(`/clip/${streamer}`).emit('prepare-clip');
-      console.log("Etst uwdjakldwal")
+    io.of(/^\/clip\/\w+$/).on('connection', (socket) => {
+      const channel = socket.nsp.name.split('/')[2];
+      io.of(`/clip/${channel}`).emit('prepare-clips');
     });
-    
+
     //* Routes *//
     const clipRoute = require('./routes/clip.route');
 
@@ -50,22 +51,33 @@ function init() {
 
       let clip = getVideoURL(thumbnail);
 
-      let fileName = `${streamer}-clip-${clipNumber}.mp4`;
+      let fileName = `${streamer}-clip.mp4`;
 
       let path = `${downloadPath}${fileName}`;
-      let file = fs.createWriteStream(path);
 
-      https.get(clip, (response) => {
-          response.pipe(file);
-      });
+      if(!fs.existsSync(downloadPath)){
+        fs.mkdirSync(downloadPath, {recursive: true})
+      }
 
-      file.on('finish', () => {
-          file.close();
-          io.of(`/clip/${streamer}`).emit('play-clip', {channel, duration, clipNumber});
+      const response = await fetch(clip);
+      if(!response.ok){
+        const err = new Error(`Error bla bla bla`)
+        throw err
+      }
+      const file = fs.createWriteStream(path);
+      const stream = response.body.pipe(file);
+      // https.get(clip, (response) => {
+      //     response.pipe(file);
+      // });
+      await new Promise((resolve, reject) => {
+        stream.on('finish', () => {
+          io.of(`/clip/${streamer}`).emit('play-clip', {channel, duration});
           soSent.push(streamer);
           setTimeout(() => { 
             soSent = soSent.filter(so => so !== streamer);
           }, 1000 * Number(duration));
+          resolve()
+        });
       });
 
       file.on('error', (err) => {
@@ -77,9 +89,10 @@ function init() {
       
     });
 
-    app.get('/video/:channel/:clipNumber', (req, res) => {
-      const {channel, clipNumber} = req.params;
-      res.status(200).sendFile(`${__dirname}/routes/public/downloads/${channel}-clip-${clipNumber}.mp4`);
+    app.get('/video/:channel', (req, res) => {
+      const {channel} = req.params;
+      res.status(200).sendFile(`${__dirname}/routes/public/downloads/${channel}-clip.mp4`);
+      // res.status(200).sendFile(`${__dirname}/routes/public/downloads/${channel}-clip-${clipNumber}.mp4`);
     });
 
     app.get('/speach/:channel', (req, res) => {
@@ -115,27 +128,8 @@ app.use('/clips', clipRoute);
       return finalUrl;
     }
 
-    function downloadVideo(url, fileName) {
-      let path = `${downloadPath}${fileName}`;
-      let file = fs.createWriteStream(path);
-
-      https.get(url, (response) => {
-          response.pipe(file);
-      });
-
-      file.on('finish', () => {
-          file.close();
-          return true;
-      });
-
-      file.on('error', (err) => {
-        console.error(err);
-        return false;
-      });
-    }
-
     server.listen(PORT, () => {
-      console.log(`Server running on port http://localhost:${PORT}`);
+      console.log(`Server running on port ${PORT}`);
     });
 }
 
