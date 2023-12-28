@@ -14,6 +14,8 @@ const headers = {
     'Content-Type': 'application/json'
 }
 
+const modID = '698614112';
+
 async function Bot() {
     require('dotenv').config();
 
@@ -21,7 +23,6 @@ const mongoose = require('mongoose');
 const ChatLog = require('./schemas/chat_log.schema');
 const Channel = require('./schemas/channel.schema');
 
-const modID = '698614112';
 
 const commandsRegex = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?$/);
 
