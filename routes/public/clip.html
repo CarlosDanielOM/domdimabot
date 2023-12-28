@@ -11,13 +11,13 @@
 
     <div id="container"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
     <script>
 
         const container = document.getElementById('container');
 
         let channel = window.location.pathname.split('/')[2];
-        const socket = io(`/clip/${channel}`);
+        const socket = io(`https://domdimabot.com/clip/${channel}`);
 
         const second = 1000;
 

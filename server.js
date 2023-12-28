@@ -16,6 +16,11 @@ function init() {
     const server = http.createServer(app);
     const io = socketio(server);
 
+    io.on('connection', (streamer) => {
+      io.of(`/clip/${streamer}`).emit('prepare-clip');
+      console.log("Etst uwdjakldwal")
+    });
+    
     //* Routes *//
     const clipRoute = require('./routes/clip.route');
 
