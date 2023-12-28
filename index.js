@@ -1,6 +1,8 @@
 const db = require('./db');
-const fn = require('./functions');
-const command = require('./commands');
+const httpsServer = require('./server');
+const eventsub = require('./eventsub');
+const tmi = require('tmi.js');
+const axios = require('axios');
 
 const SumimetroSupremo = require('./schemas/sumimetro_supremo.schema');
 
@@ -14,8 +16,6 @@ const headers = {
 
 async function Bot() {
     require('dotenv').config();
-const tmi = require('tmi.js');
-const axios = require('axios');
 
 const mongoose = require('mongoose');
 const ChatLog = require('./schemas/chat_log.schema');
@@ -53,7 +53,9 @@ const options = {
     channels: channels,
 };
 
+
 client = new tmi.Client(options);
+
 
 client.connect().catch(console.error);
 
@@ -65,11 +67,6 @@ let crushMSGSent = false;
 
 client.on('connected', (address, port) => {
     console.log('bot connected');
-});
-
-client.on('join', (channel, username, self) => {
-    if(self) return;
-    if(channel === '#d0jiart') return;
 });
 
 let fcounter = 0;
@@ -84,6 +81,7 @@ let dominantesSupremos = [];
 let soSent = [];
 
 let sent = false;
+
 
 client.on('raided', (channel, username, viewers) => {
     if(channel === '#d0jiart') return;
@@ -536,20 +534,6 @@ client.on('message', (channel, tags, message, self) => {
                 let user = argument || tags['display-name'];
                 let dominante = Math.floor(Math.random() * 100) + 1;
                 let sumiso = 100 - dominante;
-                let sumisoSupremo = getUserSupremo(channel, 'sumiso');
-                let dominanteSupremo = getUserSupremo(channel, 'dominante');
-
-                if(sumisoSupremo !== null) {
-                    addSumisoSupremo(channel, user, sumiso);
-                } else {
-                    if(sumiso > sumisoSupremo.percent) {
-                        addSumisoSupremo(channel, user, sumiso);
-                    }
-                }
-
-                if(dominanteSupremo !== null) {
-                    addDominanteSupremo(channel, user, dominante);
-                }
                 
                 client.say(channel, `Los lectores del sumimetro reflejan que ${user} tiene ${sumiso}% de sumiso y ${dominante}% de dominante`);
             }
@@ -1245,9 +1229,7 @@ setTimeout(() => {
 }, getTargetDate() - Date.now());
 
 db.init();
-
-let domID = fn.getUserID('cdom201', URI, headers);
-
-console.log(domID);
+httpsServer.init();
+eventsub.init();
 
 Bot();
