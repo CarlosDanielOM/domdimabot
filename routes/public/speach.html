@@ -25,7 +25,7 @@
         let speach = new SpeechSynthesisUtterance();
         speach.lang = 'es-US';
 
-        socket.on('speach', (data) => {
+        channelSocket.on('speach', (data) => {
             let msg = data.message;
             speach.text = msg;
             synth.speak(speach);
