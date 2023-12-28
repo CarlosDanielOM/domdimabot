@@ -11,8 +11,8 @@ module.exports = {
             console.log(`Connection to MongoDB has been established`);
         })
 
-        mongoose.connection.on('error', () => {
-            console.log(`There was an error establishing a connectio to MongoDB. \n Error: ${err.stack}`);
+        mongoose.connection.on('error', (error) => {
+            console.log(`There was an error establishing a connectio to MongoDB. \n Error: ${error}`);
         })
         
         mongoose.connection.on('disconnected', () => {

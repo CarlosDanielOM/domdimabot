@@ -7,9 +7,8 @@ const https = require('https');
 
 const downloadPath = `${__dirname}/routes/public/downloads/`;
 
-module.exports = {
-  init: () => {
-    const PORT = process.env.PORT || 3000;
+function init() {
+  const PORT = process.env.PORT || 3000;
     
     const app = express();
     const server = https.createServer(app);
@@ -131,6 +130,10 @@ app.use('/clips', clipRoute);
     server.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
-
-  }
 }
+
+module.exports = {
+  init
+}
+
+init();
