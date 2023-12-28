@@ -906,7 +906,7 @@ client.on('message', (channel, tags, message, self) => {
         },
         ruletarusa: {
             response: () => {
-                if(channel === '#marcvt_' && tags.username === 'cdom201') {isMod = false;}
+                if(( tags.username !== channel.replace('#', '') ) && !tags.mod ) {isMod = false;}
                 if(isMod) return client.say(channel, `No puedes disparar te como un mod, no seas pendejo.`);
                 let user = tags['display-name'];
                 let probability = Math.floor(Math.random() * 120) + 1;
