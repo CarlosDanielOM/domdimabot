@@ -22,6 +22,11 @@ async function init() {
       io.of(`/clip/${channel}`).emit('prepare-clips');
     });
 
+    io.of(/^\/speach\/\w+$/).on('connection', (socket) => {
+      const channel = socket.nsp.name.split('/')[2];
+      io.of(`/clip/${channel}`).emit('prepare-speach');
+    });
+
     //* Routes *//
     const clipRoute = require('./routes/clip.route');
 
@@ -93,6 +98,12 @@ async function init() {
       const {channel} = req.params;
       res.status(200).sendFile(`${__dirname}/routes/public/downloads/${channel}-clip.mp4`);
       // res.status(200).sendFile(`${__dirname}/routes/public/downloads/${channel}-clip-${clipNumber}.mp4`);
+    });
+
+    //? Just so I can show saved clips
+    app.get('/video/:channel/:clip', (req, res) => {
+      const {channel, clip} = req.params;
+      res.status(200).sendFile(`${__dirname}/routes/public/downloads/${channel}-clip-${clip}.mp4`);
     });
 
     app.get('/speach/:channel', (req, res) => {
