@@ -4,14 +4,16 @@ const express = require('express');
 const socketio = require('socket.io');
 const fs = require('fs');
 const https = require('https');
+const http = require('http');
 
 const downloadPath = `${__dirname}/routes/public/downloads/`;
+const htmlPath = `${__dirname}/routes/public/`;
 
 function init() {
   const PORT = process.env.PORT || 3000;
     
     const app = express();
-    const server = https.createServer(app);
+    const server = http.createServer(app);
     const io = socketio(server);
 
     //* Routes *//
@@ -25,7 +27,7 @@ function init() {
 
     app.get('/clip/:channel', (req, res) => {
       const channel = req.params.channel;
-      res.status(200).sendFile(`${__dirname}/routes/public/clip.html`);
+      res.status(200).sendFile(`${htmlPath}clip.html`);
     })
 
     app.post('/clip/:channel', async (req, res) => {
@@ -128,12 +130,10 @@ app.use('/clips', clipRoute);
     }
 
     server.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+      console.log(`Server running on port http://localhost:${PORT}`);
     });
 }
 
 module.exports = {
   init
 }
-
-init();
