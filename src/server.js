@@ -7,11 +7,11 @@ const fs = require('fs');
 const https = require('https');
 const http = require('http');
 const axios = require('axios');
+const CLIENT = require('../util/client.js');
 
-const { encrypt, decrypt } = require('./crypto');
+const { encrypt, decrypt } = require('../util/crypto');
 
-const channelSchema = require('./schemas/channel.schema');
-const { channel } = require('diagnostics_channel');
+const channelSchema = require('../schemas/channel.schema');
 
 const downloadPath = `${__dirname}/routes/public/downloads/`;
 const htmlPath = `${__dirname}/routes/public/`;
@@ -34,7 +34,7 @@ async function init() {
     });
 
     //* Routes *//
-    const clipRoute = require('./routes/clip.route');
+    const clipRoute = require('./routes/clip.route.js');
 
     let soSent = [];
     
@@ -182,13 +182,14 @@ app.use('/clips', clipRoute);
         token = encrypt(token);
         refreshToken = encrypt(refreshToken);
 
-        updatedChannel = await channelSchema.findOneAndUpdate({name: username}, {twitch_user_token: token, twitch_user_refresh_token: refreshToken, twitch_user_token_id: tokenID, active: true});
+        updatedChannel = await channelSchema.findOneAndUpdate({name: username}, {twitch_user_token: token, twitch_user_refresh_token: refreshToken, twitch_user_token_id: tokenID, actived: true});
 
         if(!updatedChannel) {
           res.status(400).send('There was an error updating your channel');
           return false;
         }
 
+        CLIENT.connectChannel(username);
         res.status(200).send('Your channel was updated successfully');
 
       })
