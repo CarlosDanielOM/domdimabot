@@ -5,6 +5,7 @@ const tmi = require('tmi.js');
 const axios = require('axios');
 
 const SumimetroSupremo = require('./schemas/sumimetro_supremo.schema');
+const Channel = require('./schemas/channel.schema');
 
 const URI = 'https://api.twitch.tv/helix/';
 
@@ -15,6 +16,9 @@ const headers = {
 }
 
 const modID = '698614112';
+
+let client; 
+
 
 async function Bot() {
     require('dotenv').config();
@@ -28,7 +32,6 @@ const commandsRegex = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?$/);
 
 
 
-let client;
 
 let streamerHeader;
 
@@ -38,10 +41,9 @@ let Channels = await Channel.find({actived: true}, 'name').exec();
 
 let pandaSent = false;
 
-Channels.forEach(channel => {
+Channels.forEach((channel) => {
     channels.push(`#${channel.name}`);
 });
-
 
 const options = {
     options: {
@@ -982,17 +984,10 @@ function addUser(user) {
     users.push(user);
 }
 
-function validateOAuth() {
-    axios({
-        method: 'get',
-        url: "https://id.twitch.tv/oauth2/validate",
-        headers: {
-            'Authorization': `OAuth ${process.env.PANDA_TOKEN}`,
-            'Client-ID': process.env.ClientID
-        }
-    })
+function validateOAuth(token) {
+    axios({method: 'get', url: 'https://id.twitch.tv/oauth2/validate', headers: {'Authorization': `OAuth ${token}`, 'Client-ID': process.env.ClientID}})
     .then((res) => {
-        console.log(res);
+        console.log(res.data);
     })
     .catch((error) => {
         console.log(error);
@@ -1232,5 +1227,30 @@ setTimeout(() => {
 db.init();
 httpsServer.init();
 eventsub.init();
+
+async function test(channelname) {
+    let testy = await Channel.find({actived: true});
+    testy = testy.filter(channel => channel.name !== 'marcvt_');
+    testy = testy.map(channel => {
+        return {
+            name: channel.name,
+            id: channel.twitch_user_id,
+            token: channel.twitch_user_token
+        }
+    })
+
+    let huh = testy.includes(channelname);
+
+    console.log(huh);
+
+    testy.forEach(async (channel) => {
+        console.log(channel)
+        if(channel.name === channelname) {
+            console.log('aqui')
+        }
+    });
+}
+
+//validateOAuth('u6uvjfga2pkcpsjbcs0tfdqk5227iw') //? CDOM201
 
 Bot();

@@ -7,6 +7,9 @@ const fs = require('fs');
 const https = require('https');
 const http = require('http');
 
+const channelSchema = require('./schemas/channel.schema');
+const { channel } = require('diagnostics_channel');
+
 const downloadPath = `${__dirname}/routes/public/downloads/`;
 const htmlPath = `${__dirname}/routes/public/`;
 
@@ -138,6 +141,32 @@ app.use('/clips', clipRoute);
 
       return finalUrl;
     }
+
+    //? AUTH ROUTES
+    app.get('/auth', async (req, res) => {
+      let token = req.query.code;
+      let username = req.query.state;
+      
+      if(!token) {
+        res.status(400).send('No token provided, there was an error getting your token');
+        return false;
+      }
+
+      let updatedChannel = await channelSchema.findOneAndUpdate({name: username}, {twitch_user_token: token, active: true});
+
+      if(!updatedChannel) {
+        res.status(400).send('No channel found');
+        return false;
+      }
+
+      res.status(200).send(`Token updated for ${username}`);
+      
+    });
+
+    app.get('/login', (req, res) => {
+      res.status(200).sendFile(`${htmlPath}login.html`);
+    });
+    
 
     server.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

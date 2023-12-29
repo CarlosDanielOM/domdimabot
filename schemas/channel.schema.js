@@ -7,6 +7,8 @@ const channelSchema = new schema({
     premium: Boolean,
     premium_until: Date,
     actived: Boolean,
+    twitch_user_id: String,
+    twitch_user_token: String,
 });
 
 const Channel = moongoose.model('Channel', channelSchema);
