@@ -6,6 +6,7 @@ const socketio = require('socket.io');
 const fs = require('fs');
 const https = require('https');
 const http = require('http');
+const axios = require('axios');
 
 const channelSchema = require('./schemas/channel.schema');
 const { channel } = require('diagnostics_channel');
@@ -146,20 +147,51 @@ app.use('/clips', clipRoute);
     app.get('/auth', async (req, res) => {
       let token = req.query.code;
       let username = req.query.state;
+
+      let updatedChannel;
       
       if(!token) {
         res.status(400).send('No token provided, there was an error getting your token');
         return false;
       }
 
-      let updatedChannel = await channelSchema.findOneAndUpdate({name: username}, {twitch_user_token: token, active: true});
+      axios({
+        method: 'post',
+        url: 'https://id.twitch.tv/oauth2/token',
+        params: {
+          client_id: process.env.CLIENT_ID,
+          client_secret: process.env.CLIENT_SECRET,
+          code: token,
+          grant_type: 'authorization_code',
+          redirect_uri: 'https://domdimabot.com/auth'
+        },
+        headers: {
+          'Content-Type': 'www-form-urlencoded'
+        }
+      })
+      .then(async (response) => {
+        let token = response.data.access_token;
+        let refreshToken = response.data.refresh_token;
+        let tokenType = response.data.token_type;
+        let expiresIn = response.data.expires_in;
+        let scope = response.data.scope;
+        let tokenID = response.data.id_token;
 
-      if(!updatedChannel) {
-        res.status(400).send('No channel found');
-        return false;
-      }
+        console.log({res: response.data})
 
-      res.status(200).send(`Token updated for ${username}`);
+        updatedChannel = await channelSchema.findOneAndUpdate({name: username}, {twitch_user_token: token, twitch_user_refresh_token: refreshToken, twitch_user_token_id: tokenID, active: true});
+
+        if(!updatedChannel) {
+          res.status(400).send('There was an error updating your channel');
+          return false;
+        }
+
+        res.status(200).send('Your channel was updated successfully');
+
+      })
+      .catch((err) => {
+        console.log(err);
+      });
       
     });
 
