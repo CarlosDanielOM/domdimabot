@@ -4,6 +4,8 @@ const eventsub = require('./eventsub');
 const tmi = require('tmi.js');
 const axios = require('axios');
 
+const { encrypt, decrypt } = require('./crypto');
+
 const SumimetroSupremo = require('./schemas/sumimetro_supremo.schema');
 const Channel = require('./schemas/channel.schema');
 
@@ -1250,7 +1252,5 @@ async function test(channelname) {
         }
     });
 }
-
-//validateOAuth('u6uvjfga2pkcpsjbcs0tfdqk5227iw') //? CDOM201
 
 Bot();

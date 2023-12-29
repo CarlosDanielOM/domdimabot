@@ -8,8 +8,8 @@ const channelSchema = new schema({
     premium_until: Date,
     actived: Boolean,
     twitch_user_id: String,
-    twitch_user_token: String,
-    twitch_user_refresh_token: String,
+    twitch_user_token: {iv: String, content: String},
+    twitch_user_refresh_token: {iv: String, content: String},
     twitch_user_token_id: String,
 });
 

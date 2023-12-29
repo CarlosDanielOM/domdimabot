@@ -8,6 +8,8 @@ const https = require('https');
 const http = require('http');
 const axios = require('axios');
 
+const { encrypt, decrypt } = require('./crypto');
+
 const channelSchema = require('./schemas/channel.schema');
 const { channel } = require('diagnostics_channel');
 
@@ -177,7 +179,8 @@ app.use('/clips', clipRoute);
         let scope = response.data.scope;
         let tokenID = response.data.id_token;
 
-        console.log({res: response.data})
+        token = encrypt(token);
+        refreshToken = encrypt(refreshToken);
 
         updatedChannel = await channelSchema.findOneAndUpdate({name: username}, {twitch_user_token: token, twitch_user_refresh_token: refreshToken, twitch_user_token_id: tokenID, active: true});
 
