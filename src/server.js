@@ -7,6 +7,8 @@ const fs = require('fs');
 const https = require('https');
 const http = require('http');
 const axios = require('axios');
+
+const streamerNames = require('../util/streamerNames.js');
 const CLIENT = require('../util/client.js');
 
 const { encrypt, decrypt } = require('../util/crypto');
@@ -77,9 +79,6 @@ async function init() {
       }
       const file = fs.createWriteStream(path);
       const stream = response.body.pipe(file);
-      // https.get(clip, (response) => {
-      //     response.pipe(file);
-      // });
       await new Promise((resolve, reject) => {
         stream.on('finish', () => {
           io.of(`/clip/${streamer}`).emit('play-clip', {channel, duration});
@@ -103,7 +102,6 @@ async function init() {
     app.get('/video/:channel', (req, res) => {
       const {channel} = req.params;
       res.status(200).sendFile(`${__dirname}/routes/public/downloads/${channel}-clip.mp4`);
-      // res.status(200).sendFile(`${__dirname}/routes/public/downloads/${channel}-clip-${clipNumber}.mp4`);
     });
 
     //? Just so I can show saved clips
@@ -189,7 +187,8 @@ app.use('/clips', clipRoute);
           return false;
         }
 
-        CLIENT.connectChannel(username);
+        await CLIENT.connectChannel(username);
+        await streamerNames.updateNames();
         res.status(200).send('Your channel was updated successfully');
 
       })

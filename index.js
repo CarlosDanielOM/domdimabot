@@ -6,6 +6,7 @@ const eventsub = require('./src/eventsub');
 const bot = require('./src/bot');
 const streamerNames = require('./util/streamerNames');
 const CLIENT = require('./util/client.js');
+const { refreshAllTokens } = require('./util/token');
 
 async function initialize() {
     await CLIENT.clientConnect();
@@ -16,6 +17,11 @@ async function initialize() {
     await httpServer.init();
     eventsub.init();
     await bot.init();
+    refreshAllTokens();
+
+    setInterval(async () => {
+        await refreshAllTokens();
+    }, 1000 * 60 * 60 * 4);
 }
-  
+
 initialize();

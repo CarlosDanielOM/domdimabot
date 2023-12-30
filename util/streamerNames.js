@@ -4,15 +4,16 @@ const channelSchema = require('../schemas/channel.schema');
 let streamerNames = [];
 
 //? Get all channels from DB
-async function getNamesDB(){
+async function getNamesDB() {
     try {
-        const result = await channelSchema.find({actived: true}, 'name twitch_user_id twitch_user_token');
+        const result = await channelSchema.find({ actived: true }, 'name twitch_user_id twitch_user_token twitch_user_refresh_token');
 
         // console.log(result)
         const namesArray = result.map((item) => ({
-            name: item.name, 
-            user_id: item.twitch_user_id, 
-            token: item.twitch_user_token
+            name: item.name,
+            user_id: item.twitch_user_id,
+            token: item.twitch_user_token,
+            refresh_token: item.twitch_user_refresh_token
         }));
 
         return namesArray;
@@ -27,12 +28,12 @@ async function getStreamer(name) {
     return await filteredS[0];
 }
 
-function getNames(){
+function getNames() {
     const allNames = streamerNames.map(streamer => streamer.name);
     return allNames;
 }
 
-async function updateNames(){
+async function updateNames() {
     streamerNames = await getNamesDB();
 };
 

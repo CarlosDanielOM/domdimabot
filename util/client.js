@@ -1,12 +1,12 @@
 require('dotenv').config();
 const tmi = require('tmi.js');
-const streamerNames = require('./streamerNames'); 
+const streamerNames = require('./streamerNames');
 
 let client = null;
 
 const options = {
     options: {
-        debug: true,
+        debug: false,
     },
     identity: {
         username: process.env.TWITCH_USERNAME,
