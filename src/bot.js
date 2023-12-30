@@ -1113,11 +1113,6 @@ function repeatTimeout() {
     }, targetTime);
 }
 
-setTimeout(() => {
-    console.log('Resseting Supremos');
-    repeatTimeout();
-}, getTargetDate() - Date.now());
-
 async function test(channelname) {
     let testy = await Channel.find({actived: true});
     testy = testy.filter(channel => channel.name !== 'marcvt_');
