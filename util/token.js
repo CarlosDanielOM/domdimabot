@@ -11,19 +11,12 @@ async function refreshAllTokens() {
         streamers.forEach(async (streamer) => {
             let channel = await streamerNames.getStreamer(streamer);
 
-            console.log('channel', channel);
-
             const { token, refresh_token } = await refreshToken(decrypt(channel.refresh_token));
 
             channel.token = token;
             channel.refresh_token = refresh_token;
 
-            console.log('channel', channel);
-
             let doc = await channelSchema.findOneAndUpdate({ name: channel.name }, { twitch_user_token: channel.token, twitch_user_refresh_token: channel.refresh_token });
-
-            console.log('doc', doc);
-
 
         });
     } catch (error) {
