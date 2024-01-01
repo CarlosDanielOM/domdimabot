@@ -39,9 +39,14 @@ function connectChannel(channel) {
     client.join(channel);
 };
 
+function disconnectChannel(channel) {
+    client.part(channel);
+}
+
 module.exports = {
     clientConnect,
     getClient,
     connectChannels,
-    connectChannel
+    connectChannel,
+    disconnectChannel,
 };

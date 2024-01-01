@@ -20,155 +20,147 @@ const htmlPath = `${__dirname}/routes/public/`;
 
 async function init() {
   const PORT = process.env.PORT || 3000;
-    
-    const app = express();
-    const server = http.createServer(app);
-    const io = await socketio(server);
 
-    io.of(/^\/clip\/\w+$/).on('connection', (socket) => {
-      const channel = socket.nsp.name.split('/')[2];
-      io.of(`/clip/${channel}`).emit('prepare-clips');
-    });
+  const app = express();
+  const server = http.createServer(app);
+  const io = await socketio(server);
 
-    io.of(/^\/speach\/\w+$/).on('connection', (socket) => {
-      const channel = socket.nsp.name.split('/')[2];
-      io.of(`/clip/${channel}`).emit('prepare-speach');
-    });
+  io.of(/^\/clip\/\w+$/).on('connection', (socket) => {
+    const channel = socket.nsp.name.split('/')[2];
+    io.of(`/clip/${channel}`).emit('prepare-clips');
+  });
 
-    //* Routes *//
-    const clipRoute = require('./routes/clip.route.js');
+  io.of(/^\/speach\/\w+$/).on('connection', (socket) => {
+    const channel = socket.nsp.name.split('/')[2];
+    io.of(`/clip/${channel}`).emit('prepare-speach');
+  });
 
-    let soSent = [];
-    
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(express.static('public'));
+  //* Routes *//
+  const clipRoute = require('./routes/clip.route.js');
 
-    app.get('/clip/:channel', (req, res) => {
-      const channel = req.params.channel;
-      res.status(200).sendFile(`${htmlPath}clip.html`);
-    })
+  let soSent = [];
 
-    app.post('/clip/:channel', async (req, res) => {
-      const streamer = req.params.channel;
-      const channel = req.body.channel;
-      //const clip = req.body.clip_url;
-      const thumbnail = req.body.thumbnail;
-      const duration = req.body.duration;
-      const clipNumber = Math.floor(Math.random() * 100);
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(express.static(__dirname + "/routes/public"));
+  // app.use("/", express.static(__dirname + "/routes/public"));
+  // app.use(express.static('routes/public/assets'));
 
-      if(soSent.includes(streamer)) {
-        res.status(400).json({ message: `Clip already playing on ${streamer} channel` });
-        return false;
-      }
+  //! Routes !//
+  //? CLIP ROUTES ?//
 
-      let clip = getVideoURL(thumbnail);
+  app.get('/clip/:channel', (req, res) => {
+    const channel = req.params.channel;
+    res.status(200).sendFile(`${htmlPath}clip.html`);
+  })
 
-      let fileName = `${streamer}-clip.mp4`;
+  app.post('/clip/:channel', async (req, res) => {
+    const streamer = req.params.channel;
+    const channel = req.body.channel;
+    //const clip = req.body.clip_url;
+    const thumbnail = req.body.thumbnail;
+    const duration = req.body.duration;
+    const clipNumber = Math.floor(Math.random() * 100);
 
-      let path = `${downloadPath}${fileName}`;
+    if (soSent.includes(streamer)) {
+      res.status(400).json({ message: `Clip already playing on ${streamer} channel` });
+      return false;
+    }
 
-      if(!fs.existsSync(downloadPath)){
-        fs.mkdirSync(downloadPath, {recursive: true})
-      }
+    let clip = getVideoURL(thumbnail);
 
-      const response = await fetch(clip);
-      if(!response.ok){
-        const err = new Error(`Error bla bla bla`)
-        throw err
-      }
-      const file = fs.createWriteStream(path);
-      const stream = response.body.pipe(file);
-      await new Promise((resolve, reject) => {
-        stream.on('finish', () => {
-          io.of(`/clip/${streamer}`).emit('play-clip', {channel, duration});
-          soSent.push(streamer);
-          setTimeout(() => { 
-            soSent = soSent.filter(so => so !== streamer);
-          }, 1000 * Number(duration));
-          resolve()
-        });
+    let fileName = `${streamer}-clip.mp4`;
+
+    let path = `${downloadPath}${fileName}`;
+
+    if (!fs.existsSync(downloadPath)) {
+      fs.mkdirSync(downloadPath, { recursive: true })
+    }
+
+    const response = await fetch(clip);
+    if (!response.ok) {
+      const err = new Error(`Error bla bla bla`)
+      throw err
+    }
+    const file = fs.createWriteStream(path);
+    const stream = response.body.pipe(file);
+    await new Promise((resolve, reject) => {
+      stream.on('finish', () => {
+        io.of(`/clip/${streamer}`).emit('play-clip', { channel, duration });
+        soSent.push(streamer);
+        setTimeout(() => {
+          soSent = soSent.filter(so => so !== streamer);
+        }, 1000 * Number(duration));
+        resolve()
       });
-
-      file.on('error', (err) => {
-        console.error(err);
-        return false;
-      });
-
-      res.status(200).json({ message: `Playing clip on ${streamer} channel` });
-      
     });
 
-    app.get('/video/:channel', (req, res) => {
-      const {channel} = req.params;
-      res.status(200).sendFile(`${__dirname}/routes/public/downloads/${channel}-clip.mp4`);
+    file.on('error', (err) => {
+      console.error(err);
+      return false;
     });
 
-    //? Just so I can show saved clips
-    app.get('/video/:channel/:clip', (req, res) => {
-      const {channel, clip} = req.params;
-      res.status(200).sendFile(`${__dirname}/routes/public/downloads/${channel}-clip-${clip}.mp4`);
-    });
+    res.status(200).json({ message: `Playing clip on ${streamer} channel` });
 
-    app.get('/speach/:channel', (req, res) => {
-      const channel = req.params.channel;
-      res.status(200).sendFile(`${__dirname}/routes/public/speach.html`);
-    });
+  });
 
-    app.post('/speach/:channel', (req, res) => {
+  //? VIDEO ROUTES ?//
+
+  app.get('/video/:channel', (req, res) => {
+    const { channel } = req.params;
+    res.status(200).sendFile(`${__dirname}/routes/public/downloads/${channel}-clip.mp4`);
+  });
+
+  //? Just so I can show saved clips
+  app.get('/video/:channel/:clip', (req, res) => {
+    const { channel, clip } = req.params;
+    res.status(200).sendFile(`${__dirname}/routes/public/downloads/${channel}-clip-${clip}.mp4`);
+  });
+
+  //? SPEACH ROUTES ?//
+
+  app.get('/speach/:channel', (req, res) => {
+    const channel = req.params.channel;
+    res.status(200).sendFile(`${__dirname}/routes/public/speach.html`);
+  });
+
+  app.post('/speach/:channel', (req, res) => {
     const channel = req.params.channel;
     const speach = req.body.speach;
 
-    io.of(`/speach/${channel}`).emit('speach', {message: speach});
+    io.of(`/speach/${channel}`).emit('speach', { message: speach });
 
     res.status(200).json({ message: `Playing speach on ${channel} channel` });
-    });
+  });
 
-app.use('/clips', clipRoute);
 
-    function getVideoURL(thumbnailUrl) {
-      let firstPart = `${thumbnailUrl.split('tv/')[0]}tv/`;
+  //? AUTH ROUTES
 
-      let clipPart = thumbnailUrl.split('tv/')[1];
+  app.get('/auth', async (req, res) => {
+    let token = req.query.code;
+    let username = req.query.state;
 
-      let clipId = clipPart.split('-preview')[0];
-      let extension = clipPart.split('.')[1]
+    let updatedChannel;
 
-      if(extension === 'jpg' || extension === 'png' || extension === 'jpeg') {
-          extension = 'mp4';
-      }
-
-      let finalUrl = `${firstPart}${clipId}.${extension}`;
-
-      return finalUrl;
+    if (!token) {
+      res.status(400).send('No token provided, there was an error getting your token');
+      return false;
     }
 
-    //? AUTH ROUTES
-    app.get('/auth', async (req, res) => {
-      let token = req.query.code;
-      let username = req.query.state;
-
-      let updatedChannel;
-      
-      if(!token) {
-        res.status(400).send('No token provided, there was an error getting your token');
-        return false;
+    axios({
+      method: 'post',
+      url: 'https://id.twitch.tv/oauth2/token',
+      params: {
+        client_id: process.env.CLIENT_ID,
+        client_secret: process.env.CLIENT_SECRET,
+        code: token,
+        grant_type: 'authorization_code',
+        redirect_uri: 'https://domdimabot.com/auth'
+      },
+      headers: {
+        'Content-Type': 'www-form-urlencoded'
       }
-
-      axios({
-        method: 'post',
-        url: 'https://id.twitch.tv/oauth2/token',
-        params: {
-          client_id: process.env.CLIENT_ID,
-          client_secret: process.env.CLIENT_SECRET,
-          code: token,
-          grant_type: 'authorization_code',
-          redirect_uri: 'https://domdimabot.com/auth'
-        },
-        headers: {
-          'Content-Type': 'www-form-urlencoded'
-        }
-      })
+    })
       .then(async (response) => {
         let token = response.data.access_token;
         let refreshToken = response.data.refresh_token;
@@ -180,34 +172,123 @@ app.use('/clips', clipRoute);
         token = encrypt(token);
         refreshToken = encrypt(refreshToken);
 
-        updatedChannel = await channelSchema.findOneAndUpdate({name: username}, {twitch_user_token: token, twitch_user_refresh_token: refreshToken, twitch_user_token_id: tokenID, actived: true});
+        updatedChannel = await channelSchema.findOneAndUpdate({ name: username }, { twitch_user_token: token, twitch_user_refresh_token: refreshToken, twitch_user_token_id: tokenID, actived: true });
 
-        if(!updatedChannel) {
+        if (!updatedChannel) {
           res.status(400).send('There was an error updating your channel');
           return false;
         }
 
-        await CLIENT.connectChannel(username);
-        await streamerNames.updateNames();
-        res.status(200).send('Your channel was updated successfully');
+        streamerNames.updateNames();
+        CLIENT.connectChannel(username);
+        res.location('/dashboard');
 
       })
       .catch((err) => {
         console.log(err);
       });
-      
-    });
 
-    app.get('/login', (req, res) => {
-      res.status(200).sendFile(`${htmlPath}login.html`);
-    });
-    
+  });
 
-    server.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
+  //? LOGIN ROUTES ?//
+
+  app.get('/login', (req, res) => {
+    res.status(200).sendFile(`${htmlPath}login.html`);
+  });
+
+  app.post('/login', async (req, res) => {
+    const { name, id, email, action } = req.body;
+
+    let exists = await channelSchema.findOne({ twitch_user_id: id });
+
+    if (exists) {
+      res.status(200).json({
+        message: 'User already exists',
+        exists: true,
+      });
+      return false;
+    } else {
+      if (action === 'login') {
+        let newChannel = new channelSchema({
+          name,
+          email,
+          type: 'twitch',
+          premium: false,
+          premium_until: null,
+          actived: false,
+          twitch_user_id: id,
+        });
+
+        await newChannel.save();
+
+        res.status(200).json({
+          message: 'User created',
+          saved: true,
+        });
+      } else {
+        res.status(200).json({
+          message: 'User not found',
+          exists: false,
+        });
+      }
+    }
+
+  });
+
+  //? DASHBOARD ROUTES ?//
+
+  app.get('/dashboard', async (req, res) => {
+    res.status(200).sendFile(`${htmlPath}dashboard.html`);
+  });
+
+  //? BOT ROUTES ?//
+
+  app.post('/bot/:action', async (req, res) => {
+    const action = req.params.action;
+    const { id } = req.body;
+
+    let exists = await channelSchema.findOne({ twitch_user_id: id });
+
+    if (exists) {
+      if (action === 'join') {
+        CLIENT.connectChannel(exists.name);
+        res.status(200).json({ message: 'Joined channel' });
+      } else if (action === 'leave') {
+        CLIENT.disconnectChannel(exists.name);
+        res.status(200).json({ message: 'Left channel' });
+      } else {
+        res.status(400).json({ message: 'Action not found' });
+      }
+    } else {
+      res.status(400).json({ message: 'User not found' });
+      return false;
+    }
+
+
+  })
+
+  server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 }
 
 module.exports = {
   init
+}
+
+function getVideoURL(thumbnailUrl) {
+  let firstPart = `${thumbnailUrl.split('tv/')[0]}tv/`;
+
+  let clipPart = thumbnailUrl.split('tv/')[1];
+
+  let clipId = clipPart.split('-preview')[0];
+  let extension = clipPart.split('.')[1]
+
+  if (extension === 'jpg' || extension === 'png' || extension === 'jpeg') {
+    extension = 'mp4';
+  }
+
+  let finalUrl = `${firstPart}${clipId}.${extension}`;
+
+  return finalUrl;
 }

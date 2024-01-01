@@ -1,0 +1,118 @@
+{
+    "scopes": {
+        "analytics": {
+            "read": [
+                "extensions",
+                "games"
+            ]
+        },
+        "bits": {
+            "read": [
+                ""
+            ]
+        },
+        "channel": {
+            "read": [
+                "ads",
+                "charity",
+                "editors",
+                "goals",
+                "guest_star",
+                "hype_train",
+                "polls",
+                "predictions",
+                "redemptions",
+                "stream_key",
+                "subscriptions",
+                "vips"
+            ],
+            "manage": [
+                "ads",
+                "broadcast",
+                "extensions",
+                "guest_star",
+                "moderators",
+                "polls",
+                "predictions",
+                "raids",
+                "redemptions",
+                "schedule",
+                "videos",
+                "vips"
+            ],
+            "edit": [
+                "commercial"
+            ]
+        },
+        "clips": {
+            "edit":[
+                ""
+            ]
+        },
+        "moderation": {
+            "read": [
+                ""
+            ]
+        },
+        "moderator": {
+            "read": [
+                "automod_settings",
+                "blocked_terms",
+                "chat_settings",
+                "chatters",
+                "followers",
+                "guest_star",
+                "shield_mode",
+                "shoutouts"
+            ],
+            "manage": [
+                "announcements",
+                "automod",
+                "automod_settings",
+                "banned_users",
+                "blocked_terms",
+                "chat_messages",
+                "chat_settings",
+                "guest_star",
+                "shield_mode",
+                "shoutouts"
+            ]
+        },
+        "user": {
+            "read": [
+                "blocked_users",
+                "broadcast",
+                "email",
+                "follows",
+                "subscriptions"
+            ],
+            "manage": [
+                "blocked_users",
+                "chat_color",
+                "whispers"
+            ],
+            "edit": [
+                "",
+                "follows"
+            ]
+        }
+    },
+    "bot": {
+        "channel": [
+            "bot",
+            "moderate"
+        ],
+        "chat": [
+            "edit",
+            "read"
+        ],
+        "user": [
+            "bot",
+            "read:chat"
+        ],
+        "whispers": [
+            "read",
+            "edit"
+        ]
+    }
+}

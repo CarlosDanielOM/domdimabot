@@ -557,10 +557,6 @@ async function init() {
                                             }, 1000 * 60 * 2);
                                         })
                                         .catch((error) => {
-                                            let data = error.data;
-                                            let httpcode = 429;
-                                            if (httpcode === 429) return client.say(channel, `Hubo un error al enviar el SO a ${user}, Se necesita un cooldown de 2 minutos para cada SO automatico o un cooldown de 60 minutos si es a la misma persona.`);
-                                            client.say(channel, `Hubo un error al enviar el SO a ${user}, por favor contacta al creador del bot para que lo arregle.`)
                                         })
                                 })
                         })
@@ -869,15 +865,6 @@ async function init() {
 
 function addUser(user) {
     users.push(user);
-}
-
-function validateOAuth(token) {
-    axios({ method: 'get', url: 'https://id.twitch.tv/oauth2/validate', headers: { 'Authorization': `OAuth ${token}`, 'Client-ID': process.env.ClientID } })
-        .then((res) => {
-            console.log(res.data);
-        })
-        .catch((error) => {
-        });
 }
 
 function showClip(streamer, user = undefined) {
