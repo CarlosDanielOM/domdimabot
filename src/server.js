@@ -100,7 +100,7 @@ async function init() {
       return false;
     });
 
-    res.status(200).json({ message: `Playing clip on ${streamer} channel` });
+    res.status(200).json({ message: `Playing clip on ${streamer} channel`, status: 'success' });
 
   });
 
@@ -177,12 +177,11 @@ async function init() {
         if (!updatedChannel) {
           res.status(400).send('There was an error updating your channel');
           return false;
+        } else {
+          streamerNames.updateNames();
+          CLIENT.connectChannel(username);
+          res.location('/dashboard');
         }
-
-        streamerNames.updateNames();
-        CLIENT.connectChannel(username);
-        res.location('/dashboard');
-
       })
       .catch((err) => {
         console.log(err);
@@ -191,7 +190,6 @@ async function init() {
   });
 
   //? LOGIN ROUTES ?//
-
   app.get('/login', (req, res) => {
     res.status(200).sendFile(`${htmlPath}login.html`);
   });
@@ -252,13 +250,18 @@ async function init() {
     if (exists) {
       if (action === 'join') {
         CLIENT.connectChannel(exists.name);
+        exists.actived = true;
+        await exists.save();
         res.status(200).json({ message: 'Joined channel' });
       } else if (action === 'leave') {
         CLIENT.disconnectChannel(exists.name);
+        exists.actived = false;
+        await exists.save();
         res.status(200).json({ message: 'Left channel' });
       } else {
         res.status(400).json({ message: 'Action not found' });
       }
+      streamerNames.updateNames();
     } else {
       res.status(400).json({ message: 'User not found' });
       return false;

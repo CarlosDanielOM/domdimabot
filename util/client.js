@@ -1,19 +1,11 @@
 require('dotenv').config();
 const tmi = require('tmi.js');
 const streamerNames = require('./streamerNames');
+const { getClientOpts } = require('./dev');
 
 let client = null;
 
-const options = {
-    options: {
-        debug: false,
-    },
-    identity: {
-        username: process.env.TWITCH_USERNAME,
-        password: process.env.User_Token_Auth,
-    },
-    channels: ['domdimabot'],
-};
+const options = getClientOpts();
 
 async function clientConnect() {
     client = new tmi.client(options);

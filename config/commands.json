@@ -1,0 +1,80 @@
+{
+    "speach": {
+        "name": "s",
+        "allowed": "mod, vip, sub, founder, follower, viewer",
+        "active": true
+    },
+    "poll": [
+        {
+            "name": "poll",
+            "allowed": "mod",
+            "active": true
+        },
+        {
+            "name": "cancelpoll",
+            "allowed": "mod",
+            "active": true
+        },
+        {
+            "name": "endpoll",
+            "allowed": "mod",
+            "active": true
+        }
+    ],
+    "predicition": [
+        {
+            "name": "predi",
+            "allowed": "mod",
+            "active": true
+        },
+        {
+            "name": "endpredi",
+            "allowed": "mod",
+            "active": true
+        },
+        {
+            "name": "cancelpredi",
+            "allowed": "mod",
+            "active": true
+        },
+        {
+            "name": "lockpredi",
+            "allowed": "mod",
+            "active": true
+        }
+    ],
+    "announcement": {
+        "name": "anuncio",
+        "allowed": "mod",
+        "active": true
+    },
+    "ruletarusa": {
+        "name": "ruletarusa",
+        "active": true,
+        "tier": {
+            "free": {
+                "allowed": "viewer",
+                "denied": "mod",
+                "ban": null
+            },
+            "basic": {
+                "allowed": "viewer",
+                "denied": "mod",
+                "ban": "viewer",
+                "role": null
+            },
+            "premium": {
+                "allowed": "mod, viewer",
+                "denied": null,
+                "ban": "mod, viewer",
+                "roll": null
+            },
+            "partner": {
+                "allowed": "mod, viewer",
+                "denied": null,
+                "ban": "mod, viewer",
+                "roll": "mod"
+            }
+        }
+    }
+}

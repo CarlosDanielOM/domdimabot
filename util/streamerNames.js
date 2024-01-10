@@ -1,4 +1,5 @@
 const channelSchema = require('../schemas/channel.schema');
+const { decrypt } = require('./crypto');
 
 //Define array with all names
 let streamerNames = [];
@@ -37,8 +38,14 @@ async function updateNames() {
     streamerNames = await getNamesDB();
 };
 
+async function getUserToken(user) {
+    let data = await getStreamer(user);
+    return decrypt({ content: data.token.content, iv: data.token.iv }).toString();
+}
+
 module.exports = {
     getNames,
     updateNames,
-    getStreamer
+    getStreamer,
+    getUserToken
 }
