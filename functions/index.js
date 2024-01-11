@@ -6,6 +6,10 @@ const getUserID = require('./getuserid');
 const getChannel = require('./getchannel');
 const shoutout = require('./shoutout');
 const speach = require('./speach');
+const sumimetro = require('./sumimetro');
+const amor = require('./amor');
+const ponerla = require('./ponerla');
+const mecabe = require('./mecabe');
 
 //* Importing Prediction Functions
 const prediction = require('./prediction');
@@ -22,5 +26,9 @@ module.exports = {
     makeShoutout: shoutout,
     prediction: prediction,
     poll: poll,
-    speach: speach
+    speach: speach,
+    sumimetro: sumimetro,
+    amor: amor,
+    ponerla: ponerla,
+    mecabe: mecabe
 }

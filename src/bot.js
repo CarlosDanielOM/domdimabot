@@ -18,9 +18,6 @@ async function init() {
 
     let onlyEmotes = false;
 
-    let predisData = [];
-    let pollsData = [];
-
     client.on('resub', (channel, username, months, message, userstate, methods) => {
         let tier = userstate['msg-param-sub-plan'];
         switch (tier) {
@@ -87,54 +84,8 @@ async function init() {
         }
 
         const commands = {
-            sumimetro: {
-                response: (argument) => {
-                    let user = argument || tags['display-name'];
-                    let dominante = Math.floor(Math.random() * 100) + 1;
-                    let sumiso = 100 - dominante;
-
-                    client.say(channel, `Los lectores del sumimetro reflejan que ${user} tiene ${sumiso}% de sumiso y ${dominante}% de dominante`);
-                }
-            },
-            memide: {
-                response: (argument) => {
-                    let user = argument || tags['display-name'];
-                    let size = Math.floor(Math.random() * 28) + 3;
-                    if (size <= 10) {
-                        client.say(channel, `El tamaño de la tula de ${user} mide ${size}cm. Pero que chiquito JAJAJA!`);
-                    } else if (size > 18 && size <= 24) {
-                        client.say(channel, `El tamaño de la tula de ${user} mide ${size}cm. Fua pero mira que macizo.`);
-                    } else if (size > 24) {
-                        client.say(channel, `El tamaño de la tula de ${user} mide ${size}cm. Esa madre ya paga hasta impuestos.`);
-                    } else {
-                        client.say(channel, `El tamaño de la tula de ${user} mide ${size}cm. Algo promedio eh?`);
-                    }
-                }
-            },
             awynowo: {
                 response: `Siempre dominante, nunca sumiso.`
-            },
-            amor: {
-                response: (argument) => {
-                    let touser = argument || null;
-                    let user = tags['display-name'];
-                    if (touser === null) return client.say(channel, `Se te olvido poner a la persona a la que quieres medir el amor. No mas por eso te quedaras solter@ toda tu vida.`);
-                    let viewers = touser.split(' ');
-                    let user1 = viewers[0];
-                    let user2 = viewers[1] || null;
-                    let multiple = false;
-                    if (user2 !== null) {
-                        user = user1;
-                        touser = user2.replace('@', '');
-                        multiple = true;
-                    }
-
-                    if (touser.toLowerCase() === tags.username && !multiple) {
-                        return client.say(channel, `No te puedes medir el amor a ti mismo. No seas tan solitario.`);
-                    }
-                    let love = Math.floor(Math.random() * 100) + 1;
-                    client.say(channel, `El amor entre ${user} y ${touser} es de ${love}%`);
-                }
             },
             id: {
                 response: (argument) => {
@@ -189,29 +140,7 @@ async function init() {
                             console.log(error);
                         });
                 }
-            },
-            mecabe: {
-                response: (argument) => {
-                    let user = argument || tags['display-name'];
-                    let size = Math.floor(Math.random() * 28) + 3;
-                    if (size <= 10) {
-                        client.say(channel, `A ${user} le caben ${size}cm de tula. Poquito porque ya comio.`)
-                    } else if (size > 18 && size <= 24) {
-                        client.say(channel, `A ${user} le caben ${size}cm de tula. Ya se le esta antojando.`);
-                    } else if (size > 24) {
-                        client.say(channel, `A ${user} le caben ${size}cm de tula. Ya dasela que se muere de hambre.`);
-                    } else {
-                        client.say(channel, `A ${user} le caben ${size}cm de tula. Ya comio pero le cabe mas.`);
-                    }
-                }
-            },
-            ponerla: {
-                response: (argument) => {
-                    let user = argument || tags['display-name'];
-                    let probability = Math.floor(Math.random() * 100) + 1;
-                    client.say(channel, `La probabilidad de que ${user} la ponga esta noche es de ${probability}%`);
-                }
-            },
+            }
         }
 
         if (message.toLowerCase().includes('panda') && !pandaSent && channel !== '#d0jiart') {

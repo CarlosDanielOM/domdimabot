@@ -8,6 +8,7 @@ const commandsRegex = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?$/);
 const modID = '698614112';
 
 let isMod;
+let user;
 
 async function message(client, channel, tags, message) {
     if (tags.mod || tags.username === channel) {
@@ -112,6 +113,29 @@ async function message(client, channel, tags, message) {
         case 's':
             let s = await func.speach(tags, argument, channel);
             if (s.error) return client.say(channel, `${s.reason}`);
+            break;
+        case 'sumimetro':
+            let sumimetro = func.sumimetro(argument);
+            client.say(channel, sumimetro.message);
+            break;
+        case 'memide':
+            user = argument || tags['display-name'];
+            let memide = func.memide(user);
+            client.say(channel, memide.message);
+            break;
+        case 'amor':
+            let amor = func.amor(tags, argument);
+            client.say(channel, amor.message);
+            break;
+        case 'ponerla':
+            user = argument || tags['display-name'];
+            let ponerla = func.ponerla(user);
+            client.say(channel, ponerla.message);
+            break;
+        case 'mecabe':
+            user = argument || tags['display-name'];
+            let mecabe = func.mecabe(user);
+            client.say(channel, mecabe.message);
             break;
         default:
             break;
