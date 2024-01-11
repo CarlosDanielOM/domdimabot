@@ -5,6 +5,7 @@ const getclips = require('./getclips');
 const getUserID = require('./getuserid');
 const getChannel = require('./getchannel');
 const shoutout = require('./shoutout');
+const speach = require('./speach');
 
 //* Importing Prediction Functions
 const prediction = require('./prediction');
@@ -20,5 +21,6 @@ module.exports = {
     getChannel: getChannel,
     makeShoutout: shoutout,
     prediction: prediction,
-    poll: poll
+    poll: poll,
+    speach: speach
 }

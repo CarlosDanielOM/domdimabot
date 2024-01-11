@@ -212,34 +212,6 @@ async function init() {
                     client.say(channel, `La probabilidad de que ${user} la ponga esta noche es de ${probability}%`);
                 }
             },
-            s: {
-                response: (argument) => {
-                    let user = tags.username;
-                    let message = argument || undefined;
-                    let streamer = channel.replace('#', '');
-
-                    let msg = `${user} dice: ${message}`;
-
-                    if (message === undefined) return client.say(channel, `Se te olvido poner el mensaje.`);
-
-
-
-                    axios({
-                        method: 'post',
-                        url: `https://domdimabot.com/speach/${streamer}`,
-                        data: {
-                            speach: msg
-                        }
-                    })
-                        .then((res) => {
-                            console.log(res.data);
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        });
-
-                }
-            }
         }
 
         if (message.toLowerCase().includes('panda') && !pandaSent && channel !== '#d0jiart') {

@@ -109,6 +109,10 @@ async function message(client, channel, tags, message) {
             if (title.error) return client.say(channel, `${title.reason}`);
             client.say(channel, `${tags['display-name']} --> ${title.message}`);
             break;
+        case 's':
+            let s = await func.speach(tags, argument, channel);
+            if (s.error) return client.say(channel, `${s.reason}`);
+            break;
         default:
             break;
     }
