@@ -20,7 +20,7 @@ async function end(status, prediID, winner = null) {
     if (data.status === 401) return null;
 
     if (data.error) {
-        console.log({ error: data.error, message: data.message, status: data.status });
+        console.log({ error: data.error, reason: data.message, status: data.status });
         return null;
     }
 

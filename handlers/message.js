@@ -71,7 +71,8 @@ async function message(client, channel, tags, message) {
         case 'predi':
             if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
             let prediRes = commands.prediction('CREATE', channel, argument);
-            if (!prediRes) return client.say(channel, `No se ha podido crear la predicción.`);
+            if (prediRes.error) return client.say(channel, `${prediRes.reason}`);
+            client.say(channel, prediRes.message);
             break;
         case 'endpredi':
             if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
