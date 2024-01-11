@@ -1,18 +1,18 @@
-async function create(options) {
-    let outcomes = options.votes.map((vote) => {
+async function createPoll(options) {
+    let choices = options.choices.map((choice) => {
         return {
-            title: vote
+            title: choice
         }
     });
 
     let bodyData = {
         broadcaster_id: this.userID,
         title: options.title,
-        outcomes,
-        prediction_window: Number(options.duration)
+        choices,
+        duration: Number(options.duration)
     }
 
-    let response = await fetch(`${this.helixURL}/predictions`, {
+    let response = await fetch(`${this.helixURL}/polls`, {
         method: 'POST',
         headers: this.streamerHeaders,
         body: JSON.stringify(bodyData)
@@ -27,24 +27,23 @@ async function create(options) {
 
     data = data.data[0];
 
-    let outcomesData = data.outcomes.map((outcome) => {
+    let choicesData = data.choices.map((choice) => {
         return {
-            title: outcome.title,
-            id: outcome.id
+            title: choice.title,
+            id: choice.id
         }
     });
 
-    let prediData = {
+    let pollData = {
         id: data.id,
         title: data.title,
-        outcomes: outcomesData,
+        choices: choicesData,
         channel: this.channel
     };
 
-    this.setPredi(this.channel, prediData);
+    this.setPoll(this.channel, pollData);
 
-    return true;
-
+    return { message: `Encuesta creada con éxito.` }
 }
 
-module.exports = create;
+module.exports = createPoll;

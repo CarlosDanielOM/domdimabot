@@ -1,3 +1,0 @@
-class prediction {
-    constructor() {}
-}

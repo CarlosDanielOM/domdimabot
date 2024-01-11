@@ -16,7 +16,7 @@ async function getUserID(name) {
         return null;
     }
 
-    return user[0].id;
+    return Number(user[0].id);
 }
 
 module.exports = getUserID;

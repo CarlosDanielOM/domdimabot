@@ -1,4 +1,4 @@
-const { prediction } = require('../functions/index');
+const { prediction } = require('../functions');
 
 async function predi(action, channel, argument = null) {
     await prediction.init(channel);
@@ -28,7 +28,7 @@ async function predi(action, channel, argument = null) {
 
         if (won <= 0 || won > predictionData.outcomes.length) return false;
 
-        winner--;
+        won--;
 
         winner = predictionData.outcomes[won].id;
 

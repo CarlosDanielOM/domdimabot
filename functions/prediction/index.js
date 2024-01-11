@@ -11,6 +11,7 @@ class prediction {
         this.channel;
         this.helixURL = getTwitchHelixURL();
         this.userID;
+        this.streamerHeaders;
         this.predictions = new Map();
     }
 

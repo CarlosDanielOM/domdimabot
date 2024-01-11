@@ -84,6 +84,31 @@ async function message(client, channel, tags, message) {
             if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
             commands.prediction('LOCKED', channel);
             break;
+        case 'poll':
+            let poll = await commands.poll('CREATE', channel, argument, isMod);
+            if (poll.error) return client.say(channel, `${poll.reason}`);
+            client.say(channel, poll.message);
+            break;
+        case 'cancelpoll':
+            let cancelPoll = await commands.poll('ARCHIVED', channel, argument, isMod);
+            if (cancelPoll.error) return client.say(channel, `${cancelPoll.message}`);
+            client.say(channel, cancelPoll.message);
+            break;
+        case 'endpoll':
+            let endPoll = await commands.poll('TERMINATED', channel, argument, isMod);
+            if (endPoll.error) return client.say(channel, `${endPoll.reason}`);
+            client.say(channel, endPoll.message);
+            break;
+        case 'game':
+            let game = await commands.game(channel, argument, isMod);
+            if (game.error) return client.say(channel, `${game.reason}`);
+            client.say(channel, `${tags['display-name']} --> ${game.message}`);
+            break;
+        case 'title':
+            let title = await commands.title(channel, argument, isMod);
+            if (title.error) return client.say(channel, `${title.reason}`);
+            client.say(channel, `${tags['display-name']} --> ${title.message}`);
+            break;
         default:
             break;
     }

@@ -8,6 +8,7 @@ const shoutout = require('./shoutout');
 
 //* Importing Prediction Functions
 const prediction = require('./prediction');
+const poll = require('./poll');
 
 
 module.exports = {
@@ -18,5 +19,6 @@ module.exports = {
     getUserID: getUserID,
     getChannel: getChannel,
     makeShoutout: shoutout,
-    prediction: prediction
+    prediction: prediction,
+    poll: poll
 }

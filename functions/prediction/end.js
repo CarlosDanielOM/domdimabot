@@ -1,5 +1,5 @@
 async function end(status, prediID, winner = null) {
-    body = {
+    let body = {
         broadcaster_id: this.userID,
         id: prediID,
         status
