@@ -37,7 +37,8 @@ async function message(client, channel, tags, message) {
             }
             break;
         case 'discord':
-            commands.discord(client, channel);
+            let discord = commands.discord(channel);
+            client.say(channel, discord.message);
             break;
         case 'anuncio':
             if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
