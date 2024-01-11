@@ -30,7 +30,7 @@ async function predi(action, channel, argument = null) {
 
         won--;
 
-        winner = predictionData.outcomes[won].id;
+        winner = predictionData.outcomes[won];
 
         res = prediction.endPrediction('RESOLVED', prediID, winner);
     } else if (action === 'CREATE') {

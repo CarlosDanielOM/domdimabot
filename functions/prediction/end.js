@@ -6,7 +6,7 @@ async function end(status, prediID, winner = null) {
     }
 
     if (status === 'RESOLVED') {
-        body.winning_outcome_id = winner;
+        body.winning_outcome_id = winner.id;
     }
 
     let response = await fetch(`${this.helixURL}/predictions`, {
@@ -29,7 +29,12 @@ async function end(status, prediID, winner = null) {
     if (data.data.length === 0) return null;
 
     if (status !== 'LOCKED') this.deletePredi(this.channel);
-    return data.data[0];
+
+    let resData = {
+        message: `Ha ganado la opción ${winner.title}!`,
+    }
+
+    return;
 }
 
 module.exports = end;
