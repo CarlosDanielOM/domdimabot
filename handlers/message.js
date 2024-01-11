@@ -116,7 +116,8 @@ async function message(client, channel, tags, message) {
             if (s.error) return client.say(channel, `${s.reason}`);
             break;
         case 'sumimetro':
-            let sumimetro = func.sumimetro(argument);
+            let user = argument || tags['display-name'];
+            let sumimetro = func.sumimetro(user);
             client.say(channel, sumimetro.message);
             break;
         case 'memide':

@@ -1,5 +1,4 @@
-function sumimetro() {
-    let user = argument || tags['display-name'];
+function sumimetro(user) {
     let dominante = Math.floor(Math.random() * 100) + 1;
     let sumiso = 100 - dominante;
 
