@@ -21,8 +21,7 @@ async function create(options) {
     let data = await response.json();
 
     if (data.error) {
-        console.log({ error: data.error, reason: data.message, status: data.status });
-        return false;
+        return { error: data.error, reason: data.message, status: data.status };
     }
 
     data = data.data[0];

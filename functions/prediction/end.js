@@ -20,8 +20,7 @@ async function end(status, prediID, winner = null) {
     if (data.status === 401) return null;
 
     if (data.error) {
-        console.log({ error: data.error, reason: data.message, status: data.status });
-        return null;
+        return { error: data.error, reason: data.message, status: data.status };
     }
 
     if (data.data === undefined) return null;
@@ -34,7 +33,7 @@ async function end(status, prediID, winner = null) {
         message: `Ha ganado la opción ${winner.title}!`,
     }
 
-    return;
+    return resData;
 }
 
 module.exports = end;
