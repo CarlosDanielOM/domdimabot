@@ -6,6 +6,7 @@ const prediction = require('./prediction');
 const game = require('./game');
 const title = require('./title');
 const poll = require('./poll');
+const sumimetro = require('./sumimetro');
 
 module.exports = {
     shoutout,
@@ -15,5 +16,6 @@ module.exports = {
     prediction,
     game,
     title,
-    poll
+    poll,
+    sumimetro
 }

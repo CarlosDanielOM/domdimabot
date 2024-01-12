@@ -38,7 +38,7 @@ async function message(client, channel, tags, message) {
             break;
         case 'discord':
             let discord = commands.discord(channel);
-            client.say(channel, discord.message);
+            client.say('cdom201', discord.message);
             break;
         case 'anuncio':
             if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
@@ -118,7 +118,7 @@ async function message(client, channel, tags, message) {
             break;
         case 'sumimetro':
             let user = argument || tags['display-name'];
-            let sumimetro = func.sumimetro(user);
+            let sumimetro = await commands.sumimetro(channel, tags['display-name'], user);
             client.say(channel, sumimetro.message);
             break;
         case 'memide':
