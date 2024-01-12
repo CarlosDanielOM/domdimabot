@@ -55,11 +55,11 @@ class SUMIMETRO {
         return this.message;
     }
 
-    getSumisoSupremos() {
+    getSumisoSupremo() {
         return this.sumisoSupremo;
     }
 
-    getDominanteSupremos() {
+    getDominanteSupremo() {
         return this.dominanteSupremo;
     }
 
