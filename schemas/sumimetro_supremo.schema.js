@@ -6,7 +6,8 @@ const sumimetroSupremoSchema = new Schema({
     username: String,
     type: String,
     percent: Number,
-    timestamp: Date
+    timestamp: Date,
+    date: String
 });
 
 const SumimetroSupremo = mongoose.model('Sumimetro_Supremo', sumimetroSupremoSchema);

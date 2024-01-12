@@ -6,6 +6,7 @@ const { encrypt, decrypt } = require('./crypto');
 
 async function refreshAllTokens() {
     try {
+        await streamerNames.updateNames();
         const streamers = await streamerNames.getNames();
 
         streamers.forEach(async (streamer) => {
