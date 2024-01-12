@@ -69,6 +69,27 @@ async function sumimetro(channel, user, toUser) {
                 //? Checks if there is a dominante supremo
                 if (!instance.hasDominanteSupremo()) {
                     instance.setDominanteSupremo(user);
+
+                    sumimetroSupremoData = {
+                        channel: channel,
+                        username: user,
+                        type: 'dominante',
+                        percent: dominante,
+                        timestamp: new Date(),
+                        date: {
+                            day: todayDate.day,
+                            month: todayDate.month,
+                            year: todayDate.year
+
+                        }
+                    }
+
+                    let sumiSupremoData = new SumimetroSupremoSchema(sumimetroSupremoData);
+
+                    await sumiSupremoData.save();
+
+                    //* SENDS HTTP REQUEST TO THE API
+
                 } else {
                     let dominanteSupremo = instance.getDominanteSupremo();
                     //? Checks if the user is the new dominante supremo
@@ -102,6 +123,27 @@ async function sumimetro(channel, user, toUser) {
                 //? Checks if there is a sumiso supremo
                 if (!instance.hasSumisoSupremo()) {
                     instance.setSumisoSupremo(user);
+
+                    sumimetroSupremoData = {
+                        channel: channel,
+                        username: user,
+                        type: 'sumiso',
+                        percent: sumiso,
+                        timestamp: new Date(),
+                        date: {
+                            day: todayDate.day,
+                            month: todayDate.month,
+                            year: todayDate.year
+
+                        }
+                    }
+
+                    let sumiSupremoData = new SumimetroSupremoSchema(sumimetroSupremoData);
+
+                    await sumiSupremoData.save();
+
+                    //* SENDS HTTP REQUEST TO THE API
+
                 } else {
                     let sumisoSupremo = instance.getSumisoSupremo();
                     //? Checks if the user is the new sumiso supremo
