@@ -7,7 +7,11 @@ const sumimetroSchema = new Schema({
     dominant: Number,
     submissive: Number,
     timestamp: Date,
-    date: String
+    date: {
+        day: Number,
+        month: Number,
+        year: Number
+    }
 });
 
 const Sumimetro = mongoose.model('Sumimetro', sumimetroSchema);

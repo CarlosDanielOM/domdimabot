@@ -12,11 +12,25 @@ class SUMIMETRO {
 
         this.channel = null;
         this.url = null;
+
+        this.date = null;
     }
 
     init(channel) {
         this.channel = channel;
         this.url = getUrl();
+    }
+
+    reset() {
+        this.sumimetro = new Map();
+        this.sumisoSupremo = {};
+        this.dominanteSupremo = {};
+
+        this.sumiso = 0;
+        this.dominante = 0;
+        this.message = '';
+
+        this.date = null;
     }
 
     //? GET METHODS
@@ -49,6 +63,10 @@ class SUMIMETRO {
         return this.dominanteSupremo;
     }
 
+    getDateString() {
+        return this.date;
+    }
+
     //? HAS METHODS
     hasSumimetro(user) {
         return this.sumimetro.has(user);
@@ -70,18 +88,23 @@ class SUMIMETRO {
         this.dominante = value.dominante;
     }
 
-    setSumisoSupremo(value) {
-        this.sumisoSupremo = value;
+    setSumisoSupremo(user) {
+        this.sumisoSupremo = {
+            user: user,
+            sumiso: this.sumiso
+        };
     }
 
-    setDominanteSupremo(value) {
-        this.dominanteSupremo = value;
-    }
+    setDominanteSupremo(user) {
+        this.dominanteSupremo = {
+            user: user,
+            dominante: this.dominante
+        };
+    };
 
+    setDateString(dateString) {
+        this.date = dateString;
+    }
 }
 
 module.exports = SUMIMETRO;
-
-function sumimetro(user) {
-    
-}
