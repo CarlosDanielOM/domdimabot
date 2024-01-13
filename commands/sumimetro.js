@@ -12,6 +12,9 @@ async function sumimetro(channel, user, toUser) {
     let dominante = rand;
     let sumiso = 100 - rand;
 
+    const lowerCaseUser = user.toLowerCase();
+    const lowerCaseToUser = toUser.toLowerCase();
+
     let message = null;
     let sumimetroData = null;
     let sumimetroSupremoData = null;
@@ -36,10 +39,10 @@ async function sumimetro(channel, user, toUser) {
     }
 
     //? Checks if the command is for the user or for another user
-    if (user === toUser) {
+    if (lowerCaseUser === lowerCaseToUser) {
         //? Checks if the user has already given his sumimetro and if not, it saves it
-        if (!instance.hasSumimetro(user)) {
-            instance.setSumimetro(user, {
+        if (!instance.hasSumimetro(lowerCaseUser)) {
+            instance.setSumimetro(lowerCaseUser, {
                 dominante: dominante,
                 sumiso: sumiso
             });
@@ -50,6 +53,7 @@ async function sumimetro(channel, user, toUser) {
             sumimetroData = {
                 channel: channel,
                 username: user,
+                login: lowerCaseUser,
                 dominant: dominante,
                 submissive: sumiso,
                 timestamp: new Date(),
@@ -68,11 +72,12 @@ async function sumimetro(channel, user, toUser) {
             if (dominante > 50) {
                 //? Checks if there is a dominante supremo
                 if (!instance.hasDominanteSupremo()) {
-                    instance.setDominanteSupremo(user);
+                    instance.setDominanteSupremo(lowerCaseUser);
 
                     sumimetroSupremoData = {
                         channel: channel,
                         username: user,
+                        login: lowerCaseUser,
                         type: 'dominante',
                         percent: dominante,
                         timestamp: new Date(),
@@ -94,11 +99,12 @@ async function sumimetro(channel, user, toUser) {
                     let dominanteSupremo = instance.getDominanteSupremo();
                     //? Checks if the user is the new dominante supremo
                     if (dominante > dominanteSupremo.dominante) {
-                        instance.setDominanteSupremo(user);
+                        instance.setDominanteSupremo(lowerCaseUser);
                         //? Saves the new dominante supremo in the database
                         sumimetroSupremoData = {
                             channel: channel,
                             username: user,
+                            login: lowerCaseUser,
                             type: 'dominante',
                             percent: dominante,
                             timestamp: new Date(),
@@ -122,7 +128,7 @@ async function sumimetro(channel, user, toUser) {
             else if (sumiso > 50) {
                 //? Checks if there is a sumiso supremo
                 if (!instance.hasSumisoSupremo()) {
-                    instance.setSumisoSupremo(user);
+                    instance.setSumisoSupremo(lowerCaseUser);
 
                     sumimetroSupremoData = {
                         channel: channel,
@@ -148,7 +154,7 @@ async function sumimetro(channel, user, toUser) {
                     let sumisoSupremo = instance.getSumisoSupremo();
                     //? Checks if the user is the new sumiso supremo
                     if (sumiso > sumisoSupremo.sumiso) {
-                        instance.setSumisoSupremo(user);
+                        instance.setSumisoSupremo(lowerCaseUser);
                         //? Saves the new sumiso supremo in the database
                         sumimetroSupremoData = {
                             channel: channel,
@@ -175,7 +181,7 @@ async function sumimetro(channel, user, toUser) {
             }
         } else {
             //? If the user has already given his sumimetro, it returns the values
-            let sumimetro = instance.getUserSumimetro(user);
+            let sumimetro = instance.getUserSumimetro(lowerCaseUser);
             dominante = sumimetro.dominante;
             sumiso = sumimetro.sumiso;
 
@@ -184,11 +190,11 @@ async function sumimetro(channel, user, toUser) {
         }
     } else {
         //? Checks if the user has already given his sumimetro and if not, it says that the user has not given his sumimetro
-        if (!instance.hasSumimetro(toUser)) {
+        if (!instance.hasSumimetro(lowerCaseToUser)) {
             message = `El usuario ${toUser} no se ha dado su lectura de sumimetro el dia de hoy.`
         } else {
             //? If the user has already given his sumimetro, it returns the values
-            let sumimetro = instance.getUserSumimetro(toUser);
+            let sumimetro = instance.getUserSumimetro(lowerCaseToUser);
             dominante = sumimetro.dominante;
             sumiso = sumimetro.sumiso;
 

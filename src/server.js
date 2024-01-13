@@ -35,6 +35,12 @@ async function init() {
     io.of(`/clip/${channel}`).emit('prepare-speach');
   });
 
+  io.of(/^\/sumimetro\/\w+\/\w+$/).on('connection', (socket) => {
+    const type = socket.nsp.name.split('/')[2];
+    const channel = socket.nsp.name.split('/')[3];
+    io.of(`/sumimetro/${type}/${channel}`).emit('active');
+  });
+
   //* Routes *//
   const clipRoute = require('./routes/clip.route.js');
 
@@ -270,6 +276,19 @@ async function init() {
 
   })
 
+  //? SUMIMETRO ROUTES ?//
+  app.get('/sumimetro/:type/:channel', async (req, res) => {
+    res.sendFile(`${htmlPath}sumimetro.html`);
+  });
+
+  app.post('/sumimetro/:type/:channel', async (req, res) => {
+    const { type, channel } = req.params;
+    const { username, value } = req.body;
+
+    io.of(`/sumimetro/${type}/${channel}`).emit('sumimetro', { username, value });
+  });
+
+  //? Server ?//
   server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });

@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const sumimetroSupremoSchema = new Schema({
     channel: String,
     username: String,
+    login: String,
     type: String,
     percent: Number,
     timestamp: Date,

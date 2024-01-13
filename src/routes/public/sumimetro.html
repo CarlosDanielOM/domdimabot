@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sumimetro Supremo</title>
+</head>
+
+<body>
+    <h1 id="supremo"></h1>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    <script>
+        const type = window.location.pathname.split('/')[2];
+        const channel = window.location.pathname.split('/')[3];
+
+        console.log(type, channel);
+
+        const socket = io.connect('https://domdimabot.com/', { reconnection: true, transports: ['websocket'] });
+        const supremoSocket = io(`/sumimetro/${type}/${channel}`, { reconnection: true, transports: ['websocket'] });
+
+        supremoSocket.on('sumimetro', (data) => {
+            let { name, value } = data;
+            console.log(data);
+            let text = `${name} es ${value}& ${type}`;
+            document.getElementById('supremo').innerHTML = text;
+        })
+
+        supremoSocket.on('active', () => {
+            console.log('Conectado al supremo');
+        });
+    </script>
+</body>
+
+</html>
