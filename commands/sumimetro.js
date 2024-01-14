@@ -105,9 +105,6 @@ async function sumimetro(channel, user, toUser) {
                             value: dominante
                         })
                     })
-
-                    console.log({ dominante: sumimetroRes });
-
                 } else {
                     let dominanteSupremo = instance.getDominanteSupremo();
                     //? Checks if the user is the new dominante supremo
@@ -144,9 +141,6 @@ async function sumimetro(channel, user, toUser) {
                                 value: dominante
                             })
                         })
-
-                        console.log({ dominante: sumimetroRes });
-
                     }
                 }
             }
@@ -185,9 +179,6 @@ async function sumimetro(channel, user, toUser) {
                             value: sumiso
                         })
                     })
-
-                    console.log({ sumiso: sumimetroRes });
-
                 } else {
                     let sumisoSupremo = instance.getSumisoSupremo();
                     //? Checks if the user is the new sumiso supremo
@@ -223,9 +214,6 @@ async function sumimetro(channel, user, toUser) {
                                 value: sumiso
                             })
                         })
-
-                        console.log({ sumiso: sumimetroRes });
-
                     }
                 }
             }
