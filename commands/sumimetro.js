@@ -255,4 +255,11 @@ async function sumimetro(channel, user, toUser) {
     return { message: message };
 }
 
-module.exports = sumimetro;
+async function resetSumimetro(channel) {
+    if (!instances.has(channel)) return { error: true, reason: 'No hay sumimetro para resetear.' };
+    let instance = instances.get(channel);
+    instance.reset();
+    return { message: 'Se ha reseteado el sumimetro.' };
+}
+
+module.exports = { sumimetro, resetSumimetro };

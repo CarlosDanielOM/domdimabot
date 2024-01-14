@@ -142,6 +142,11 @@ async function message(client, channel, tags, message) {
             let mecabe = func.mecabe(user);
             client.say(channel, mecabe.message);
             break;
+        case 'resetsumimetro':
+            if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
+            let reset = await commands.resetSumimetro(channel);
+            if (reset.error) return client.say(channel, `${reset.reason}`);
+            client.say(channel, reset.message);
         default:
             break;
     }

@@ -17,5 +17,6 @@ module.exports = {
     game,
     title,
     poll,
-    sumimetro
+    sumimetro: sumimetro.sumimetro,
+    resetSumimetro: sumimetro.resetSumimetro,
 }
