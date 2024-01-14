@@ -106,9 +106,7 @@ async function sumimetro(channel, user, toUser) {
                         })
                     })
 
-                    let sumimetroJson = await sumimetroRes.json();
-
-                    console.log({ dominante: sumimetroJson });
+                    console.log({ dominante: sumimetroRes });
 
                 } else {
                     let dominanteSupremo = instance.getDominanteSupremo();
@@ -147,9 +145,7 @@ async function sumimetro(channel, user, toUser) {
                             })
                         })
 
-                        let sumimetroJson = await sumimetroRes.json();
-
-                        console.log({ dominante: sumimetroJson });
+                        console.log({ dominante: sumimetroRes });
 
                     }
                 }
@@ -190,9 +186,7 @@ async function sumimetro(channel, user, toUser) {
                         })
                     })
 
-                    let sumimetroJson = await sumimetroRes.json();
-
-                    console.log({ sumiso: sumimetroJson });
+                    console.log({ sumiso: sumimetroRes });
 
                 } else {
                     let sumisoSupremo = instance.getSumisoSupremo();
@@ -230,9 +224,7 @@ async function sumimetro(channel, user, toUser) {
                             })
                         })
 
-                        let sumimetroJson = await sumimetroRes.json();
-
-                        console.log({ sumiso: sumimetroJson });
+                        console.log({ sumiso: sumimetroRes });
 
                     }
                 }
