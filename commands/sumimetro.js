@@ -95,6 +95,21 @@ async function sumimetro(channel, user, toUser) {
 
                     //* SENDS HTTP REQUEST TO THE API
 
+                    let sumimetroRes = await fetch(`https://domdimabot.com/sumimetro/dominante/${channel}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            username: user,
+                            value: dominante
+                        })
+                    })
+
+                    let sumimetroJson = await sumimetroRes.json();
+
+                    console.log({ dominante: sumimetroJson });
+
                 } else {
                     let dominanteSupremo = instance.getDominanteSupremo();
                     //? Checks if the user is the new dominante supremo
@@ -121,6 +136,20 @@ async function sumimetro(channel, user, toUser) {
                         await sumiSupremoData.save();
 
                         //* SENDS HTTP REQUEST TO THE API
+                        let sumimetroRes = await fetch(`https://domdimabot.com/sumimetro/dominante/${channel}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                username: user,
+                                value: dominante
+                            })
+                        })
+
+                        let sumimetroJson = await sumimetroRes.json();
+
+                        console.log({ dominante: sumimetroJson });
 
                     }
                 }
@@ -150,6 +179,21 @@ async function sumimetro(channel, user, toUser) {
 
                     //* SENDS HTTP REQUEST TO THE API
 
+                    let sumimetroRes = await fetch(`https://domdimabot.com/sumimetro/sumiso/${channel}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            username: user,
+                            value: sumiso
+                        })
+                    })
+
+                    let sumimetroJson = await sumimetroRes.json();
+
+                    console.log({ sumiso: sumimetroJson });
+
                 } else {
                     let sumisoSupremo = instance.getSumisoSupremo();
                     //? Checks if the user is the new sumiso supremo
@@ -175,6 +219,20 @@ async function sumimetro(channel, user, toUser) {
                         await sumiSupremoData.save();
 
                         //* SENDS HTTP REQUEST TO THE API
+                        let sumimetroRes = await fetch(`https://domdimabot.com/sumimetro/sumiso/${channel}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                username: user,
+                                value: sumiso
+                            })
+                        })
+
+                        let sumimetroJson = await sumimetroRes.json();
+
+                        console.log({ sumiso: sumimetroJson });
 
                     }
                 }

@@ -20,9 +20,9 @@
         const supremoSocket = io(`/sumimetro/${type}/${channel}`, { reconnection: true, transports: ['websocket'] });
 
         supremoSocket.on('sumimetro', (data) => {
-            let { name, value } = data;
+            let { username, value } = data;
             console.log(data);
-            let text = `${name} es ${value}& ${type}`;
+            let text = `${username} es ${value}% ${type}`;
             document.getElementById('supremo').innerHTML = text;
         })
 

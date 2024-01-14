@@ -286,6 +286,7 @@ async function init() {
     const { username, value } = req.body;
 
     io.of(`/sumimetro/${type}/${channel}`).emit('sumimetro', { username, value });
+    res.status(204).send();
   });
 
   //? Server ?//
