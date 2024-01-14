@@ -27,7 +27,7 @@
         supremoSocket.on('sumimetro', (data) => {
             let { username, value } = data;
             console.log(data);
-            let text = `${username} es ${value}% ${type}`;
+            let text = `${username} es: <br> ${value}% ${type}`;
             document.getElementById('supremo').innerHTML = text;
         })
 
