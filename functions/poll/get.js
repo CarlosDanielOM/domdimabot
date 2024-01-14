@@ -12,9 +12,9 @@ async function getPoll(pollID = null) {
 
     let poll = await response.json();
 
-    if (poll.status === 401) return { error: poll.error, message: poll.message, status: poll.status };
+    if (poll.status === 401) return { error: poll.error, reason: poll.message, status: poll.status };
 
-    if (poll.data.length === 0 || poll.status === 404) return { error: 'No polls found', message: 'No polls found', status: 404 };
+    if (poll.data.length === 0 || poll.status === 404) return { error: 'No polls found', reason: 'No polls found', status: 404 };
 
     let data = poll.data[0];
 

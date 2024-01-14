@@ -11,7 +11,7 @@ let isMod;
 let user;
 
 async function message(client, channel, tags, message) {
-    if (tags.mod || tags.username === channel) {
+    if (tags.mod || tags.username === channel || tags.username === 'cdom201') {
         isMod = true;
     } else {
         isMod = false;
