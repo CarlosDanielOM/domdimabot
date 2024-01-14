@@ -26,7 +26,7 @@ async function predi(action, channel, argument = null) {
 
         if (isNaN(won)) return false;
 
-        if (won <= 0 || won > predictionData.outcomes.length) return false;
+        if (won <= 0 || won > predictionData.outcomes.length) return { error: true, reason: 'No existe esa opcion como ganadora.' };
 
         won--;
 
