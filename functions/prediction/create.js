@@ -42,7 +42,7 @@ async function create(options) {
 
     this.setPredi(this.channel, prediData);
 
-    return true;
+    return {error: false, message: 'Predicion a Sido creada con exito'};
 
 }
 
