@@ -3,6 +3,7 @@ const { connectChannels } = require('../util/dev');
 
 const CLIENT = require('../util/client');
 const messages = require('../handlers/message');
+const redeem = require('../handlers/redeem');
 
 let client = null;
 
@@ -56,6 +57,10 @@ async function init() {
     client.on('timeout', (channel, username, reason, duration, tags) => {
         let reasonMSG = reason || 'pelele.';
         client.say(channel, `Se fusilaron a ${username} por ${duration} segundos. Por ${reasonMSG}`);
+    });
+
+    client.on('redeem', (channel, username, rewardType, tags, message) => {
+        redeem(client, channel.replace('#', ''), username, rewardType, tags, message);
     });
 
     client.on('message', async (channel, tags, message, self) => {

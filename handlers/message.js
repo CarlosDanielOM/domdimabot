@@ -17,6 +17,15 @@ async function message(client, channel, tags, message) {
         isMod = false;
     }
 
+    let subType = null;
+
+    if (tags.subscriber) {
+        subType = tags['badge-info-raw'].split('/')[0];
+        if (subType === 'founder') {
+            isFounder = true;
+        }
+    }
+
     const [raw, command, argument] = message.match(commandsRegex) || [];
 
     switch (command) {
@@ -25,8 +34,9 @@ async function message(client, channel, tags, message) {
             if (isMod) return client.say(channel, `No puedes disparar te como un mod, no seas pendejo.`);
             let dead = commands.ruletarusa();
             if (dead) {
+                let broadcasterID = await func.getUserID(channel);
                 client.say(channel, `${tags['display-name']} ha jalado el gatillo y la bala ha sido disparada causando su muerte.`);
-                let timeout = await func.timeoutUser(broadcasterID, tags['user-id'], modID, 600, 'Ruleta Rusa');
+                let timeout = await func.timeoutUser(broadcasterID, tags['user-id'], modID, 150, 'Ruleta Rusa');
 
                 if (timeout.status === 401) {
                     client.say(channel, `${channel}, No tengo permisos para banear usuarios!`);
@@ -147,6 +157,34 @@ async function message(client, channel, tags, message) {
             let reset = await commands.resetSumimetro(channel);
             if (reset.error) return client.say(channel, `${reset.reason}`);
             client.say(channel, reset.message);
+            break;
+        case 'onlyemotes':
+            if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
+            let onlyEmotes = await commands.onlyEmotes(channel, modID);
+            if (onlyEmotes.error) return client.say(channel, `${onlyEmotes.reason}`);
+            client.say(channel, onlyEmotes.message);
+            break;
+        case 'awynowo':
+            client.say(channel, `Siempre dominante, nunca sumiso.`);
+            break;
+        case 'cc':
+            if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
+            let cc = await commands.cc('CREATE', channel, argument);
+            if (cc.error) return client.say(channel, `${cc.reason}`);
+            client.say(channel, cc.message);
+            break;
+        case 'dc':
+            if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
+            let dc = await commands.cc('DELETE', channel, argument);
+            if (dc.error) return client.say(channel, `${dc.reason}`);
+            client.say(channel, dc.message);
+            break;
+        case 'ec':
+            if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
+            let ec = await commands.cc('EDIT', channel, argument);
+            if (ec.error) return client.say(channel, `${ec.reason}`);
+            client.say(channel, ec.message);
+            break;
         default:
             break;
     }
