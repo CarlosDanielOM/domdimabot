@@ -81,25 +81,27 @@ async function message(client, channel, tags, message) {
             break;
         case 'predi':
             if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
-            let prediRes = commands.prediction('CREATE', channel, argument);
+            let prediRes = await commands.prediction('CREATE', channel, argument);
             if (prediRes.error) return client.say(channel, `${prediRes.reason}`);
             client.say(channel, prediRes.message);
             break;
         case 'endpredi':
             if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
-            let endPredi = commands.prediction('END', channel, argument);
+            let endPredi = await commands.prediction('END', channel, argument);
             if (endPredi.error) return client.say(channel, `${endPredi.reason}`);
             client.say(channel, endPredi.message)
             break;
         case 'cancelpredi':
             if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
-            let cancelPredi = commands.prediction('CANCELED', channel);
-            if(cancelPredi.error) return client.say(channel, `${cancelPredi.reason}`);
+            let cancelPredi = await commands.prediction('CANCELED', channel);
+            if (cancelPredi.error) return client.say(channel, `${cancelPredi.reason}`);
             client.say(channel, cancelPredi.message);
             break;
         case 'lockpredi':
             if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
-            commands.prediction('LOCKED', channel);
+            let lockPredi = await commands.prediction('LOCKED', channel);
+            if (lockPredi.error) return client.say(channel, lockPredi.reason);
+            client.say(channel, lockPredi.reason)
             break;
         case 'poll':
             let poll = await commands.poll('CREATE', channel, argument, isMod);
@@ -131,7 +133,7 @@ async function message(client, channel, tags, message) {
             if (s.error) return client.say(channel, `${s.reason}`);
             break;
         case 'sumimetro':
-            let user = argument || tags['display-name'];
+            user = argument || tags['display-name'];
             let sumimetro = await commands.sumimetro(channel, tags['display-name'], user);
             client.say(channel, sumimetro.message);
             break;

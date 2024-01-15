@@ -5,8 +5,17 @@ async function end(status, prediID, winner = null) {
         status
     }
 
+    let resData = {
+        error: false,
+        message: `Ha ganado la opción ${winner.title}!`,
+    }
+
     if (status === 'RESOLVED') {
         body.winning_outcome_id = winner.id;
+    } else if (status === 'CANCELED') {
+        resData.message = 'Se ha cancelado la predicción.';
+    } else {
+        resData.message = 'Se ha cerrado la predicción.';
     }
 
     let response = await fetch(`${this.helixURL}/predictions`, {
@@ -23,16 +32,11 @@ async function end(status, prediID, winner = null) {
         return { error: data.error, reason: data.message, status: data.status };
     }
 
-    if (data.data === undefined) return { error: true, reason: 'No hay ninguna predicción activa.'};
+    if (data.data === undefined) return { error: true, reason: 'No hay ninguna predicción activa.' };
 
     if (data.data.length === 0) return { error: true, reason: 'No hay ninguna predicción activa.' };
 
     if (status !== 'LOCKED') this.deletePredi(this.channel);
-
-    let resData = {
-        error: false,
-        message: `Ha ganado la opción ${winner.title}!`,
-    }
 
     return resData;
 }
