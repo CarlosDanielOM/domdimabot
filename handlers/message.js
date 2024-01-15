@@ -25,7 +25,7 @@ async function message(client, channel, tags, message) {
             isFounder = true;
         }
     }
-    if (channel === 'unositopolar' && (command === '!sumimetro')) {
+    if (channel === 'unositopolar' && (message === '!sumimetro')) {
         user = argument || tags['display-name'];
         let sumimetro = await commands.sumimetro(channel, tags['display-name'], user);
         return client.say(channel, sumimetro.message);
