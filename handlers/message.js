@@ -28,6 +28,12 @@ async function message(client, channel, tags, message) {
 
     const [raw, command, argument] = message.match(commandsRegex) || [];
 
+    if (channel === 'unositopolar' && (command === 'sumimetro')) {
+        user = argument || tags['display-name'];
+        let sumimetro = await commands.sumimetro(channel, tags['display-name'], user);
+        return client.say(channel, sumimetro.message);
+    }
+
     switch (command) {
         case 'ruletarusa':
             if ((tags.username !== channel) && !tags.mod) { isMod = false; }
