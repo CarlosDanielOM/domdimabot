@@ -28,8 +28,6 @@ async function sumimetro(channel, user, toUser) {
     let instance = instances.get(channel);
     await instance.init(channel);
 
-    await instance.getSumimetroDB(user, todayDate.dateinString);
-
     //? Checks if the date the data was saved is the same as today
     if (instance.getDateString() === null) {
         instance.setDateString(todayDate.dateinString);
@@ -38,6 +36,10 @@ async function sumimetro(channel, user, toUser) {
     if (instance.getDateString() !== todayDate.dateinString) {
         instance.reset();
         instance.setDateString(todayDate.dateinString);
+    }
+
+    if (!instance.hasSumimetro(lowerCaseUser)) {
+        await instance.getSumimetroDB(user, todayDate.dateinString);
     }
 
     //? Checks if the command is for the user or for another user
