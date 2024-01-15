@@ -7,11 +7,12 @@ async function end(status, prediID, winner = null) {
 
     let resData = {
         error: false,
-        message: `Ha ganado la opción ${winner.title}!`,
+        message: null,
     }
 
     if (status === 'RESOLVED') {
         body.winning_outcome_id = winner.id;
+        resData.message = `Ha ganado la opción ${winner.title}!`;
     } else if (status === 'CANCELED') {
         resData.message = 'Se ha cancelado la predicción.';
     } else {
