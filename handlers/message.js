@@ -25,14 +25,14 @@ async function message(client, channel, tags, message) {
             isFounder = true;
         }
     }
-
-    const [raw, command, argument] = message.match(commandsRegex) || [];
-
-    if (channel === 'unositopolar' && (command === 'sumimetro')) {
+    if (channel === 'unositopolar' && (command === '!sumimetro')) {
         user = argument || tags['display-name'];
         let sumimetro = await commands.sumimetro(channel, tags['display-name'], user);
         return client.say(channel, sumimetro.message);
     }
+
+    const [raw, command, argument] = message.match(commandsRegex) || [];
+
 
     switch (command) {
         case 'ruletarusa':
