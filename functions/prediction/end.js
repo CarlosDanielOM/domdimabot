@@ -23,13 +23,14 @@ async function end(status, prediID, winner = null) {
         return { error: data.error, reason: data.message, status: data.status };
     }
 
-    if (data.data === undefined) return null;
+    if (data.data === undefined) return { error: true, reason: 'No hay ninguna predicción activa.'};
 
-    if (data.data.length === 0) return null;
+    if (data.data.length === 0) return { error: true, reason: 'No hay ninguna predicción activa.' };
 
     if (status !== 'LOCKED') this.deletePredi(this.channel);
 
     let resData = {
+        error: false,
         message: `Ha ganado la opción ${winner.title}!`,
     }
 

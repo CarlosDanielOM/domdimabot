@@ -42,7 +42,12 @@ async function create(options) {
 
     this.setPredi(this.channel, prediData);
 
-    return true;
+    let resData = {
+        error: false,
+        message: `Se ha creado una nueva predicción con exito!`
+    }
+
+    return resData;
 
 }
 
