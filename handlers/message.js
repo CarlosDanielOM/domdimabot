@@ -31,7 +31,7 @@ async function message(client, channel, tags, message) {
 
     const [raw, command, argument] = message.match(commandsRegex) || [];
 
-    if (channel === 'unositopolar' && (message === '!sumimetro')) {
+    if (channel == 'unositopolar' && (message == '!sumimetro')) {
         user = argument || tags['display-name'];
         let sumimetro = await commands.sumimetro(channel, tags['display-name'], user);
         osito = true;
