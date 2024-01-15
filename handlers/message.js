@@ -31,11 +31,13 @@ async function message(client, channel, tags, message) {
 
     const [raw, command, argument] = message.match(commandsRegex) || [];
 
-    if (channel == 'unositopolar' && (message == '!sumimetro')) {
-        user = argument || tags['display-name'];
-        let sumimetro = await commands.sumimetro(channel, tags['display-name'], user);
+    if (channel == 'unositopolar') {
+        if (command == 'sumimetro') {
+            user = argument || tags['display-name'];
+            let sumimetro = await commands.sumimetro(channel, tags['display-name'], user);
+            return client.say(channel, sumimetro.message);
+        }
         osito = true;
-        return client.say(channel, sumimetro.message);
     }
 
     if (!osito) {
