@@ -38,12 +38,11 @@ async function sumimetro(channel, user, toUser) {
         instance.setDateString(todayDate.dateinString);
     }
 
-    if (!instance.hasSumimetro(lowerCaseUser)) {
-        await instance.getSumimetroDB(user, todayDate.dateinString);
-    }
-
     //? Checks if the command is for the user or for another user
     if (lowerCaseUser === lowerCaseToUser) {
+        if (!instance.hasSumimetro(lowerCaseUser)) {
+            await instance.getSumimetroDB(user, todayDate.dateinString);
+        }
         //? Checks if the user has already given his sumimetro and if not, it saves it
         if (!instance.hasSumimetro(lowerCaseUser)) {
             instance.setSumimetro(lowerCaseUser, {
@@ -231,6 +230,9 @@ async function sumimetro(channel, user, toUser) {
 
         }
     } else {
+        if (!instance.hasSumimetro(lowerCaseToUser)) {
+            await instance.getSumimetroDB(toUser, todayDate.dateinString);
+        }
         //? Checks if the user has already given his sumimetro and if not, it says that the user has not given his sumimetro
         if (!instance.hasSumimetro(lowerCaseToUser)) {
             message = `El usuario ${toUser} no se ha dado su lectura de sumimetro el dia de hoy.`
