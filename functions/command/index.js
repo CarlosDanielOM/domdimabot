@@ -16,8 +16,8 @@ class COMMAND {
         this.userLevel = 0;
         this.userLevelName = 'everyone';
         this.function = null;
-        this.createdAt = new Date();
-        this.dateInString = TIME.getDateinString();
+        this.createdAt = null;
+        this.dateInString = null;
         this.permissionLevels = {
             0: 'everyone',
             1: 'tier 1',
@@ -32,6 +32,8 @@ class COMMAND {
 
     async init(channel) {
         this.channel = channel;
+        this.createdAt = new Date();
+        this.dateInString = TIME.getDateinString();
     }
 
     createCommand = createcommand;
@@ -40,4 +42,4 @@ class COMMAND {
     getCommand = getcommand;
 }
 
-module.exports = COMMAND;
+module.exports = new COMMAND();

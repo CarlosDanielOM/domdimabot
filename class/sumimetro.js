@@ -1,4 +1,5 @@
 const { getUrl } = require('../util/dev');
+const sumimetroSchema = require('../schemas/sumimetro.schema');
 
 class SUMIMETRO {
     constructor() {
@@ -105,6 +106,25 @@ class SUMIMETRO {
     setDateString(dateString) {
         this.date = dateString;
     }
+
+    getSumimetroDB = getSumimetroDB
+
 }
 
 module.exports = SUMIMETRO;
+
+async function getSumimetroDB(user, date) {
+    const sumimetro = await sumimetroSchema.findOne({ channel: this.channel, username: user }).sort({ timestamp: -1 });
+    console.log(sumimetro)
+    if (sumimetro === null) return null;
+    let sumiDate = sumimetro.date.day + '/' + sumimetro.date.month + '/' + sumimetro.date.year;
+    console.log({ sumiDate, date, condition: sumiDate !== date })
+    if (sumiDate !== date) return null;
+    let newSumiDate = {
+        sumiso: sumimetro.submissive,
+        dominante: sumimetro.dominant
+    }
+    user = user.toLowerCase();
+    await this.setSumimetro(user, newSumiDate);
+    return true;
+}

@@ -161,7 +161,7 @@ async function init() {
         client_secret: process.env.CLIENT_SECRET,
         code: token,
         grant_type: 'authorization_code',
-        redirect_uri: 'https://domdimabot.com/auth'
+        redirect_uri: 'https://domdimabot.com/login'
       },
       headers: {
         'Content-Type': 'www-form-urlencoded'
@@ -186,7 +186,6 @@ async function init() {
         } else {
           streamerNames.updateNames();
           CLIENT.connectChannel(username);
-          res.location('/dashboard');
         }
       })
       .catch((err) => {

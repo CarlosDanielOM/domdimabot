@@ -1,3 +1,7 @@
-async function command(action, channel, argument) { }
+const COMMAND = require('../functions/command');
+
+async function command(action, channel, argument) {
+    
+}
 
 module.exports = command;
