@@ -24,4 +24,5 @@ initialize();
 
 setInterval(async () => {
     await dev.refreshAllTokens(refreshAllTokens, streamerNames.updateNames);
+    console.log('Tokens refreshed');
 }, 1000 * 60 * 60 * 4);
