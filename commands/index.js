@@ -8,7 +8,6 @@ const title = require('./title');
 const poll = require('./poll');
 const sumimetro = require('./sumimetro');
 const onlyEmotes = require('./onlyemotes');
-const COMMAND = require('./command/index');
 
 module.exports = {
     shoutout,
@@ -22,5 +21,4 @@ module.exports = {
     sumimetro: sumimetro.sumimetro,
     resetSumimetro: sumimetro.resetSumimetro,
     onlyEmotes,
-    COMMAND: COMMAND
 }

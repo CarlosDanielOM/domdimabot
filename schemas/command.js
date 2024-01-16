@@ -10,7 +10,7 @@ const commandSchema = new Schema({
     channel: String,
     userLevel: Number,
     userLevelName: String,
-    function: String,
+    func: String,
     createdAt: Date,
     date: {
         day: Number,

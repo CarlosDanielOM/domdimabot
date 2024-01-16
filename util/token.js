@@ -20,10 +20,15 @@ async function refreshAllTokens() {
             let doc = await channelSchema.findOneAndUpdate({ name: channel.name }, { twitch_user_token: channel.token, twitch_user_refresh_token: channel.refresh_token });
 
         });
+        await streamerNames.updateNames();
     } catch (error) {
         console.error('Error on refreshAllTokens:', error);
         throw error;
     }
+}
+
+async function refreshSingleToken(user) {
+
 }
 
 async function refreshToken(refreshToken) {

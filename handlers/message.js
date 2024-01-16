@@ -35,7 +35,7 @@ async function message(client, channel, tags, message) {
         if (command == 'sumimetro') {
             user = argument || tags['display-name'];
             let sumimetro = await commands.sumimetro(channel, tags['display-name'], user);
-            return client.say(channel, sumimetro.message);
+            client.say(channel, sumimetro.message);
         }
         osito = true;
     }

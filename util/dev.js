@@ -12,10 +12,10 @@ function getUrl() {
     }
 }
 
-function refreshAllTokens(fun, updateDBFetch) {
+async function refreshAllTokens(fun, updateDBFetch) {
     if (production) {
-        fun();
-        updateDBFetch();
+        await fun();
+        await updateDBFetch();
     }
 }
 
