@@ -10,10 +10,10 @@ async function refreshAllTokens() {
         streamers.forEach(async (streamer) => {
             let channel = await STREAMER.getStreamer(streamer);
 
-            const { token, refresh_token } = await refreshToken(decrypt(channel.refresh_token));
+            const { tokenEncrypt, refresh_tokenEncrypt } = await refreshToken(decrypt(channel.refresh_token));
 
-            channel.token = token;
-            channel.refresh_token = refresh_token;
+            channel.token = tokenEncrypt;
+            channel.refresh_token = refresh_tokenEncrypt;
 
             let doc = await channelSchema.findOneAndUpdate({ name: channel.name }, { twitch_user_token: channel.token, twitch_user_refresh_token: channel.refresh_token });
 
