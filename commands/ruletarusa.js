@@ -1,4 +1,3 @@
-const { getStreamer } = require('../util/streamerNames');
 const { timeoutUser } = require('../functions/index');
 
 function ruletarusa() {

@@ -1,4 +1,4 @@
-let production = false;
+let production = true;
 
 function isProduction() {
     return production;
@@ -8,14 +8,14 @@ function getUrl() {
     if (production === true) {
         return "https://domdimabot.com";
     } else {
+        return "https://domdimabot.com";
         return "http://localhost:3000";
     }
 }
 
-async function refreshAllTokens(fun, updateDBFetch) {
+async function refreshAllTokens(fun) {
     if (production) {
         await fun();
-        await updateDBFetch();
     }
 }
 

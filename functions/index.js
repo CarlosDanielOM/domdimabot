@@ -10,6 +10,7 @@ const sumimetro = require('./sumimetro');
 const amor = require('./amor');
 const ponerla = require('./ponerla');
 const mecabe = require('./mecabe');
+const memide = require('./memide');
 
 //* Importing Prediction Functions
 const prediction = require('./prediction');
@@ -30,5 +31,6 @@ module.exports = {
     sumimetro: sumimetro,
     amor: amor,
     ponerla: ponerla,
-    mecabe: mecabe
+    mecabe: mecabe,
+    memide: memide
 }

@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { getUserToken } = require('./streamerNames');
+const STREAMER = require('../class/streamers');
 
 let botHeaders = {
     'Authorization': null,
@@ -14,13 +14,13 @@ let header = {
 }
 
 async function getStreamerHeader(streamer) {
-    let streamerToken = await getUserToken(streamer);
+    let streamerToken = await STREAMER.getStreamerToken(streamer);
     header.Authorization = `Bearer ${streamerToken}`;
     return header;
 }
 
 async function getBotHeader() {
-    let botToken = await getUserToken('domdimabot');
+    let botToken = await STREAMER.getStreamerToken('domdimabot');
     botHeaders.Authorization = `Bearer ${botToken}`;
     return botHeaders;
 }

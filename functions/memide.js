@@ -13,3 +13,5 @@ function memide(user) {
 
     return { message }
 }
+
+module.exports = memide;

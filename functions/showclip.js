@@ -1,6 +1,7 @@
 const { getUrl } = require('../util/dev')
 
 async function showClip(channel, data) {
+    if (!data || data === undefined || data.length === 0) return { error: 'No data', reason: 'No data was provided to the function' };
     let random = Math.floor(Math.random() * data.length);
     let clip = data[random];
     let duration = clip['duration'];

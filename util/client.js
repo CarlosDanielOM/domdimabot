@@ -1,6 +1,6 @@
 require('dotenv').config();
 const tmi = require('tmi.js');
-const streamerNames = require('./streamerNames');
+const STREAMERS = require('../class/streamers');
 const { getClientOpts } = require('./dev');
 
 let client = null;
@@ -20,7 +20,7 @@ function getClient() {
 }
 
 async function connectChannels() {
-    const joinableChannels = streamerNames.getNames();
+    const joinableChannels = STREAMERS.getStreamersNames();
 
     joinableChannels.forEach(async (channel) => {
         client.join(channel);

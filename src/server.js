@@ -8,7 +8,7 @@ const https = require('https');
 const http = require('http');
 const axios = require('axios');
 
-const streamerNames = require('../util/streamerNames.js');
+const STREAMERS = require('../class/streamers.js');
 const CLIENT = require('../util/client.js');
 
 const { encrypt, decrypt } = require('../util/crypto');
@@ -184,7 +184,7 @@ async function init() {
           res.status(400).send('There was an error updating your channel');
           return false;
         } else {
-          streamerNames.updateNames();
+          STREAMERS.updateStreamers();
           CLIENT.connectChannel(username);
         }
       })
@@ -266,7 +266,7 @@ async function init() {
       } else {
         res.status(400).json({ message: 'Action not found' });
       }
-      streamerNames.updateNames();
+      STREAMERS.updateStreamers();
     } else {
       res.status(400).json({ message: 'User not found' });
       return false;
