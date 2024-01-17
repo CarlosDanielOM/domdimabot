@@ -3,7 +3,6 @@ const db = require('./src/db');
 const httpServer = require('./src/server');
 const eventsub = require('./src/eventsub');
 const bot = require('./src/bot');
-const streamerNames = require('./util/streamerNames');
 const STREAMERS = require('./class/streamers');
 const CLIENT = require('./util/client.js');
 const { refreshAllTokens } = require('./util/token');

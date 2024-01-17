@@ -44,8 +44,10 @@ async function refreshToken(refreshToken, independent = false, user = null) {
             }
         });
 
-        let token = response.data.access_token;
-        let refresh_token = response.data.refresh_token;
+        response = await response.json();
+
+        let token = response.access_token;
+        let refresh_token = response.refresh_token;
 
         tokenEncrypt = encrypt(token);
         refresh_tokenEncrypt = encrypt(refresh_token);

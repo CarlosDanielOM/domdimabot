@@ -184,7 +184,7 @@ async function init() {
           res.status(400).send('There was an error updating your channel');
           return false;
         } else {
-          STREAMERS.updateStreamers();
+          await STREAMERS.updateStreamers();
           CLIENT.connectChannel(username);
         }
       })
@@ -266,7 +266,7 @@ async function init() {
       } else {
         res.status(400).json({ message: 'Action not found' });
       }
-      STREAMERS.updateStreamers();
+      await STREAMERS.updateStreamers();
     } else {
       res.status(400).json({ message: 'User not found' });
       return false;

@@ -20,7 +20,7 @@ function getClient() {
 }
 
 async function connectChannels() {
-    const joinableChannels = STREAMERS.getStreamersNames();
+    const joinableChannels = await STREAMERS.getStreamersNames();
 
     joinableChannels.forEach(async (channel) => {
         client.join(channel);
