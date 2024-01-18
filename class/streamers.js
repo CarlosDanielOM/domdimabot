@@ -24,7 +24,7 @@ class STREAMERS {
                 this.streamerData.set(data.name, data);
                 return data;
             });
-
+            // console.log({ data: this.streamerData.get('cdom201'), where: 'getStreamersFromDB' })
             return namesArray;
         } catch (error) {
             console.error('Error on getStreamersFromDB:', error)
@@ -32,8 +32,16 @@ class STREAMERS {
         }
     }
 
+    async getStreamers() {
+        return this.streamerData;
+    }
+
     async getStreamer(name) {
         return this.streamerData.get(name);
+    }
+
+    async setStreamer(name, data) {
+        this.streamerData.set(name, data);
     }
 
     async getStreamersNames() {

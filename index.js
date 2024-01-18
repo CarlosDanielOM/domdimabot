@@ -12,7 +12,6 @@ async function initialize() {
     await CLIENT.clientConnect();
 
     db.init();
-    //await streamerNames.updateNames();
     await STREAMERS.init();
 
     await httpServer.init();

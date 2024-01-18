@@ -16,8 +16,7 @@ async function refreshAllTokens() {
             channel.refresh_token = refresh_tokenEncrypt;
 
             let doc = await channelSchema.findOneAndUpdate({ name: channel.name }, { twitch_user_token: channel.token, twitch_user_refresh_token: channel.refresh_token });
-
-        });
+        })
         await STREAMER.updateStreamers();
     } catch (error) {
         console.error('Error on refreshAllTokens:', error);
