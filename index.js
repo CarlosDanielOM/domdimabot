@@ -23,6 +23,11 @@ async function initialize() {
 initialize();
 
 setInterval(async () => {
-    await dev.refreshAllTokens(refreshAllTokens);
+    // await dev.refreshAllTokens(refreshAllTokens);
+    await refreshAllTokens();
+    setTimeout(async () => {
+        await refreshAllTokens();
+        console.log('Refreshed tokens 2');
+    }, 1000 * 2);
     console.log('Refreshed tokens');
 }, 1000 * 60 * 60 * 4);
