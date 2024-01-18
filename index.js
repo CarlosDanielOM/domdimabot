@@ -11,23 +11,19 @@ const dev = require('./util/dev');
 async function initialize() {
     await CLIENT.clientConnect();
 
-    db.init();
+    await db.init();
     await STREAMERS.init();
 
     await httpServer.init();
     eventsub.init();
     await bot.init();
     await dev.refreshAllTokens(refreshAllTokens);
+
 }
 
 initialize();
 
 setInterval(async () => {
-    // await dev.refreshAllTokens(refreshAllTokens);
-    await refreshAllTokens();
-    setTimeout(async () => {
-        await refreshAllTokens();
-        console.log('Refreshed tokens 2');
-    }, 1000 * 2);
+    await dev.refreshAllTokens(refreshAllTokens);
     console.log('Refreshed tokens');
-}, 1000 * 60 * 60 * 4);
+}, 1000 * 30);

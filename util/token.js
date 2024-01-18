@@ -7,7 +7,7 @@ async function refreshAllTokens() {
         await STREAMER.updateStreamers();
         const streamers = await STREAMER.getStreamersNames();
 
-        streamers.forEach(async (streamer) => {
+        const promises = streamers.map(async (streamer) => {
             let channel = await STREAMER.getStreamer(streamer);
 
             const { tokenEncrypt, refresh_tokenEncrypt } = await refreshToken(decrypt(channel.refresh_token));
@@ -15,17 +15,15 @@ async function refreshAllTokens() {
             channel.token = tokenEncrypt;
             channel.refresh_token = refresh_tokenEncrypt;
 
-            let doc = await channelSchema.findOneAndUpdate({ name: channel.name }, { twitch_user_token: channel.token, twitch_user_refresh_token: channel.refresh_token });
-        })
+            await channelSchema.findOneAndUpdate({ name: channel.name }, { twitch_user_token: channel.token, twitch_user_refresh_token: channel.refresh_token });
+        });
+
+        await Promise.all(promises);
         await STREAMER.updateStreamers();
     } catch (error) {
         console.error('Error on refreshAllTokens:', error);
         throw error;
     }
-}
-
-async function refreshSingleToken(user) {
-
 }
 
 async function refreshToken(refreshToken, independent = false, user = null) {

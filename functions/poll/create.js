@@ -21,7 +21,6 @@ async function createPoll(options) {
     let data = await response.json();
 
     if (data.error) {
-        console.log({data});
         return { error: data.error, reason: data.message, status: data.status };
     }
 

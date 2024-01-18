@@ -7,14 +7,20 @@ class STREAMERS {
     }
 
     async init() {
-        await this.getStreamersFromDB();
-    }
+        try {
+            await this.getStreamersFromDB();
+            console.log('Streamers initialized successfully.');
+        } catch (error) {
+            console.error('Error initializing streamers:', error);
+        }
+    };
 
     async getStreamersFromDB() {
+        console.log('Refreshed')
         try {
             const result = await channelSchema.find({ actived: true }, 'name twitch_user_id twitch_user_token twitch_user_refresh_token');
 
-            const namesArray = result.map((item) => {
+            result.map((item) => {
                 let data = {
                     name: item.name,
                     user_id: item.twitch_user_id,
@@ -22,10 +28,11 @@ class STREAMERS {
                     refresh_token: item.twitch_user_refresh_token
                 }
                 this.streamerData.set(data.name, data);
-                return data;
+                // return data;
             });
             // console.log({ data: this.streamerData.get('cdom201'), where: 'getStreamersFromDB' })
-            return namesArray;
+            // return namesArray;
+            // return true;
         } catch (error) {
             console.error('Error on getStreamersFromDB:', error)
             throw error;
@@ -37,7 +44,7 @@ class STREAMERS {
     }
 
     async getStreamer(name) {
-        return this.streamerData.get(name);
+        return await this.streamerData.get(name);
     }
 
     async setStreamer(name, data) {
