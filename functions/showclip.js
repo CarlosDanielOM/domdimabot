@@ -18,7 +18,7 @@ async function showClip(channel, clipData, streamerData, streamerChannelData) {
 
     if (!duration || !thumbnail) return null;
 
-    let game = await getGameByID(clipData.game_id);
+    let game = await getGameByID(clip.game_id);
 
     let clipResponse = await fetch(`${getUrl()}/clip/${channel}`, {
         method: 'POST',
