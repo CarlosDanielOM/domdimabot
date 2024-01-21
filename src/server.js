@@ -61,21 +61,18 @@ async function init() {
   })
 
   app.post('/clip/:channel', async (req, res) => {
-    const streamer = req.params.channel;
-    const channel = req.body.channel;
-    //const clip = req.body.clip_url;
-    const thumbnail = req.body.thumbnail;
-    const duration = req.body.duration;
-    const clipNumber = Math.floor(Math.random() * 100);
+    const channel = req.params.channel;
+    const { duration, thumbnail, title, game, streamer, profileImg, streamerColor, description } = req.body;
+    const body = req.body;
 
-    if (soSent.includes(streamer)) {
-      res.status(400).json({ message: `Clip already playing on ${streamer} channel` });
+    if (soSent.includes(channel)) {
+      res.status(400).json({ message: `Clip already playing on ${channel} channel` });
       return false;
     }
 
     let clip = getVideoURL(thumbnail);
 
-    let fileName = `${streamer}-clip.mp4`;
+    let fileName = `${channel}-clip.mp4`;
 
     let path = `${downloadPath}${fileName}`;
 
@@ -90,9 +87,10 @@ async function init() {
     }
     const file = fs.createWriteStream(path);
     const stream = response.body.pipe(file);
+
     await new Promise((resolve, reject) => {
       stream.on('finish', () => {
-        io.of(`/clip/${streamer}`).emit('play-clip', { channel, duration });
+        io.of(`/clip/${channel}`).emit('play-clip', body);
         soSent.push(streamer);
         setTimeout(() => {
           soSent = soSent.filter(so => so !== streamer);
@@ -106,7 +104,7 @@ async function init() {
       return false;
     });
 
-    res.status(200).json({ message: `Playing clip on ${streamer} channel`, status: 'success' });
+    res.status(200).json({ message: `Playing clip on ${channel} channel`, status: 'success' });
 
   });
 

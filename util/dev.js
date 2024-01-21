@@ -1,4 +1,4 @@
-let production = true;
+let production = false;
 
 function isProduction() {
     return production;
@@ -8,8 +8,8 @@ function getUrl() {
     if (production === true) {
         return "https://domdimabot.com";
     } else {
-        return "https://domdimabot.com";
         return "http://localhost:3000";
+        return "https://domdimabot.com";
     }
 }
 

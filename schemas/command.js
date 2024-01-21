@@ -19,4 +19,5 @@ const commandSchema = new Schema({
     }
 });
 
+
 module.exports = mongoose.model('Command', commandSchema);

@@ -11,6 +11,7 @@ const amor = require('./amor');
 const ponerla = require('./ponerla');
 const mecabe = require('./mecabe');
 const memide = require('./memide');
+const getUser = require('./getuser');
 
 //* Importing Prediction Functions
 const prediction = require('./prediction');
@@ -32,5 +33,6 @@ module.exports = {
     amor: amor,
     ponerla: ponerla,
     mecabe: mecabe,
-    memide: memide
+    memide: memide,
+    getUser: getUser
 }

@@ -31,6 +31,9 @@ async function init() {
                 tier = '3';
                 break;
         }
+
+        if (months == 0) { months++ }
+
         client.say(channel, `Gracias por la resub ${username}! de ${months} meses y de nivel ${tier}!`);
     });
 

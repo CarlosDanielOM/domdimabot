@@ -5,27 +5,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clip Player</title>
+    <link rel="stylesheet" href="/assets/css/clip.css">
 </head>
 
 <body>
 
     <div id="container">
-        <video width="400px" height="300px" id="vplayer"></video>
+        <div class="left-container" id="left">
+            <video id="vplayer"></video>
+        </div>
+        <div class="img" id="img">
+        </div>
+        <div class="right-container" id="right">
+            <div class="streamer-info">
+                <div class="streamer-info__name">
+                    <h2 id="streamer_name"></h2>
+                </div>
+            </div>
+            <div class="stream-description">
+                <h4 id="stream_description"></h4>
+            </div>
+            <div class="stream-info">
+                <div class="stream-info__game">
+                    <h3 id="stream_game"></h3>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
     <script>
         const container = document.getElementById('container');
+        const leftContainer = document.getElementById('left');
+        const rightContainer = document.getElementById('right');
+        const imgContainer = document.getElementById('img');
+
+        const streamerName = document.getElementById('streamer_name');
+        const streamTitle = document.getElementById('stream_title');
+        const streamGame = document.getElementById('stream_game');
+        const streamDescription = document.getElementById('stream_description');
 
         let channel = window.location.pathname.split('/')[2];
-        
+
         const socket = io.connect('https://domdimabot.com/', { reconnection: true, transports: ['websocket'] });
+        // const socket = io.connect('http://localhost:3000/', { reconnection: true, transports: ['websocket'] });
         const channelSocket = io(`/clip/${channel}`, { forceNew: true, transports: ['websocket'] });
 
         channelSocket.on('play-clip', (data) => {
+            console.log({ data })
             let duration = Number(data.duration);
             let videoPlayer = document.getElementById('vplayer');
-            if(!videoPlayer){
+            if (!videoPlayer) {
                 videoPlayer = document.createElement('video');
                 videoPlayer.setAttribute('width', '400px');
                 videoPlayer.setAttribute('height', '300px');
@@ -33,20 +63,54 @@
                 container.appendChild(videoPlayer);
             }
 
+            let profileImg = document.getElementById('profile_img');
+            if (!profileImg) {
+                profileImg = document.createElement('img');
+                profileImg.setAttribute('id', 'profile_img');
+                let rgb = hexToRgb(data.streamerColor);
+                if (rgb.r <= 40 && rgb.g <= 40 && rgb.b <= 40) {
+                    rightContainer.style.background = 'rgba(204,204,204, 0.5)';
+                } else {
+                    rightContainer.style.background = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.5)`;
+                    rightContainer.style.color = '#000000';
+                }
+                imgContainer.appendChild(profileImg);
+            }
+
+            profileImg.setAttribute('src', data.profileImg);
+
             let clipLink = `https://domdimabot.com/video/${channel}?t=${Date.now()}`;
+            // let clipLink = `http://localhost:3000/video/${channel}?t=${Date.now()}`;
 
             const videoSource = document.createElement('source');
             videoSource.setAttribute('type', 'video/mp4');
             videoSource.setAttribute('src', clipLink);
-            
+
             videoPlayer.appendChild(videoSource);
 
             videoPlayer.addEventListener('canplaythrough', () => {
                 videoPlayer.play().then(() => {
+                    streamerName.innerText = data.streamer;
+                    streamGame.innerText = data.game;
+                    streamDescription.innerText = data.description;
+                    videoPlayer.style.opacity = 1;
+                    rightContainer.style.transform = 'translateX(400px)';
+                    rightContainer.style.opacity = 1;
+                    imgContainer.style.opacity = 1;
+                    imgContainer.style.transform = 'scale(1)'
+                    setTimeout(() => {
+                        rightContainer.style.transform = 'translateX(0px)';
+                        rightContainer.style.opacity = 0;
+                        imgContainer.style.opacity = 0;
+                        imgContainer.style.transform = 'scale(0)'
+                        videoPlayer.style.opacity = 0;
+                    }, (1000 * duration) - (500));
                     setTimeout(() => {
                         videoSource.setAttribute('src', ' ');
                         videoSource.remove();
                         videoPlayer.remove();
+                        profileImg.remove();
+                        imgContainer.style.background = 'none';
                         console.log('Clip Finished');
                     }, (1000 * duration) + (1000));
                 });
@@ -58,6 +122,16 @@
         channelSocket.on('prepare-clips', (data) => {
             console.log('Clips Prepared');
         })
+
+        function hexToRgb(hex) {
+            if (!hex) return { r: 255, g: 255, b: 255 };
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
     </script>
 </body>
 

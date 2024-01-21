@@ -1,4 +1,4 @@
-const { getClips, showClip, getUserID, getChannel, makeAnnouncement, makeShoutout } = require('../functions');
+const { getClips, showClip, getUserID, getChannel, makeAnnouncement, makeShoutout, getUser } = require('../functions');
 const { shoutouts } = require('../util/cooldowns');
 
 async function shoutout(channel, streamer, modID) {
@@ -6,10 +6,12 @@ async function shoutout(channel, streamer, modID) {
     let channelID = await getUserID(channel);
     let streamerID = await getUserID(streamer);
     if (!channelID || !streamerID) return { clip: null };
-    let clips = await getClips(streamerID);
-    let clip = await showClip(channel, clips);
-
+    let streamerUserData = await getUser(streamerID);
+    if (streamerUserData.error) return { clip: null };
     let streamerChannel = await getChannel(streamerID);
+    let clips = await getClips(streamerID);
+    let clip = await showClip(channel, clips, streamerChannel, streamerUserData);
+
     streamerChannel = {
         name: streamerChannel.broadcaster_name,
         login: streamerChannel.broadcaster_login,

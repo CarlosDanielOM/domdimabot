@@ -4,6 +4,7 @@ const getUserID = require('../getuserid');
 
 const setonlyEmotes = require('./setonlyemotes');
 const getonlyEmotes = require('./getonlyemotes');
+const getuserColor = require('./getusercolor');
 
 class CHAT {
     constructor() {
@@ -12,6 +13,8 @@ class CHAT {
         this.streamerHeaders = null;
         this.modID = null;
         this.userID = null;
+        this.streamerID = null;
+        this.botHeaders = null;
     }
 
     async init(channel, modID) {
@@ -20,10 +23,16 @@ class CHAT {
         this.streamerHeaders = await getStreamerHeader(channel);
         this.modID = modID;
         this.userID = await getUserID(channel);
+        this.botHeaders = await getStreamerHeader('domdimabot');
+    }
+
+    async setStreamerID(streamerID) {
+        this.streamerID = streamerID;
     }
 
     setOnlyEmotes = setonlyEmotes;
     getOnlyEmotes = getonlyEmotes;
+    getUserColor = getuserColor;
 
 }
 

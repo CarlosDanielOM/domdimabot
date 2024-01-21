@@ -18,3 +18,5 @@ async function redeem(client, channel, username, rewardType, tags, message) {
 }
 
 module.exports = redeem;
+
+//! free basic noramal premium

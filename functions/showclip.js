@@ -1,9 +1,17 @@
 const { getUrl } = require('../util/dev')
+const CHAT = require('./chat');
 
-async function showClip(channel, data) {
-    if (!data || data === undefined || data.length === 0) return { error: 'No data', reason: 'No data was provided to the function' };
-    let random = Math.floor(Math.random() * data.length);
-    let clip = data[random];
+async function showClip(channel, clipData, streamerData, streamerChannelData) {
+    if (!clipData || clipData === undefined || clipData.length === 0) return { error: 'No data', reason: 'No data was provided to the function' };
+    if (!streamerData || streamerData === undefined || streamerData.length === 0) return { error: 'No data', reason: 'No data was provided to the function' };
+    let streamerID = streamerChannelData.id;
+
+    await CHAT.init(channel, null);
+    await CHAT.setStreamerID(streamerID);
+    let streamerColor = await CHAT.getUserColor();
+
+    let random = Math.floor(Math.random() * clipData.length);
+    let clip = clipData[random];
     let duration = clip['duration'];
     let thumbnail = clip['thumbnail_url'];
 
@@ -16,13 +24,19 @@ async function showClip(channel, data) {
         },
         body: JSON.stringify({
             duration,
-            thumbnail
+            thumbnail,
+            title: streamerData.title,
+            game: streamerData.game_name,
+            streamer: streamerData.broadcaster_name,
+            profileImg: streamerChannelData.profile_image_url,
+            description: streamerChannelData.description,
+            streamerColor: streamerColor
         })
     });
 
-    let clipData = clipResponse;
+    let clipResData = clipResponse;
 
-    return clipData;
+    return clipResData;
 }
 
 module.exports = showClip;
