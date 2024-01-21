@@ -1,5 +1,6 @@
 const { getUrl } = require('../util/dev')
 const CHAT = require('./chat');
+const getGameByID = require('./getgamebyid');
 
 async function showClip(channel, clipData, streamerData, streamerChannelData) {
     if (!clipData || clipData === undefined || clipData.length === 0) return { error: 'No data', reason: 'No data was provided to the function' };
@@ -17,6 +18,8 @@ async function showClip(channel, clipData, streamerData, streamerChannelData) {
 
     if (!duration || !thumbnail) return null;
 
+    let game = await getGameByID(clipData.game_id);
+
     let clipResponse = await fetch(`${getUrl()}/clip/${channel}`, {
         method: 'POST',
         headers: {
@@ -26,11 +29,11 @@ async function showClip(channel, clipData, streamerData, streamerChannelData) {
             duration,
             thumbnail,
             title: streamerData.title,
-            game: streamerData.game_name,
+            game: game.name,
             streamer: streamerData.broadcaster_name,
             profileImg: streamerChannelData.profile_image_url,
             description: streamerChannelData.description,
-            streamerColor: streamerColor
+            streamerColor: streamerColor,
         })
     });
 

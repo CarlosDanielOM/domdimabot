@@ -12,6 +12,7 @@ const ponerla = require('./ponerla');
 const mecabe = require('./mecabe');
 const memide = require('./memide');
 const getUser = require('./getuser');
+const getGameByID = require('./getgamebyid');
 
 //* Importing Prediction Functions
 const prediction = require('./prediction');
@@ -34,5 +35,6 @@ module.exports = {
     ponerla: ponerla,
     mecabe: mecabe,
     memide: memide,
-    getUser: getUser
+    getUser: getUser,
+    getGameByID: getGameByID
 }

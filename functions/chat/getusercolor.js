@@ -8,8 +8,6 @@ async function getUserColor() {
     if (data.error) return { error: data.error, reason: data.message, status: data.status }
     data = data.data[0];
 
-    console.log({ data });
-
     return data.color;
 }
 
