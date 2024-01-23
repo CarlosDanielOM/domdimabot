@@ -3,6 +3,8 @@ const commands = require('../commands/index.js');
 const func = require('../functions/index.js');
 const ChatLog = require('../schemas/chat_log.schema.js');
 
+const COOLDOWNS = require('../util/cooldowns');
+
 const commandsRegex = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?$/);
 
 const modID = '698614112';
@@ -12,6 +14,9 @@ let user;
 let osito;
 
 async function message(client, channel, tags, message) {
+    let cmdCD = COOLDOWNS.command;
+    let onCooldown = false;
+
     if (tags.mod || tags.username === channel || tags.username === 'cdom201') {
         isMod = true;
     } else {
@@ -29,18 +34,23 @@ async function message(client, channel, tags, message) {
         }
     }
 
+    if (cmdCD.hasCooldown(channel)) {
+        onCooldown = true;
+    };
+
     const [raw, command, argument] = message.match(commandsRegex) || [];
 
-    if (channel == 'unositopolar') {
+    if (channel == 'unositopolar' && !onCooldown) {
         if (command == 'sumimetro') {
             user = argument || tags['display-name'];
             let sumimetro = await commands.sumimetro(channel, tags['display-name'], user);
+            cmdCD.setCooldown(channel, 5);
             client.say(channel, sumimetro.message);
         }
         osito = true;
     }
 
-    if (!osito) {
+    if (!osito && !onCooldown && command) {
         switch (command) {
             case 'ruletarusa':
                 if ((tags.username !== channel) && !tags.mod) { isMod = false; }
@@ -186,25 +196,32 @@ async function message(client, channel, tags, message) {
                 break;
             case 'cc':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
-                let cc = await commands.cc('CREATE', channel, argument);
+                let cc = await commands.cmd('CREATE', 'command', channel, argument);
                 if (cc.error) return client.say(channel, `${cc.reason}`);
                 client.say(channel, cc.message);
                 break;
             case 'dc':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
-                let dc = await commands.cc('DELETE', channel, argument);
+                let dc = await commands.cmd('DELETE', channel, argument);
                 if (dc.error) return client.say(channel, `${dc.reason}`);
                 client.say(channel, dc.message);
                 break;
             case 'ec':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
-                let ec = await commands.cc('EDIT', channel, argument);
+                let ec = await commands.cmd('EDIT', channel, argument);
                 if (ec.error) return client.say(channel, `${ec.reason}`);
                 client.say(channel, ec.message);
+                break;
+            case 'followage':
+                let followageUser = argument || tags['display-name'];
+                let followage = await commands.followage(channel, followageUser);
+                if (followage.error) return client.say(channel, `${followage.reason}`);
+                client.say(channel, followage.message);
                 break;
             default:
                 break;
         }
+        cmdCD.setCooldown(channel, 5);
     }
 
     let chatBody = {
