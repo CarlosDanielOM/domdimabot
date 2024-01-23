@@ -7,6 +7,8 @@ const COOLDOWNS = require('../util/cooldowns');
 
 const commandsRegex = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?$/);
 
+const commandHandler = require('./command.js');
+
 const modID = '698614112';
 
 let isMod;
@@ -68,10 +70,6 @@ async function message(client, channel, tags, message) {
                 } else {
                     client.say(channel, `${tags['display-name']} ha jalado el gatillo y la bala no ha sido disparada.`);
                 }
-                break;
-            case 'discord':
-                let discord = commands.discord(channel);
-                client.say('cdom201', discord.message);
                 break;
             case 'anuncio':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
@@ -196,7 +194,7 @@ async function message(client, channel, tags, message) {
                 break;
             case 'cc':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
-                let cc = await commands.cmd('CREATE', 'command', channel, argument);
+                let cc = await commands.cmd('CREATE', channel, argument, 'command');
                 if (cc.error) return client.say(channel, `${cc.reason}`);
                 client.say(channel, cc.message);
                 break;
@@ -219,6 +217,12 @@ async function message(client, channel, tags, message) {
                 client.say(channel, followage.message);
                 break;
             default:
+                let cmdHandler = await commandHandler(channel, tags, command, argument);
+                if (!cmdHandler.exists) return;
+                if (cmdHandler.error) return client.say(channel, `${cmdHandler.reason}`);
+                let cmd = cmdHandler.command;
+                if (!cmd.enabled) return;
+                client.say(channel, cmd.func);
                 break;
         }
         cmdCD.setCooldown(channel, 5);

@@ -52,12 +52,19 @@ class COMMAND {
         return { error: false, message: null, created: true, command: cmd };
     }
 
+    //? DELETE METHODS
+    async deleteCommandFromDB(command) {
+        let deleted = await this.schema.deleteOne({ name: command.name, channel: this.channel });
+        if (deleted.deletedCount === 0) return false;
+        return true;
+    }
+
     //? DATABASE METHODS
 
     async getCommandFromDB(name) {
         let command = await this.schema.findOne({ name: name, channel: this.channel });
         if (command === null) return { error: 'Command does not exist', reason: 'command does not exist', command: null };
-        return command;
+        return { error: false, command };
     }
 
     async getCommandFromDBasd(name) {
@@ -76,7 +83,7 @@ class COMMAND {
         let command = new this.schema(commandData);
         let cmd = await command.save();
         if (cmd === null) return false;
-        return true;
+        return cmd;
     }
 }
 

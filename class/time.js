@@ -12,6 +12,10 @@ class TIME {
         return this.time;
     }
 
+    getTimeNow() {
+        return Date.now();
+    }
+
     //? SET METHODS
     setTime(time) {
         this.time = time;
