@@ -29,29 +29,39 @@ async function followage(channel, user) {
     const now = new Date();
 
     const diff = now.getTime() - date.getTime();
-    const hours = Math.floor(diff / (1000 * 3600));
-    const days = Math.floor(hours / 24);
-    const weeks = Math.floor(days / 7);
-    const months = Math.floor(weeks / 4);
-    const years = Math.floor(months / 12);
 
-    let responseString = `${user} sigue a ${channel} hace `;
+    const hour = (1000 * 3600);
+    const day = 24;
+    const month = 30;
+    const year = 365;
 
+    let days = 0;
+    let months = 0;
+    let years = 0;
+
+    let hours = Math.floor(diff / hour);
+    days = Math.floor(hours / day);
+    hours = hours % day;
+    months = Math.floor(days / month);
+    days = days % month;
+    years = Math.floor(months / year);
+    months = months % year;
+
+    let message = `${user} sigue a ${channel} desde hace `;
     if (years > 0) {
-        responseString += `${years} año${years > 1 ? 's' : ''}`;
-    } else if (months > 0) {
-        responseString += `${months} mes${months > 1 ? 'es' : ''}`;
-    } else if (weeks > 0) {
-        responseString += `${weeks} semana${weeks > 1 ? 's' : ''}`;
-    } else if (days > 0) {
-        responseString += `${days} día${days > 1 ? 's' : ''}`;
-    } else if (hours > 0) {
-        responseString += `${hours} hora${hours > 1 ? 's' : ''}`;
-    } else {
-        responseString += 'menos de una hora';
+        message += `${years} año${years > 1 ? 's' : ''}`;
+    }
+    if (months > 0) {
+        message += `${years > 0 ? ', ' : ''}${months} mes${months > 1 ? 'es' : ''}`;
+    }
+    if (days > 0) {
+        message += `${years > 0 || months > 0 ? ', ' : ''}${days} día${days > 1 ? 's' : ''}`;
+    }
+    if (hours > 0) {
+        message += `${years > 0 || months > 0 || days > 0 ? ', ' : ''}${hours} hora${hours > 1 ? 's' : ''}`;
     }
 
-    return { error: false, message: responseString };
+    return { error: false, message };
 
 }
 
