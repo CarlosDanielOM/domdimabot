@@ -16,6 +16,20 @@ let user;
 let osito;
 
 async function message(client, channel, tags, message) {
+
+    let chatBody = {
+        channel: channel,
+        message: message,
+        username: tags['display-name'],
+        timestamp: new Date()
+    }
+
+    let chatLog = await ChatLog.create(chatBody);
+
+    if (!chatLog) {
+        console.log('Error al guardar el mensaje en la base de datos.');
+    }
+
     let cmdCD = COOLDOWNS.command;
     let onCooldown = false;
 
@@ -227,20 +241,6 @@ async function message(client, channel, tags, message) {
         }
         cmdCD.setCooldown(channel, 5);
     }
-
-    let chatBody = {
-        channel: channel,
-        message: message,
-        username: tags['display-name'],
-        timestamp: new Date()
-    }
-
-    let chatLog = await ChatLog.create(chatBody);
-
-    if (!chatLog) {
-        console.log('Error al guardar el mensaje en la base de datos.');
-    }
-
 }
 
 module.exports = message;
