@@ -57,7 +57,7 @@ async function subscribeTwitchEventFollow(channel) {
 
 }
 
-async function subscribeTwitchEvents(channel) {
+async function subscribeTwitchEventStreamOnline(channel) {
 
     let streamer = await STREAMERS.getStreamer(channel);
     let streamerHeaders = await getStreamerHeader(channel);
@@ -129,7 +129,7 @@ async function getEventsub() {
 }
 
 module.exports = {
-    subscribeTwitchEvents,
+    subscribeTwitchEventStreamOnline,
     getEventsub,
     subscribeTwitchEventFollow
 }
