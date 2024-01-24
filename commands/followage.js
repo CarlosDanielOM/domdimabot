@@ -41,11 +41,11 @@ async function followage(channel, user) {
 
     let hours = Math.floor(diff / hour);
     days = Math.floor(hours / day);
-    hours = hours % day;
+    hours = Math.floor(hours % day);
     months = Math.floor(days / month);
-    days = days % month;
+    days = Math.floor(days % month);
     years = Math.floor(months / year);
-    months = months % year;
+    months = Math.floor(months % year);
 
     let message = `${user} sigue a ${channel} desde hace `;
     if (years > 0) {
