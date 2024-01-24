@@ -20,6 +20,9 @@ const { getTwitchHelixURL } = require('../util/links.js');
 const { getNewAppToken, getAppToken } = require('../util/token.js');
 const { getStreamerHeader } = require('../util/headers.js');
 
+const eventsubHandler = require('../handlers/eventsub.js');
+const { subscribeTwitchEventFollow } = require('../util/eventsub.js');
+
 const downloadPath = `${__dirname}/routes/public/downloads/`;
 const htmlPath = `${__dirname}/routes/public/`;
 
@@ -58,6 +61,13 @@ async function init() {
   // app.use(express.static('routes/public/assets'));
 
   //! Routes !//
+
+  app.get('/test/:channel', (req, res) => {
+    let channel = req.params.channel;
+    subscribeTwitchEventFollow(channel);
+    res.status(200).send('Hello World!');
+  });
+
   //? CLIP ROUTES ?//
 
   app.get('/clip/:channel', (req, res) => {

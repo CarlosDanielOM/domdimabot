@@ -1,6 +1,7 @@
 require('dotenv').config();
 const crypto = require('crypto');
 const express = require('express');
+const eventsubHandler = require('../handlers/eventsub');
 
 module.exports = {
     init: () => {
@@ -44,8 +45,7 @@ module.exports = {
                 let notification = JSON.parse(req.body);
 
                 if (MESSAGE_TYPE_NOTIFICATION === req.headers[MESSAGE_TYPE]) {
-                    console.log(`Event type: ${notification.subscription.type}`);
-                    console.log(JSON.stringify(notification, null, 4));
+                    eventsubHandler(notification.subscription, notification.event);
 
                     res.sendStatus(204);
                 } else if (MESSAGE_TYPE_VERIFICATION === req.headers[MESSAGE_TYPE]) {
