@@ -34,17 +34,16 @@
                 if (vc.lang == 'es-US') {
                     console.log({ name: vc.name, lang: vc.lang, npi: vc.voiceURI });
                 }
+                document.getElementById('voices').innerHTML += `<p>${vc.name}</p>`;
             });
 
+            channelSocket.on('speach', (data) => {
+                let msg = data.message;
+                speach.text = msg;
+                synth.speak(speach);
+                console.table(speach)
+            });
         }
-
-
-        channelSocket.on('speach', (data) => {
-            let msg = data.message;
-            speach.text = msg;
-            synth.speak(speach);
-            console.table(speach)
-        });
     </script>
 </body>
 
