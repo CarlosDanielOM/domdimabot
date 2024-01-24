@@ -44,8 +44,6 @@ async function command(action, channel, argument, type = null) {
         let opts = text.split(' ');
         let name = opts[0];
 
-        console.log({ opts, where: 'command.js' })
-
         let funcLength = opts.length;
         for (let i = 2; i < funcLength; i++) {
             opts[1] += ` ${opts[i]}`;
@@ -74,7 +72,6 @@ async function command(action, channel, argument, type = null) {
     }
 
     if (action === 'DELETE') {
-        console.log({ argument, where: 'command.js' })
         let exists = await COMMAND.commandExistsInDB(argument);
         if (!exists) return { error: true, reason: 'command does not exist' };
         let cmd = await COMMAND.getCommandFromDB(argument);

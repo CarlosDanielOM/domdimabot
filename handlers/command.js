@@ -9,8 +9,6 @@ async function commandHandler(channel, tags, command, argument) {
     cmd = cmd.command;
     if (!cmd.enabled) return { error: true, reason: 'command is disabled', enabled: false, exists: true };
 
-    console.log({ cmd, where: 'commandHandler' })
-
     return { error: false, enabled: true, exists: true, command: cmd }
 
 }

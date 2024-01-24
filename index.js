@@ -5,7 +5,7 @@ const eventsub = require('./src/eventsub');
 const bot = require('./src/bot');
 const STREAMERS = require('./class/streamers');
 const CLIENT = require('./util/client.js');
-const { refreshAllTokens } = require('./util/token');
+const { refreshAllTokens, getNewAppToken } = require('./util/token');
 const dev = require('./util/dev');
 
 async function initialize() {
@@ -19,11 +19,19 @@ async function initialize() {
     await bot.init();
     await dev.refreshAllTokens(refreshAllTokens);
 
+    // await getNewAppToken();
+
 }
 
 initialize();
 
 setInterval(async () => {
+    console.log('alo?')
     await dev.refreshAllTokens(refreshAllTokens);
     console.log('Refreshed tokens');
 }, 1000 * 60 * 60 * 4);
+
+setInterval(async () => {
+    await getNewAppToken();
+    console.log('Refreshed app token');
+}, 1000 * 60 * 60 * 24);

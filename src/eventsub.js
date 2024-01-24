@@ -24,18 +24,26 @@ module.exports = {
 
         app.use(express.raw({ type: 'application/json' }));
 
+        app.get('/', (req, res) => {
+            res.status(200).send('Hello World!');
+        });
+
+        app.get('/eventsub', (req, res) => {
+            res.status(200).send('Hello World!');
+        });
+
         app.post('/eventsub', (req, res) => {
             let secret = getSecret();
             let message = getHmacMessage(req);
             let hmac = HMAC_PREFIX + getHmac(secret, message);
 
-            if(true === verifyMessage(hmac, req.headers[TWITCH_MESSAGE_SIGNATURE])) {
+            if (true === verifyMessage(hmac, req.headers[TWITCH_MESSAGE_SIGNATURE])) {
                 console.log('Message verified');
 
                 //GET JSON object from body
                 let notification = JSON.parse(req.body);
 
-                if(MESSAGE_TYPE_NOTIFICATION === req.headers[MESSAGE_TYPE]) {
+                if (MESSAGE_TYPE_NOTIFICATION === req.headers[MESSAGE_TYPE]) {
                     console.log(`Event type: ${notification.subscription.type}`);
                     console.log(JSON.stringify(notification, null, 4));
 
@@ -49,7 +57,7 @@ module.exports = {
                     console.log(`reason ${notification.subscription.status}`);
 
                     console.log(`condition: ${JSON.stringify(notification, null, 4)}`);
-                    
+
                 } else {
                     res.sendStatus(204);
 
@@ -60,7 +68,7 @@ module.exports = {
                 console.log('403 Forbidden')
                 res.sendStatus(403);
             }
-            
+
         })
 
         app.listen(port, () => {
@@ -69,15 +77,15 @@ module.exports = {
         function getSecret() {
             return process.env.TWITCH_EVENTSUB_SECRET;
         }
-        
+
         function getHmacMessage(req) {
             return (req.headers[TWITCH_MESSAGE_ID] + req.headers[TWITCH_MESSAGE_TIMESTAMP] + req.body);
         }
-        
+
         function getHmac(secret, message) {
             return crypto.createHmac('sha256', secret).update(message).digest(HMAC_DIGEST);
         }
-        
+
         function verifyMessage(hmac, verifySignature) {
             return crypto.timingSafeEqual(Buffer.from(hmac), Buffer.from(verifySignature));
         }

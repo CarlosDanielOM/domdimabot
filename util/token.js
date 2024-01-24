@@ -1,5 +1,6 @@
 const STREAMER = require('../class/streamers');
 const channelSchema = require('../schemas/channel.schema');
+const appConfigSchema = require('../schemas/app_config');
 const { encrypt, decrypt } = require('./crypto');
 
 async function refreshAllTokens() {
@@ -61,7 +62,44 @@ async function refreshToken(refreshToken, independent = false, user = null) {
     }
 }
 
+async function getNewAppToken() {
+    try {
+        let params = new URLSearchParams({
+            client_id: process.env.CLIENT_ID,
+            client_secret: process.env.CLIENT_SECRET,
+            grant_type: 'client_credentials'
+        });
+        let response = await fetch(`https://id.twitch.tv/oauth2/token?${params.toString()}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'www-form-urlencoded'
+            }
+        });
+
+        response = await response.json();
+
+        let token = response.access_token;
+
+        tokenEncrypt = encrypt(token);
+
+        let doc = await appConfigSchema.findOneAndUpdate({ name: 'domdimabot' }, { access_token: tokenEncrypt });
+
+        return { tokenEncrypt };
+    } catch (error) {
+        console.error('Error on getNewAppToken:', error);
+        throw error;
+    }
+
+}
+
+async function getAppToken() {
+    let data = await appConfigSchema.findOne({ name: 'domdimabot' });
+    return decrypt(data.access_token);
+}
+
 module.exports = {
     refreshAllTokens,
-    refreshToken
+    refreshToken,
+    getNewAppToken,
+    getAppToken
 }
