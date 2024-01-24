@@ -8,6 +8,9 @@
 </head>
 
 <body>
+
+    <div id="voices"></div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script>
         let channel = window.location.pathname.split('/')[2];
@@ -24,6 +27,17 @@
         const synth = window.speechSynthesis;
         let speach = new SpeechSynthesisUtterance();
         speach.lang = 'es-US';
+
+        synth.onvoiceschanged = function () {
+            const voices = synth.getVoices();
+            voices.forEach(vc => {
+                if (vc.lang == 'es-US') {
+                    console.log({ name: vc.name, lang: vc.lang, npi: vc.voiceURI });
+                }
+            });
+
+        }
+
 
         channelSocket.on('speach', (data) => {
             let msg = data.message;
