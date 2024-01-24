@@ -10,6 +10,7 @@ const sumimetro = require('./sumimetro');
 const onlyEmotes = require('./onlyemotes');
 const cmd = require('./command')
 const followage = require('./followage');
+const ip = require('./ip');
 
 module.exports = {
     shoutout,
@@ -24,5 +25,6 @@ module.exports = {
     resetSumimetro: sumimetro.resetSumimetro,
     onlyEmotes,
     cmd,
-    followage
+    followage,
+    ip
 }

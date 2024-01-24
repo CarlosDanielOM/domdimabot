@@ -70,7 +70,7 @@ async function message(client, channel, tags, message) {
         switch (command) {
             case 'ruletarusa':
                 if ((tags.username !== channel) && !tags.mod) { isMod = false; }
-                if (isMod) return client.say(channel, `No puedes disparar te como un mod, no seas pendejo.`);
+                if (isMod) return client.say(channel, `No puedes dispararte como un mod, no seas pendejo.`);
                 let dead = commands.ruletarusa();
                 if (dead) {
                     let broadcasterID = await func.getUserID(channel);
@@ -229,6 +229,13 @@ async function message(client, channel, tags, message) {
                 let followage = await commands.followage(channel, followageUser);
                 if (followage.error) return client.say(channel, `${followage.reason}`);
                 client.say(channel, followage.message);
+                break;
+            case 'ip':
+                if (channel !== 'nerfoscar') return;
+                if (isMod) return client.say(channel, `Ya quisieras papi`);
+                let ip = await commands.ip(channel, tags['display-name'], modID);
+                if (ip.error) return client.say(channel, `${ip.reason}`);
+                client.say(channel, ip.message);
                 break;
             default:
                 let cmdHandler = await commandHandler(channel, tags, command, argument);
