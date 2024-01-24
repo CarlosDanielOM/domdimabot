@@ -232,6 +232,7 @@ async function message(client, channel, tags, message) {
                 break;
             case 'ip':
                 if (channel !== 'nerfoscar') return;
+                if ((tags.username !== channel) && !tags.mod) { isMod = false; }
                 if (isMod) return client.say(channel, `Ya quisieras papi`);
                 let ip = await commands.ip(channel, tags['display-name'], modID);
                 if (ip.error) return client.say(channel, `${ip.reason}`);
