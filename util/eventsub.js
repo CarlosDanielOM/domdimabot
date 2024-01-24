@@ -10,6 +10,9 @@ const modID = '698614112';
 async function subscribeTwitchEventFollow(channel) {
     let streamer = await STREAMERS.getStreamer(channel);
     let streamerHeaders = await getStreamerHeader(channel);
+    let appAccessToken = await getAppToken();
+
+    streamerHeaders['Authorization'] = `Bearer ${appAccessToken}`;
 
     let response = await fetch(`${getTwitchHelixURL()}/eventsub/subscriptions`, {
         method: 'POST',
