@@ -8,3 +8,5 @@ async function ip(channel, user, modID) {
 
     return { error: false, message: 'Ya quisieras papi' }
 }
+
+module.exports = ip;
