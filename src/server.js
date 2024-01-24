@@ -21,7 +21,7 @@ const { getNewAppToken, getAppToken } = require('../util/token.js');
 const { getStreamerHeader } = require('../util/headers.js');
 
 const eventsubHandler = require('../handlers/eventsub.js');
-const { subscribeTwitchEventFollow } = require('../util/eventsub.js');
+const { subscribeTwitchEventFollow, getEventsub } = require('../util/eventsub.js');
 
 const downloadPath = `${__dirname}/routes/public/downloads/`;
 const htmlPath = `${__dirname}/routes/public/`;
@@ -66,6 +66,11 @@ async function init() {
     let channel = req.params.channel;
     subscribeTwitchEventFollow(channel);
     res.status(200).send('Hello World!');
+  });
+
+  app.get('/eventsubs', async (req, res) => {
+    let data = await getEventsub();
+    res.status(200).json(data);
   });
 
   //? CLIP ROUTES ?//
