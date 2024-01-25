@@ -26,7 +26,6 @@ async function initialize() {
 initialize();
 
 setInterval(async () => {
-    console.log('alo?')
     await dev.refreshAllTokens(refreshAllTokens);
     console.log('Refreshed tokens');
 }, 1000 * 60 * 60 * 4);

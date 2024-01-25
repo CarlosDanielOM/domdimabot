@@ -3,7 +3,7 @@ const commands = require('../commands/index.js');
 const func = require('../functions/index.js');
 const ChatLog = require('../schemas/chat_log.schema.js');
 
-const COOLDOWNS = require('../util/cooldowns');
+const COOLDOWNS = require('../class/cooldown.js');
 
 const commandsRegex = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?$/);
 
@@ -15,8 +15,9 @@ let isMod;
 let user;
 let osito;
 
-async function message(client, channel, tags, message) {
+let channelInstances = new Map();
 
+async function message(client, channel, tags, message) {
     let chatBody = {
         channel: channel,
         message: message,
@@ -30,8 +31,12 @@ async function message(client, channel, tags, message) {
         console.log('Error al guardar el mensaje en la base de datos.');
     }
 
-    let cmdCD = COOLDOWNS.command;
     let onCooldown = false;
+
+    if (!channelInstances.has(channel)) {
+        channelInstances.set(channel, new COOLDOWNS());
+    }
+    let channelInstance = channelInstances.get(channel);
 
     if (tags.mod || tags.username === channel || tags.username === 'cdom201') {
         isMod = true;
@@ -50,23 +55,27 @@ async function message(client, channel, tags, message) {
         }
     }
 
-    if (cmdCD.hasCooldown(channel)) {
-        onCooldown = true;
-    };
-
     const [raw, command, argument] = message.match(commandsRegex) || [];
 
+    if (!command) return;
+
+    if (channelInstance.hasCooldown(command)) {
+        onCooldown = true;
+    }
+
     if (channel == 'unositopolar' && !onCooldown) {
+        if (channelInstance.hasCooldown('sumimetro')) return;
         if (command == 'sumimetro') {
             user = argument || tags['display-name'];
             let sumimetro = await commands.sumimetro(channel, tags['display-name'], user);
             cmdCD.setCooldown(channel, 5);
             client.say(channel, sumimetro.message);
+            channelInstance.setCooldown('sumimetro', 5);
         }
         osito = true;
     }
 
-    if (!osito && !onCooldown && command) {
+    if (!osito && !onCooldown && command && !onCooldown) {
         switch (command) {
             case 'ruletarusa':
                 if ((tags.username !== channel) && !tags.mod) { isMod = false; }
@@ -191,12 +200,6 @@ async function message(client, channel, tags, message) {
                 let mecabe = func.mecabe(user);
                 client.say(channel, mecabe.message);
                 break;
-            case 'resetsumimetro':
-                if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
-                let reset = await commands.resetSumimetro(channel);
-                if (reset.error) return client.say(channel, `${reset.reason}`);
-                client.say(channel, reset.message);
-                break;
             case 'onlyemotes':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
                 let onlyEmotes = await commands.onlyEmotes(channel, modID);
@@ -245,9 +248,10 @@ async function message(client, channel, tags, message) {
                 let cmd = cmdHandler.command;
                 if (!cmd.enabled) return;
                 client.say(channel, cmd.func);
-                break;
+                channelInstance.setCooldown(cmd.name, cmd.cooldown)
+                return true;
         }
-        cmdCD.setCooldown(channel, 5);
+        channelInstance.setCooldown(command, 10);
     }
 }
 

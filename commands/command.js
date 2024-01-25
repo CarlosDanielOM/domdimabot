@@ -12,7 +12,7 @@ async function command(action, channel, argument, type = null) {
         description: null,
         type: null,
         enabled: true,
-        cooldown: 15,
+        cooldown: 20,
         channel: channel,
         userLevel: 0,
         userLevelName: 'everyone',
