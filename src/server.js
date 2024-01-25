@@ -21,7 +21,7 @@ const { getNewAppToken, getAppToken } = require('../util/token.js');
 const { getStreamerHeader } = require('../util/headers.js');
 
 const eventsubHandler = require('../handlers/eventsub.js');
-const { subscribeTwitchEventFollow, getEventsub } = require('../util/eventsub.js');
+const { subscribeTwitchEventFollow, getEventsubs, SubscritpionsData, unsubscribeTwitchEvent, subscribeTwitchEvent } = require('../util/eventsub.js');
 
 const downloadPath = `${__dirname}/routes/public/downloads/`;
 const htmlPath = `${__dirname}/routes/public/`;
@@ -69,7 +69,7 @@ async function init() {
   });
 
   app.get('/eventsubs', async (req, res) => {
-    let data = await getEventsub();
+    let data = await getEventsubs();
     res.status(200).json(data);
   });
 
@@ -205,7 +205,16 @@ async function init() {
           await STREAMERS.updateStreamers();
           CLIENT.connectChannel(username);
 
+          let eventData = SubscritpionsData;
 
+          for (let event of eventData) {
+            if (event.type === 'channel.raid') {
+              event.condition.to_broadcaster_user_id = updatedChannel.twitch_user_id;
+            } else {
+              event.condition.broadcaster_user_id = updatedChannel.twitch_user_id;
+            }
+            let response = await subscribeTwitchEvent(username, event.type, event.version, event.condition);
+          }
 
         }
       })

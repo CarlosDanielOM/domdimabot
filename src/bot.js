@@ -4,7 +4,7 @@ const { connectChannels } = require('../util/dev');
 const CLIENT = require('../util/client');
 const messages = require('../handlers/message');
 const redeem = require('../handlers/redeem');
-const raid = require('../handlers/raid');
+const raid = require('../handlers/raided');
 
 let client = null;
 
@@ -16,7 +16,7 @@ async function init() {
 
     await connectChannels(CLIENT.connectChannels, client);
 
-    client.on('raid', (channel, username, viewers, tags) => {
+    client.on('raided', (channel, username, viewers, tags) => {
         raid(client, channel, username, viewers, tags);
     });
 
