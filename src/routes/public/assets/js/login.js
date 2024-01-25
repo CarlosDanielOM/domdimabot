@@ -18,6 +18,14 @@ async function login() {
 
         let user = await validateToken(token);
 
+        if (user.error) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('name');
+            localStorage.removeItem('id');
+            localStorage.removeItem('email');
+            window.location.href = baseURL;
+        }
+
         let userData = {
             name: user.login,
             id: user.id,
@@ -101,6 +109,10 @@ async function validateToken(token) {
     response = await fetch('https://api.twitch.tv/helix/users', { method: 'get', headers });
 
     response = await response.json();
+
+    if (response.error) {
+        return response;
+    }
 
     return response.data[0];
 }
