@@ -67,10 +67,6 @@ async function init() {
         client.say(channel, `Se fusilaron a ${username} por ${duration} segundos. Por ${reasonMSG}`);
     });
 
-    client.on('redeem', (channel, username, rewardType, tags, message) => {
-        redeem(client, channel.replace('#', ''), username, rewardType, tags, message);
-    });
-
     client.on('message', async (channel, tags, message, self) => {
         if (self) return;
 
