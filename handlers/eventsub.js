@@ -1,7 +1,7 @@
 const CLIENT = require('../util/client');
 const functions = require('../functions');
 const commands = require('../commands');
-const redeemHandler = require('./redeemHandler');
+const redeemHandler = require('./redeem');
 
 let client;
 
