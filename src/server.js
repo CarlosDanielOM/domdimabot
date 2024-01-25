@@ -216,7 +216,7 @@ async function init() {
             let response = await subscribeTwitchEvent(username, event.type, event.version, event.condition);
           }
 
-          res.status(200).send('Your channel was updated successfully');
+          res.status(200).sendFile(`${htmlPath}login.html`);
 
         }
       })
