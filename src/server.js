@@ -20,6 +20,8 @@ const { getTwitchHelixURL } = require('../util/links.js');
 const { getNewAppToken, getAppToken } = require('../util/token.js');
 const { getStreamerHeader } = require('../util/headers.js');
 
+const CHANNEL = require('../functions/channel');
+
 const eventsubHandler = require('../handlers/eventsub.js');
 const { subscribeTwitchEventFollow, getEventsubs, SubscritpionsData, unsubscribeTwitchEvent, subscribeTwitchEvent } = require('../util/eventsub.js');
 
@@ -61,13 +63,6 @@ async function init() {
   // app.use(express.static('routes/public/assets'));
 
   //! Routes !//
-
-  app.get('/test/:channel', (req, res) => {
-    let channel = req.params.channel;
-    subscribeTwitchEventFollow(channel);
-    res.status(200).send('Hello World!');
-  });
-
   app.get('/eventsubs', async (req, res) => {
     let data = await getEventsubs();
     res.status(200).json(data);
@@ -204,6 +199,14 @@ async function init() {
         } else {
           await STREAMERS.updateStreamers();
           CLIENT.connectChannel(username);
+
+          await CHANNEL.init(username);
+          let addedMod = await CHANNEL.setModerator();
+
+          if (addedMod.error) {
+            console.log(addedMod.message);
+            return res.status(400).json({ error: true, message: `There was an error setting up your account and the bot in your channel` });
+          }
 
           let eventData = SubscritpionsData;
 
