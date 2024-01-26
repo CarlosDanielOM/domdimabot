@@ -140,7 +140,22 @@ async function command(action, channel, argument, type = null) {
                     oldCommand.cooldown = parseInt(opt.value);
                     break;
                 case 'ul':
-                    oldCommand.userLevelName = opt.value;
+                    if (opt.value.length > 1) {
+                        let userLevelName = commandPermissions[opt.value];
+                        if (userLevelName) {
+                            oldCommand.userLevel = parseInt(userLevelName);
+                        } else {
+                            return { error: true, reason: `user level ${opt.value} does not exist` };
+                        }
+                    } else {
+                        let userLevel = parseInt(opt.value);
+                        let value = commandPermissionLevels[userLevel];
+                        if (userLevel) {
+                            oldCommand.userLevelName = value;
+                        } else {
+                            return { error: true, reason: `user level ${opt.value} does not exist` };
+                        }
+                    }
                     break;
             }
         }
