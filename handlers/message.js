@@ -1,15 +1,17 @@
 require('dotenv').config();
 const commands = require('../commands/index.js');
 const func = require('../functions/index.js');
+const CHAT = require('../functions/chat/index.js');
 const ChatLog = require('../schemas/chat_log.schema.js');
 
 const COOLDOWNS = require('../class/cooldown.js');
 
 const commandsRegex = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?$/);
+const linkRegex = new RegExp(/((http|https):\/\/)?(www\.)?[a-zA-Z-]+(\.[a-zA-Z-]+)+(:\d+)?(\/\S*)?(\?\S+)?/gi);
 
 const commandHandler = require('./command.js');
 
-const modID = '698614112';
+const modID = 698614112;
 
 let isMod;
 let user;
@@ -18,6 +20,7 @@ let osito;
 let channelInstances = new Map();
 
 async function message(client, channel, tags, message) {
+    await CHAT.init(channel, modID);
     let chatBody = {
         channel: channel,
         message: message,
@@ -29,6 +32,11 @@ async function message(client, channel, tags, message) {
 
     if (!chatLog) {
         console.log('Error al guardar el mensaje en la base de datos.');
+    }
+
+    let hasLink = message.match(linkRegex);
+    if (hasLink) {
+
     }
 
     let onCooldown = false;
@@ -240,6 +248,12 @@ async function message(client, channel, tags, message) {
                 let ip = await commands.ip(channel, tags['display-name'], modID);
                 if (ip.error) return client.say(channel, `${ip.reason}`);
                 client.say(channel, ip.message);
+                break;
+            case 'clip':
+                client.say(channel, `Guardando clip...`);
+                let saveClip = await commands.createClip(channel);
+                if (saveClip.error) return client.say(channel, `${saveClip.reason}`);
+                client.say(channel, saveClip.message);
                 break;
             default:
                 let cmdHandler = await commandHandler(channel, tags, command, argument);

@@ -11,6 +11,7 @@ const onlyEmotes = require('./onlyemotes');
 const cmd = require('./command')
 const followage = require('./followage');
 const ip = require('./ip');
+const createClip = require('./createclip');
 
 module.exports = {
     shoutout,
@@ -26,5 +27,6 @@ module.exports = {
     onlyEmotes,
     cmd,
     followage,
-    ip
+    ip,
+    createClip
 }

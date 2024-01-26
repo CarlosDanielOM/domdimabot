@@ -13,6 +13,8 @@ const mecabe = require('./mecabe');
 const memide = require('./memide');
 const getUser = require('./getuser');
 const getGameByID = require('./getgamebyid');
+const getClip = require('./getclip');
+const createClip = require('./createclip');
 
 //* Importing Prediction Functions
 const prediction = require('./prediction');
@@ -36,5 +38,7 @@ module.exports = {
     mecabe: mecabe,
     memide: memide,
     getUser: getUser,
-    getGameByID: getGameByID
+    getGameByID: getGameByID,
+    getClip: getClip,
+    createClip: createClip
 }
