@@ -5,6 +5,8 @@ const getUserID = require('../getuserid');
 const setonlyEmotes = require('./setonlyemotes');
 const getonlyEmotes = require('./getonlyemotes');
 const getuserColor = require('./getusercolor');
+const clearChat = require('./deletechat');
+const deleteMessage = require('./deletemessage');
 
 class CHAT {
     constructor() {
@@ -33,6 +35,8 @@ class CHAT {
     setOnlyEmotes = setonlyEmotes;
     getOnlyEmotes = getonlyEmotes;
     getUserColor = getuserColor;
+    clearChat = clearChat;
+    deleteMessage = deleteMessage;
 
 }
 
