@@ -34,6 +34,10 @@ const eventsubSchema = new Schema({
         type: Number,
         required: true
     },
+    channel: {
+        type: String,
+        required: true
+    }
 });
 
 module.exports = mongoose.model('eventsub', eventsubSchema);
