@@ -5,6 +5,8 @@ const cmdOptionsExistsRegex = new RegExp(/^\-([a-z]+\=[a-zA-Z0-9]+)(?:\W)?(.*)?$
 const firstCmdOptionRegex = new RegExp(/([a-z]+\=[a-zA-Z0-9]+)(?:\W)?(.*)?$/)
 const cmdOptionValueRegex = new RegExp(/([a-z]+)\=([a-zA-Z0-9]+)?$/);
 
+let maxFuncLength = 300;
+
 async function command(action, channel, argument, type = null) {
     await COMMAND.init(channel, argument);
     let cmdOptions = {
@@ -50,7 +52,7 @@ async function command(action, channel, argument, type = null) {
         }
         let func = opts[1];
 
-        if (func.length > 400) return { error: true, reason: 'command cannot be longer than 400 characters' };
+        if (func.length > maxFuncLength) return { error: true, reason: `command cannot be longer than ${maxFuncLength} characters` };
 
         cmdOptions.createdAt = TIME.getTimeNow();
         cmdOptions.date = {
@@ -79,6 +81,48 @@ async function command(action, channel, argument, type = null) {
         let deleted = await COMMAND.deleteCommandFromDB(cmd);
         if (!deleted) return { error: true, reason: 'command could not be deleted' };
         return { error: false, message: `Command !${cmd.name} deleted!` };
+    }
+
+    if (action === 'EDIT') {
+        let { options, text } = getCMDOpt(argument);
+        let opts = text.split(' ');
+        let name = opts[0];
+
+        let extis = await COMMAND.commandExistsInDB(name);
+        if (!extis) return { error: true, reason: 'command does not exist' };
+
+        let oldCommand = await COMMAND.getCommandFromDB(name);
+        oldCommand = oldCommand.command;
+
+        for (let i = 0; i < options.length; i++) {
+            let opt = options[i];
+            switch (opt.name) {
+                case 'cd':
+                    oldCommand.cooldown = parseInt(opt.value);
+                    break;
+                case 'ul':
+                    oldCommand.userLevelName = opt.value;
+                    break;
+            }
+        }
+
+        if (opts[1]) {
+            let funcLength = opts.length;
+            for (let i = 2; i < funcLength; i++) {
+                opts[1] += ` ${opts[i]}`;
+            }
+            let func = opts[1];
+
+            if (func.length > maxFuncLength) return { error: true, reason: `command cannot be longer than ${maxFuncLength} characters` };
+
+            oldCommand.func = func;
+        }
+
+        let updated = await COMMAND.updateCommandInDB(oldCommand);
+
+        if (updated.error) return { error: true, reason: updated.reason };
+
+        return { error: false, message: `Command !${oldCommand.name} updated!` };
     }
 }
 
