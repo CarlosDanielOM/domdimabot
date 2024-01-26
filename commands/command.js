@@ -1,6 +1,30 @@
 const COMMAND = require('../class/command');
 const TIME = require('../class/time');
 
+commandPermissionLevels = {
+    0: 'everyone',
+    1: 'tier1',
+    2: 'tier2',
+    3: 'tier3',
+    4: 'vip',
+    5: 'founder',
+    6: 'moderator',
+    7: 'editor',
+    8: 'broadcaster'
+}
+
+commandPermissions = {
+    'everyone': 0,
+    'tier1': 1,
+    'tier2': 2,
+    'tier3': 3,
+    'vip': 4,
+    'founder': 5,
+    'mod': 6,
+    'editor': 7,
+    'broadcaster': 8
+}
+
 const cmdOptionsExistsRegex = new RegExp(/^\-([a-z]+\=[a-zA-Z0-9]+)(?:\W)?(.*)?$/);
 const firstCmdOptionRegex = new RegExp(/([a-z]+\=[a-zA-Z0-9]+)(?:\W)?(.*)?$/)
 const cmdOptionValueRegex = new RegExp(/([a-z]+)\=([a-zA-Z0-9]+)?$/);
@@ -38,7 +62,22 @@ async function command(action, channel, argument, type = null) {
                     cmdOptions.cooldown = parseInt(opt.value);
                     break;
                 case 'ul':
-                    cmdOptions.userLevelName = opt.value;
+                    if (opt.value.length > 1) {
+                        let userLevelName = commandPermissions[opt.value];
+                        if (userLevelName) {
+                            cmdOptions.userLevel = parseInt(userLevelName);
+                        } else {
+                            return { error: true, reason: `user level ${opt.value} does not exist` };
+                        }
+                    } else {
+                        let userLevel = parseInt(opt.value);
+                        let value = commandPermissionLevels[userLevel];
+                        if (userLevel) {
+                            cmdOptions.userLevelName = value;
+                        } else {
+                            return { error: true, reason: `user level ${opt.value} does not exist` };
+                        }
+                    }
                     break;
             }
         }
