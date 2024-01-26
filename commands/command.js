@@ -66,6 +66,7 @@ async function command(action, channel, argument, type = null) {
                         let userLevelName = commandPermissions[opt.value];
                         if (userLevelName) {
                             cmdOptions.userLevel = parseInt(userLevelName);
+                            cmdOptions.userLevelName = opt.value;
                         } else {
                             return { error: true, reason: `user level ${opt.value} does not exist` };
                         }
@@ -74,6 +75,7 @@ async function command(action, channel, argument, type = null) {
                         let value = commandPermissionLevels[userLevel];
                         if (userLevel) {
                             cmdOptions.userLevelName = value;
+                            cmdOptions.userLevel = userLevel;
                         } else {
                             return { error: true, reason: `user level ${opt.value} does not exist` };
                         }
@@ -144,6 +146,7 @@ async function command(action, channel, argument, type = null) {
                         let userLevelName = commandPermissions[opt.value];
                         if (userLevelName) {
                             oldCommand.userLevel = parseInt(userLevelName);
+                            oldCommand.userLevelName = opt.value;
                         } else {
                             return { error: true, reason: `user level ${opt.value} does not exist` };
                         }
@@ -152,6 +155,7 @@ async function command(action, channel, argument, type = null) {
                         let value = commandPermissionLevels[userLevel];
                         if (userLevel) {
                             oldCommand.userLevelName = value;
+                            oldCommand.userLevel = userLevel;
                         } else {
                             return { error: true, reason: `user level ${opt.value} does not exist` };
                         }
