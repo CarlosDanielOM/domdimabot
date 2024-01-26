@@ -20,6 +20,7 @@ let osito;
 let channelInstances = new Map();
 
 async function message(client, channel, tags, message) {
+    let userlevel = giveUserLevel(channel, tags);
     await CHAT.init(channel, modID);
     let chatBody = {
         channel: channel,
@@ -54,15 +55,6 @@ async function message(client, channel, tags, message) {
 
     osito = false;
 
-    let subType = null;
-
-    if (tags.subscriber) {
-        subType = tags['badge-info-raw'].split('/')[0];
-        if (subType === 'founder') {
-            isFounder = true;
-        }
-    }
-
     const [raw, command, argument] = message.match(commandsRegex) || [];
 
     if (!command) return;
@@ -73,7 +65,7 @@ async function message(client, channel, tags, message) {
 
     if (channel == 'unositopolar' && !onCooldown) {
         if (channelInstance.hasCooldown('sumimetro')) return;
-        if (command == 'sumimetro') {
+        if (command == 'sumimetro' && userlevel >= 0) {
             user = argument || tags['display-name'];
             let sumimetro = await commands.sumimetro(channel, tags['display-name'], user);
             cmdCD.setCooldown(channel, 5);
@@ -270,3 +262,32 @@ async function message(client, channel, tags, message) {
 }
 
 module.exports = message;
+
+function giveUserLevel(channel, tags) {
+    let userlevel = 0;
+    if (tags.subscriber) {
+        userlevel = tags['badge-info'].subscriber;
+    }
+
+    if (tags.vip) {
+        userlevel = 4;
+    }
+
+    if (tags.subscriber) {
+        if (tags['badge-info-raw'].split('/')[0] === 'founder') {
+            userlevel = 5;
+        }
+    }
+
+    if (tags.mod) {
+        userlevel = 6;
+    }
+
+    //* TODO- CHECK IF USER IS EDITOR and set userlevel to 7
+
+    if (tags.username === channel) {
+        userlevel = 8;
+    }
+
+    return userlevel;
+}
