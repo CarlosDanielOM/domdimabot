@@ -184,7 +184,8 @@ async function subscribeTwitchEvent(channel, type, version, condition) {
         condition: data.condition,
         created_at: data.created_at,
         transport: data.transport,
-        cost: data.cost
+        cost: data.cost,
+        channel: channel
     });
 
     await newEventsub.save();
