@@ -65,7 +65,7 @@ async function message(client, channel, tags, message) {
 
     if (channel == 'unositopolar' && !onCooldown) {
         if (channelInstance.hasCooldown('sumimetro')) return;
-        if (command == 'sumimetro' && userlevel >= 0) {
+        if (command == 'sumimetro') {
             user = argument || tags['display-name'];
             let sumimetro = await commands.sumimetro(channel, tags['display-name'], user);
             cmdCD.setCooldown(channel, 5);
