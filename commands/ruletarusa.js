@@ -24,6 +24,8 @@ async function ruletarusa(channel, user, modID, isMod) {
         };
     }
 
+    if (isMod) return { error: false, status: 200, message: `No puedes disparatete como un mod, no seas pendejo.` }
+
     if (premiumLevel < 2) {
         return { error: false, status: 200, message: `No puedes disparatete como un mod, no seas pendejo.` }
     }
