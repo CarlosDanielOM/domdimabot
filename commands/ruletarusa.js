@@ -7,7 +7,7 @@ async function ruletarusa(channel, user, modID, isMod) {
     let timeoutRes = null;
     let modRes = null;
 
-    CHANNEL.init(channel);
+    await CHANNEL.init(channel);
     let probability = Math.floor(Math.random() * 120) + 1;
     let dead = false;
     if (probability % 3 === 0) dead = true;
@@ -24,7 +24,7 @@ async function ruletarusa(channel, user, modID, isMod) {
         };
     }
 
-    if ((premiumLevel < 2)) {
+    if (premiumLevel < 2) {
         return { error: false, status: 200, message: `No puedes disparatete como un mod, no seas pendejo.` }
     }
 
