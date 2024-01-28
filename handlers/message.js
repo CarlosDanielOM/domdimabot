@@ -78,7 +78,7 @@ async function message(client, channel, tags, message) {
         switch (command) {
             case 'ruletarusa':
                 if ((tags.username !== channel) && !tags.mod) { isMod = false; }
-                let ruletarusa = commands.ruletarusa(channel, tags['display-name'], isMod);
+                let ruletarusa = await commands.ruletarusa(channel, tags['display-name'], isMod);
                 if (ruletarusa.error) return client.say(channel, `${ruletarusa.reason}`);
                 client.say(channel, ruletarusa.message);
                 break;
