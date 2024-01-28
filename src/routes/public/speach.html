@@ -28,12 +28,11 @@
         let speach = new SpeechSynthesisUtterance();
         speach.lang = 'es-US';
 
-            channelSocket.on('speach', (data) => {
-                let msg = data.message;
-                speach.text = msg;
-                synth.speak(speach);
-            });
-        }
+        channelSocket.on('speach', (data) => {
+            let msg = data.message;
+            speach.text = msg;
+            synth.speak(speach);
+        });
     </script>
 </body>
 
