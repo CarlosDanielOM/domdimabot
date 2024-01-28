@@ -4,12 +4,12 @@ async function setModerator(user = '698614112') {
         headers: this.streamerHeaders
     });
 
-    if (response.status === 204) return { error: false, message: 'Moderator added.' };
+    if (response.status === 204) return { error: false, message: 'Moderator added.', status: 204 };
 
     let json = await response.json();
 
     if (json.error) {
-        return { error: true, reason: json.message };
+        return { error: true, reason: json.message, status: json.status };
     }
 
 }

@@ -41,6 +41,7 @@ async function ruletarusa(channel, user, isMod) {
 
     setTimeout(async () => {
         modRes = await CHANNEL.setModerator(userID);
+        if (modRes.error) return modRes;
     }, 1000 * 160);
 
     return { error: false, status: 200, message: `${user} ha jalado el gatillo y la bala ha sido disparada causando su muerte.` };
