@@ -8,7 +8,7 @@ commandPermissionLevels = {
     3: 'tier3',
     4: 'vip',
     5: 'founder',
-    6: 'moderator',
+    6: 'mod',
     7: 'editor',
     8: 'broadcaster'
 }

@@ -37,7 +37,7 @@ async function message(client, channel, tags, message) {
 
     let hasLink = message.match(linkRegex);
     if (hasLink) {
-
+        // let q = await CHAT.deleteMessage(tags.id);
     }
 
     let onCooldown = false;
@@ -68,7 +68,6 @@ async function message(client, channel, tags, message) {
         if (command == 'sumimetro') {
             user = argument || tags['display-name'];
             let sumimetro = await commands.sumimetro(channel, tags['display-name'], user);
-            //cmdCD.setCooldown(channel, 5);
             client.say(channel, sumimetro.message);
             channelInstance.setCooldown('sumimetro', 5);
         }
@@ -79,20 +78,9 @@ async function message(client, channel, tags, message) {
         switch (command) {
             case 'ruletarusa':
                 if ((tags.username !== channel) && !tags.mod) { isMod = false; }
-                if (isMod) return client.say(channel, `No puedes dispararte como un mod, no seas pendejo.`);
-                let dead = commands.ruletarusa();
-                if (dead) {
-                    let broadcasterID = await func.getUserID(channel);
-                    client.say(channel, `${tags['display-name']} ha jalado el gatillo y la bala ha sido disparada causando su muerte.`);
-                    let timeout = await func.timeoutUser(broadcasterID, tags['user-id'], modID, 150, 'Ruleta Rusa');
-
-                    if (timeout.status === 401) {
-                        client.say(channel, `${channel}, No tengo permisos para banear usuarios!`);
-                    }
-
-                } else {
-                    client.say(channel, `${tags['display-name']} ha jalado el gatillo y la bala no ha sido disparada.`);
-                }
+                let ruletarusa = commands.ruletarusa(channel, tags['display-name'], isMod);
+                if (ruletarusa.error) return client.say(channel, `${ruletarusa.reason}`);
+                client.say(channel, ruletarusa.message);
                 break;
             case 'anuncio':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
@@ -248,7 +236,7 @@ async function message(client, channel, tags, message) {
                 client.say(channel, saveClip.message);
                 break;
             default:
-                let cmdHandler = await commandHandler(channel, tags, command, argument);
+                let cmdHandler = await commandHandler(channel, tags, command, argument, userlevel);
                 if (!cmdHandler.exists) return;
                 if (cmdHandler.error) return client.say(channel, `${cmdHandler.reason}`);
                 let cmd = cmdHandler.command;
@@ -291,3 +279,5 @@ function giveUserLevel(channel, tags) {
 
     return userlevel;
 }
+
+//? !vip <user> | !vip <user> <time -D > 

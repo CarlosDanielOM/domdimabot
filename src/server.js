@@ -204,7 +204,7 @@ async function init() {
           let addedMod = await CHANNEL.setModerator();
 
           if (addedMod.error) {
-            console.log(addedMod.message);
+            console.log(addedMod.reason);
             return res.status(400).json({ error: true, message: `There was an error setting up your account and the bot in your channel` });
           }
 

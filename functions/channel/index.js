@@ -7,6 +7,7 @@ const setGame = require('./setgame');
 const getTitle = require('./gettitle');
 const setTitle = require('./settitle');
 const setModerator = require('./setmoderator');
+const deleteModerator = require('./deletemoderator');
 
 class CHANNEL {
     constructor() {
@@ -29,6 +30,7 @@ class CHANNEL {
     getTitle = getTitle;
     setTitle = setTitle;
     setModerator = setModerator;
+    deleteModerator = deleteModerator;
 
 }
 

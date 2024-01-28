@@ -1,5 +1,3 @@
-const getUserID = require('../getuserid');
-
 async function setModerator(user = '698614112') {
     let response = await fetch(`${this.helixURL}/moderation/moderators?broadcaster_id=${this.userID}&user_id=${user}`, {
         method: 'POST',
@@ -11,7 +9,7 @@ async function setModerator(user = '698614112') {
     let json = await response.json();
 
     if (json.error) {
-        return { error: true, message: json.message };
+        return { error: true, reason: json.message };
     }
 
 }
