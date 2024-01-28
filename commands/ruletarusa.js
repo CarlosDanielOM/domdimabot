@@ -4,6 +4,9 @@ const CHANNEL = require('../functions/channel/index');
 async function ruletarusa(channel, user, isMod) {
     let premiumLevel = 2;
 
+    let timeoutRes = null;
+    let modRes = null;
+
     CHANNEL.init(channel);
     let probability = Math.floor(Math.random() * 120) + 1;
     let dead = false;
@@ -14,23 +17,30 @@ async function ruletarusa(channel, user, isMod) {
 
     if (!dead) return { error: false, status: 200, message: `${user} ha jalado el gatillo y la bala no ha sido disparada.` };
 
-    if (isMod && (premiumLevel < 2)) {
+    if (!isMod) {
+        timeoutRes = await timeoutUser(broadcasterID, userID, 150, 'Ruleta rusa');
+        if (timeoutRes.status === 401) {
+            return { error: true, status: 401, reason: 'No tengo permisos para banear usuarios!' }
+        };
+    }
+
+    if ((premiumLevel < 2)) {
         return { error: false, status: 200, message: `No puedes disparatete como un mod, no seas pendejo.` }
     }
 
-    if (isMod) {
-        CHANNEL.deleteModerator(userID);
-    }
+    modRes = await CHANNEL.deleteModerator(userID);
+    if (modRes.error) return modRes;
 
     let timeout = await timeoutUser(broadcasterID, userID, 150, 'Ruleta rusa');
 
     if (timeout.status === 401) {
-        CHANNEL.setModerator(userID);
+        modRes = await CHANNEL.setModerator(userID);
+        if (modRes.error) return modRes;
         return { error: true, status: 401, reason: 'No tengo permisos para banear usuarios!' }
     };
 
-    setTimeout(() => {
-        CHANNEL.setModerator(userID);
+    setTimeout(async () => {
+        modRes = await CHANNEL.setModerator(userID);
     }, 1000 * 160);
 
     return { error: false, status: 200, message: `${user} ha jalado el gatillo y la bala ha sido disparada causando su muerte.` };
