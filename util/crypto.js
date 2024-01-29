@@ -1,9 +1,13 @@
+require('dotenv').config();
 const crypto = require('crypto');
 
 const algorithm = 'aes-256-ctr';
 const secretKey = Buffer.from(process.env.SECRET_KEY.padEnd(32), 'utf-8');
 
 const encrypt = (text) => {
+    if (!text) {
+        return { iv: '', content: '' };
+    }
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
     const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
@@ -19,4 +23,4 @@ const decrypt = (hash) => {
     return decrpyted.toString();
 }
 
-module.exports = {encrypt, decrypt};
+module.exports = { encrypt, decrypt };

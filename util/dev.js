@@ -1,4 +1,4 @@
-let production = false;
+let production = true;
 
 function isProduction() {
     return production;
@@ -14,8 +14,12 @@ function getUrl() {
 }
 
 async function refreshAllTokens(fun) {
-    if (production) {
-        await fun();
+    try {
+        if (production) {
+            await fun();
+        }
+    } catch (error) {
+        console.error('Error on refreshAllTokens:', error);
     }
 }
 

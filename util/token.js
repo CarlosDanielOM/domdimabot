@@ -2,29 +2,42 @@ const STREAMER = require('../class/streamers');
 const channelSchema = require('../schemas/channel.schema');
 const appConfigSchema = require('../schemas/app_config');
 const { encrypt, decrypt } = require('./crypto');
+const CLIENT = require('./client');
 
 async function refreshAllTokens() {
-    try {
-        await STREAMER.updateStreamers();
-        const streamers = await STREAMER.getStreamersNames();
+    await STREAMER.updateStreamers();
+    const streamers = await STREAMER.getStreamersNames();
 
-        const promises = streamers.map(async (streamer) => {
+    const promises = streamers.map(async (streamer) => {
+        try {
             let channel = await STREAMER.getStreamer(streamer);
 
+            if (channel.refresh_token.iv === null || channel.refresh_token.content === null) {
+                return console.log(`Error on refreshAllTokens: ${streamer} refresh_token is null`)
+            }
+
             const { tokenEncrypt, refresh_tokenEncrypt } = await refreshToken(decrypt(channel.refresh_token));
+
+            if (!tokenEncrypt || !refresh_tokenEncrypt) {
+                CLIENT.disconnectChannel(channel.name);
+                let nullToken = { iv: null, content: null };
+                let nullRefreshToken = { iv: null, content: null };
+                await channelSchema.findOneAndUpdate({ name: channel.name }, { actived: false, twitch_user_token: nullToken, twitch_user_refresh_token: nullRefreshToken });
+                return console.log('Error on refreshAllTokens: tokenEncrypt or refresh_tokenEncrypt is null')
+            };
 
             channel.token = tokenEncrypt;
             channel.refresh_token = refresh_tokenEncrypt;
 
             await channelSchema.findOneAndUpdate({ name: channel.name }, { twitch_user_token: channel.token, twitch_user_refresh_token: channel.refresh_token });
-        });
+        } catch (error) {
+            console.error(`Error processing ${streamer}:`, error);
+        }
+    });
 
-        await Promise.all(promises);
-        await STREAMER.updateStreamers();
-    } catch (error) {
-        console.error('Error on refreshAllTokens:', error);
-        throw error;
-    }
+    await Promise.all(promises);
+    await STREAMER.updateStreamers();
+
 }
 
 async function refreshToken(refreshToken, independent = false, user = null) {
@@ -43,6 +56,13 @@ async function refreshToken(refreshToken, independent = false, user = null) {
         });
 
         response = await response.json();
+
+        if (response.status === 400) {
+            return {
+                tokenEncrypt: null,
+                refresh_tokenEncrypt: null
+            }
+        }
 
         let token = response.access_token;
         let refresh_token = response.refresh_token;
