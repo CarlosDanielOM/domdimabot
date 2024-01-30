@@ -10,7 +10,7 @@ async function ruletarusa(channel, user, modID, isMod) {
     await CHANNEL.init(channel);
     let probability = Math.floor(Math.random() * 120) + 1;
     let dead = false;
-    if (probability % 1 === 0) dead = true;
+    if (probability % 3 === 0) dead = true;
 
     let broadcasterID = await getUserID(channel);
     let userID = await getUserID(user);
