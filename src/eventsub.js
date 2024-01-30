@@ -25,14 +25,6 @@ module.exports = {
 
         app.use(express.raw({ type: 'application/json' }));
 
-        app.get('/', (req, res) => {
-            res.status(200).send('Hello World!');
-        });
-
-        app.get('/eventsub', (req, res) => {
-            res.status(200).send('Hello World!');
-        });
-
         app.post('/eventsub', (req, res) => {
             let secret = getSecret();
             let message = getHmacMessage(req);

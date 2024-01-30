@@ -245,7 +245,9 @@ async function message(client, channel, tags, message) {
                 channelInstance.setCooldown(cmd.name, cmd.cooldown)
                 return true;
         }
-        channelInstance.setCooldown(command, 5);
+        if (command != 's') {
+            channelInstance.setCooldown(command, 5);
+        }
     }
 }
 
