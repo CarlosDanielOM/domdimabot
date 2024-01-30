@@ -46,7 +46,13 @@ async function ruletarusa(channel, user, modID, isMod) {
         if (modRes.error) return modRes;
     }, 1000 * 160);
 
-    return { error: false, status: 200, message: `${user} ha jalado el gatillo y la bala ha sido disparada causando su muerte.` };
+    return new Promise((resolve, reject) => {
+        setTimeout(async () => {
+            modRes = await CHANNEL.setModerator(userID);
+            if (modRes.error) reject(modRes);
+            resolve({ error: false, status: 200, message: `${user} ha jalado el gatillo y la bala ha sido disparada causando su muerte.` });
+        }, 1000 * 150);
+    });
 }
 
 module.exports = ruletarusa;
