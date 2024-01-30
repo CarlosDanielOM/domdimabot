@@ -23,6 +23,12 @@ async function eventsubHandler(subscriptionData, eventData) {
         case 'channel.channel_points_custom_reward_redemption.add':
             redeemHandler(client, eventData);
             break;
+        case 'channel.ad_break.begin':
+            client.say(eventData.broadcaster_user_login, `Hey! a iniciado un anuncio de ${eventData.duration_seconds} segundos!`);
+            setTimeout(() => {
+                client.say(eventData.broadcaster_user_login, `Hey! el anuncio ha terminado!`);
+            }, eventData.duration_seconds * 1000);
+            break;
         default:
             break;
     }
