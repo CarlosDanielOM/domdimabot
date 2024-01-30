@@ -201,10 +201,10 @@ async function init() {
           CLIENT.connectChannel(username);
 
           await CHANNEL.init(username);
-          let addedMod = await CHANNEL.setModerator();
+          let addedMod = await CHANNEL.setModerator(username);
 
           if (addedMod.error) {
-            console.log(addedMod.reason);
+            console.log({ error: addedMod.reason, where: 'auth.js', line: 204 });
             return res.status(400).json({ error: true, message: `There was an error setting up your account and the bot in your channel` });
           }
 

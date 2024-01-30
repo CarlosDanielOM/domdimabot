@@ -1,7 +1,12 @@
-async function setModerator(user = '698614112') {
-    let response = await fetch(`${this.helixURL}/moderation/moderators?broadcaster_id=${this.userID}&user_id=${user}`, {
+const { getStreamerHeader } = require('../../util/headers');
+const getUserID = require('../getuserid');
+
+async function setModerator(channel, user = 698614112) {
+    const headers = await getStreamerHeader(channel);
+    const userID = await getUserID(channel);
+    let response = await fetch(`${this.helixURL}/moderation/moderators?broadcaster_id=${userID}&user_id=${user}`, {
         method: 'POST',
-        headers: this.streamerHeaders
+        headers: headers
     });
 
     if (response.status === 204) return { error: false, message: 'Moderator added.', status: 204 };
