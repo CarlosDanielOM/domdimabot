@@ -2,6 +2,7 @@ require('dotenv').config();
 const commands = require('../commands/index.js');
 const func = require('../functions/index.js');
 const CHAT = require('../functions/chat/index.js');
+const CHANNEL = require('../functions/channel/index.js');
 const ChatLog = require('../schemas/chat_log.schema.js');
 
 const COOLDOWNS = require('../class/cooldown.js');
@@ -20,6 +21,7 @@ let osito;
 let channelInstances = new Map();
 
 async function message(client, channel, tags, message) {
+    let commandCD;
     let userlevel = giveUserLevel(channel, tags);
     await CHAT.init(channel, modID);
     let chatBody = {
@@ -230,10 +232,15 @@ async function message(client, channel, tags, message) {
                 client.say(channel, ip.message);
                 break;
             case 'clip':
+                return true;
                 client.say(channel, `Guardando clip...`);
                 let saveClip = await commands.createClip(channel);
                 if (saveClip.error) return client.say(channel, `${saveClip.reason}`);
                 client.say(channel, saveClip.message);
+                break;
+            case 'testy':
+                await CHANNEL.init(channel);
+                console.log(await CHANNEL.setModerator(channel, 533538623));
                 break;
             default:
                 let cmdHandler = await commandHandler(channel, tags, command, argument, userlevel);
