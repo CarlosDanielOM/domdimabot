@@ -41,11 +41,6 @@ async function ruletarusa(channel, user, modID, isMod) {
         return { error: true, status: 401, reason: 'No tengo permisos para banear usuarios!' }
     };
 
-    setTimeout(async () => {
-        modRes = await CHANNEL.setModerator(userID);
-        if (modRes.error) return modRes;
-    }, 1000 * 160);
-
     return new Promise((resolve, reject) => {
         setTimeout(async () => {
             modRes = await CHANNEL.setModerator(userID);
