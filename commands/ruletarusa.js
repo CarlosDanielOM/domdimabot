@@ -22,6 +22,7 @@ async function ruletarusa(channel, user, modID, isMod) {
         if (timeoutRes.status === 401) {
             return { error: true, status: 401, reason: 'No tengo permisos para banear usuarios!' }
         };
+        return { error: false, status: 200, message: `${user} ha jalado el gatillo y la bala ha sido disparada causando su muerte.` };
     }
 
     if (premiumLevel < 2) {
