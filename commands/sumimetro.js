@@ -71,6 +71,12 @@ async function sumimetro(channel, user, toUser) {
             await sumiData.save();
 
             //* Creating the sumimetro supremo
+
+            //! Get data from the database in case in bot memory is lost
+            if(!instance.hasDominanteSupremo()) {}
+            if(!instance.hasSumisoSupremo()) {}
+            
+            
             //? Checks if we are doing sumiso or dominante first
             if (dominante > 50) {
                 //? Checks if there is a dominante supremo

@@ -1,3 +1,13 @@
+const commandOptions = {
+    name: 'Create Prediction',
+    cmd: 'predi',
+    type: 'reserved',
+    cooldown: 10,
+    userLevelName: 'mod',
+    userLevel: 6,
+    enabled: true,
+};
+
 async function create(options) {
     let outcomes = options.votes.map((vote) => {
         return {
@@ -44,7 +54,8 @@ async function create(options) {
 
     let resData = {
         error: false,
-        message: `Se ha creado una nueva predicción con exito!`
+        message: `Se ha creado una nueva predicción con exito!`,
+        cooldown: commandOptions.cooldown
     }
 
     return resData;

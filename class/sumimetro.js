@@ -126,3 +126,20 @@ async function getSumimetroDB(user, date) {
     await this.setSumimetro(user, newSumiDate);
     return true;
 }
+
+async function getSumisoSupremoFromDB() {
+    const sumisoSupremo = await sumimetroSchema.findOne({ channel: this.channel, type: 'sumiso' }).sort({ timestamp: -1 });
+    if (sumisoSupremo === null) return null;
+    this.setSumisoSupremo(sumisoSupremo.username);
+    return true;
+}
+
+async function getDominanteSupremoFromDB() {
+    const dominanteSupremo = await sumimetroSchema.findOne({ channel: this.channel, type: 'dominante' }).sort({ timestamp: -1 });
+    if (dominanteSupremo === null) return null;
+    this.setDominanteSupremo(dominanteSupremo.username);
+    return true;
+}
+
+
+//!   !cc create command  !(texto)  !ct create timer  !ct (nombre del comando) (tiempo en segundos)  !ctc  Create text comando 

@@ -1,6 +1,19 @@
 const { getClips, showClip, getUserID, getChannel, makeAnnouncement, makeShoutout, getUser } = require('../functions');
 const { shoutouts } = require('../util/cooldowns');
 
+let commandOptions = {
+    name: 'shoutout',
+    cmd: 'so',
+    func: 'shoutout',
+    type: 'reserved',
+    cooldown: 10,
+    userLevelName: 'mod',
+    userLevel: 6,
+    enabled: true,
+    description: 'Menciona a un usuario y si tienes activado lo de los clips mandara un clip al canal',
+    clips: true
+};
+
 async function shoutout(channel, streamer, modID) {
     let soCD = shoutouts;
     let channelID = await getUserID(channel);
@@ -28,7 +41,7 @@ async function shoutout(channel, streamer, modID) {
         return { soClip: clip, cooldown: false }
     }
 
-    return { soClip: clip, cooldown: true }
+    return { soClip: clip, cooldown: true, cooldown: commandOptions.cooldown }
 }
 
 module.exports = shoutout;

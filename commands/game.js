@@ -1,5 +1,17 @@
 const CHANNEL = require('../functions/channel');
 
+const commandOptions = {
+    name: 'Change Game',
+    cmd: 'game',
+    func: 'setGame',
+    type: 'reserved',
+    cooldown: 10,
+    userLevelName: 'mod',
+    userLevel: 6,
+    enabled: true,
+    description: `Cambia el juego actual | Ejemplo: !game <nombre del juego> | Ejemplo: !game Fortnite`,
+};
+
 async function game(channel, argument = null, isMod = false) {
     await CHANNEL.init(channel);
 
@@ -17,6 +29,8 @@ async function game(channel, argument = null, isMod = false) {
 
     let game = await CHANNEL.setGame(argument);
     if (game.error) return game;
+
+    game.cooldown = commandOptions.cooldown;
 
     return game;
 }

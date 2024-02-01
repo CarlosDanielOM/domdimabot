@@ -1,5 +1,4 @@
 const shoutout = require('./shoutout');
-const discord = require('./discord');
 const ruletarusa = require('./ruletarusa');
 const promo = require('./promo');
 const prediction = require('./prediction');
@@ -12,10 +11,10 @@ const cmd = require('./command')
 const followage = require('./followage');
 const ip = require('./ip');
 const createClip = require('./createclip');
+const commandList = require('./commandlist');
 
 module.exports = {
     shoutout,
-    discord,
     ruletarusa,
     promo,
     prediction,
@@ -28,5 +27,6 @@ module.exports = {
     cmd,
     followage,
     ip,
-    createClip
+    createClip,
+    commandList
 }

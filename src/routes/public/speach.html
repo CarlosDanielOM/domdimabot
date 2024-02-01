@@ -14,6 +14,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script>
         let channel = window.location.pathname.split('/')[2];
+        let lastMsgID = '';
 
         const socket = io.connect('https://domdimabot.com/', {
             reconnection: true,
@@ -29,9 +30,12 @@
         speach.lang = 'es-US';
 
         channelSocket.on('speach', (data) => {
-            let msg = data.message;
-            speach.text = msg;
-            synth.speak(speach);
+            if (lastMsgID == data.id) {
+                let msg = data.message;
+                lastMsgID = data.id;
+                speach.text = msg;
+                synth.speak(speach);
+            }
         });
     </script>
 </body>

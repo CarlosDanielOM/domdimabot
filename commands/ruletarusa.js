@@ -1,6 +1,27 @@
 const { timeoutUser, getUserID } = require('../functions/index');
 const CHANNEL = require('../functions/channel/index');
 
+let commandOptions = {
+    name: 'ruletarusa',
+    cmd: 'ruletarusa',
+    func: 'ruletarusa',
+    type: 'reserved',
+    cooldown: 10,
+    userLevelName: 'everyone',
+    userLevel: 0,
+    enabled: true,
+    description: 'Tiraras del gatillo y si tenia bala te mueres',
+    premium: false,
+    premium_config: {
+        timeout_user: {
+            enabled: false
+        },
+        timeout_mod: {
+            enabled: false
+        }
+    }
+};
+
 async function ruletarusa(channel, user, modID, isMod) {
     let premiumLevel = 2;
 
@@ -45,7 +66,7 @@ async function ruletarusa(channel, user, modID, isMod) {
         if (modRes.error) console.log(modRes)
     }, 1000 * 160);
 
-    return { error: false, status: 200, message: `${user} ha jalado el gatillo y la bala ha sido disparada causando su muerte.` };
+    return { error: false, status: 200, message: `${user} ha jalado el gatillo y la bala ha sido disparada causando su muerte.`, cooldown: commandOptions.cooldown };
 }
 
 module.exports = ruletarusa;

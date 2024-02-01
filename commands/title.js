@@ -1,5 +1,17 @@
 const CHANNEL = require('../functions/channel');
 
+const commandOptions = {
+    name: 'Change Title',
+    cmd: 'title',
+    func: 'setTitle',
+    type: 'reserved',
+    cooldown: 10,
+    userLevelName: 'mod',
+    userLevel: 6,
+    enabled: true,
+    description: `Cambia el titulo actual | Ejemplo: !title <titulo> | Ejemplo: !title Hola como estas`,
+};
+
 async function title(channel, argument = null, isMod = false) {
     await CHANNEL.init(channel);
 
@@ -23,6 +35,8 @@ async function title(channel, argument = null, isMod = false) {
         name: title,
         message: message
     }
+
+    data.cooldown = commandOptions.cooldown;
 
     return data;
 }

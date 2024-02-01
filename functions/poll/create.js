@@ -1,3 +1,15 @@
+const commandOptions = {
+    name: 'Create Poll',
+    cmd: 'poll',
+    func: 'createPoll',
+    type: 'reserved',
+    cooldown: 10,
+    userLevelName: 'mod',
+    userLevel: 6,
+    enabled: true,
+    description: 'Crea una encuesta con la siguiente sintaxis: !poll <titulo>;<opcion1>/<opcion2>;<tiempo en segundos> | Ejemplo: !poll ¿Ganara el streamer?;Si/No;60 | El tiempo maximo es de 5 minutos y minimo de 30 segundos | El titulo no puede ser mayor a 100 caracteres | Las opciones no pueden ser mayor a 100 caracteres | Minimo 2 opciones y maximo 5 opciones y deben ser separadas por /',
+};
+
 async function createPoll(options) {
     let choices = options.choices.map((choice) => {
         return {
@@ -42,7 +54,7 @@ async function createPoll(options) {
 
     this.setPoll(this.channel, pollData);
 
-    return { message: `Encuesta creada con éxito.` }
+    return { message: `Encuesta creada con éxito.`, cooldown: commandOptions.cooldown }
 }
 
 module.exports = createPoll;

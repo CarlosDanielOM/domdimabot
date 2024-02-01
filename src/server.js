@@ -146,8 +146,9 @@ async function init() {
   app.post('/speach/:channel', (req, res) => {
     const channel = req.params.channel;
     const speach = req.body.speach;
+    const msgID = req.body.msgID;
 
-    io.of(`/speach/${channel}`).emit('speach', { message: speach });
+    io.of(`/speach/${channel}`).emit('speach', { message: speach, id: msgID });
 
     res.status(200).json({ message: `Playing speach on ${channel} channel` });
   });

@@ -59,7 +59,9 @@ async function command(action, channel, argument, type = null) {
             let opt = options[i];
             switch (opt.name) {
                 case 'cd':
-                    cmdOptions.cooldown = parseInt(opt.value);
+                    if (opt.value > 5) {
+                        cmdOptions.cooldown = parseInt(opt.value);
+                    }
                     break;
                 case 'ul':
                     if (opt.value.length > 1) {
