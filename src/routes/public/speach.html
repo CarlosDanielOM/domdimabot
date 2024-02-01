@@ -30,7 +30,7 @@
         speach.lang = 'es-US';
 
         channelSocket.on('speach', (data) => {
-            if (lastMsgID == data.id) {
+            if (lastMsgID !== data.id) {
                 let msg = data.message;
                 lastMsgID = data.id;
                 speach.text = msg;
