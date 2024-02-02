@@ -39,6 +39,8 @@ async function showClip(channel, clipData, streamerData, streamerChannelData) {
 
     let clipResData = clipResponse;
 
+    if (clipResData.error) { console.log({ error: 'Error sending clip to server', reason: clipResData, where: 'showClip', channel: channel }); };
+
     return clipResData;
 }
 
