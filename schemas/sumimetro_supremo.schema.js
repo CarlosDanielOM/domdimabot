@@ -7,7 +7,7 @@ const sumimetroSupremoSchema = new Schema({
     login: String,
     type: String,
     percent: Number,
-    timestamp: Date,
+    timestamp: { type: Date, default: Date.now },
     date: {
         day: Number,
         month: Number,

@@ -30,9 +30,9 @@
         speach.lang = 'es-US';
 
         channelSocket.on('speach', (data) => {
-            if (lastMsgID !== 'quack') {
+            if (lastMsgID !== data.id) {
                 let msg = data.message;
-                //lastMsgID = data.id;
+                lastMsgID = data.id;
                 speach.text = msg;
                 synth.speak(speach);
             }

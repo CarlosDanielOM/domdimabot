@@ -1,5 +1,6 @@
 const COMMAND = require('../class/command');
 const TIME = require('../class/time');
+const STREAMERS = require('../class/streamers');
 
 commandPermissionLevels = {
     0: 'everyone',
@@ -33,17 +34,19 @@ let maxFuncLength = 300;
 
 async function command(action, channel, argument, type = null) {
     await COMMAND.init(channel, argument);
+
+    let streamer = await STREAMERS.getStreamer(channel);
+
     let cmdOptions = {
         name: null,
-        description: null,
+        cmd: null,
         type: null,
-        enabled: true,
         cooldown: 20,
         channel: channel,
+        channelID: streamer.user_id,
         userLevel: 0,
         userLevelName: 'everyone',
         func: null,
-        createdAt: null,
         date: {
             day: null,
             month: null,
@@ -106,6 +109,7 @@ async function command(action, channel, argument, type = null) {
         cmdOptions.name = name;
         cmdOptions.func = func;
         cmdOptions.type = type;
+        cmdOptions.cmd = name;
 
         let cmd = await COMMAND.createCommand(cmdOptions);
 

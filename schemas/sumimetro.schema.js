@@ -7,7 +7,7 @@ const sumimetroSchema = new Schema({
     login: String,
     dominant: Number,
     submissive: Number,
-    timestamp: Date,
+    timestamp: { type: Date, default: Date.now },
     date: {
         day: Number,
         month: Number,

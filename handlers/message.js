@@ -28,7 +28,6 @@ async function message(client, channel, tags, message) {
         channel: channel,
         message: message,
         username: tags['display-name'],
-        timestamp: new Date()
     }
 
     let chatLog = await ChatLog.create(chatBody);
@@ -174,8 +173,9 @@ async function message(client, channel, tags, message) {
                 commandCD = title.cooldown;
                 break;
             case 's':
-                let s = await func.speach(tags, argument, channel);
+                let s = await commands.speachChat(tags, argument, channel);
                 if (s.error) return client.say(channel, `${s.reason}`);
+                commandCD = s.cooldown;
                 break;
             case 'sumimetro':
                 user = argument || tags['display-name'];
@@ -270,7 +270,7 @@ async function message(client, channel, tags, message) {
                 channelInstance.setCooldown(cmd.name, cmd.cooldown)
                 return true;
         }
-        if (command != 's') {
+        if (commandCD != 0) {
             channelInstance.setCooldown(command, commandCD);
         }
     }

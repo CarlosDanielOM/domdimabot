@@ -6,7 +6,7 @@ const chatLogSchema = new Schema({
     channel: String,
     message: String,
     username: String,
-    timestamp: Date
+    timestamp: { type: Date, default: Date.now },
 });
 
 const ChatLog = mongoose.model('Chat_Log', chatLogSchema);

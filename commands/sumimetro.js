@@ -6,6 +6,18 @@ const SumimetroSupremoSchema = require('../schemas/sumimetro_supremo.schema');
 
 let instances = new Map();
 
+let commandOptions = {
+    name: 'Sumimetro',
+    cmd: 'sumimetro',
+    func: 'sumimetro',
+    type: 'reserved',
+    cooldown: 10,
+    userLevelName: 'everyone',
+    userLevel: 0,
+    enabled: true,
+    description: `Te da tu lectura de sumimetro que va desde 0% hasta 100% en cuanto a dominante o sumiso | Ejemplo: !sumimetro | Ejemplo de respuesta: (user) ha salido 65% sumiso y 35% dominante | Si se pasa un nombre de usuario como argumento te da la lectura de sumimetro de ese usuario | Ejemplo: !sumimetro (user) | Ejemplo de respuesta: (user) ha salido 65% sumiso y 35% dominante`,
+}
+
 async function sumimetro(channel, user, toUser) {
     //? GET RANDOM NUMBER
     let rand = Math.floor(Math.random() * 100) + 1;
@@ -59,7 +71,6 @@ async function sumimetro(channel, user, toUser) {
                 login: lowerCaseUser,
                 dominant: dominante,
                 submissive: sumiso,
-                timestamp: new Date(),
                 date: {
                     day: todayDate.day,
                     month: todayDate.month,
@@ -73,10 +84,10 @@ async function sumimetro(channel, user, toUser) {
             //* Creating the sumimetro supremo
 
             //! Get data from the database in case in bot memory is lost
-            if(!instance.hasDominanteSupremo()) {}
-            if(!instance.hasSumisoSupremo()) {}
-            
-            
+            if (!instance.hasDominanteSupremo()) { }
+            if (!instance.hasSumisoSupremo()) { }
+
+
             //? Checks if we are doing sumiso or dominante first
             if (dominante > 50) {
                 //? Checks if there is a dominante supremo
@@ -89,7 +100,6 @@ async function sumimetro(channel, user, toUser) {
                         login: lowerCaseUser,
                         type: 'dominante',
                         percent: dominante,
-                        timestamp: new Date(),
                         date: {
                             day: todayDate.day,
                             month: todayDate.month,
@@ -126,7 +136,6 @@ async function sumimetro(channel, user, toUser) {
                             login: lowerCaseUser,
                             type: 'dominante',
                             percent: dominante,
-                            timestamp: new Date(),
                             date: {
                                 day: todayDate.day,
                                 month: todayDate.month,
@@ -163,7 +172,6 @@ async function sumimetro(channel, user, toUser) {
                         username: user,
                         type: 'sumiso',
                         percent: sumiso,
-                        timestamp: new Date(),
                         date: {
                             day: todayDate.day,
                             month: todayDate.month,
@@ -199,7 +207,6 @@ async function sumimetro(channel, user, toUser) {
                             username: user,
                             type: 'sumiso',
                             percent: sumiso,
-                            timestamp: new Date(),
                             date: {
                                 day: todayDate.day,
                                 month: todayDate.month,

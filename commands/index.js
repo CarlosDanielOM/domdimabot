@@ -12,6 +12,7 @@ const followage = require('./followage');
 const ip = require('./ip');
 const createClip = require('./createclip');
 const commandList = require('./commandlist');
+const speachChat = require('./speach');
 
 module.exports = {
     shoutout,
@@ -28,5 +29,6 @@ module.exports = {
     followage,
     ip,
     createClip,
-    commandList
+    commandList,
+    speachChat
 }

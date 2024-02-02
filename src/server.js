@@ -251,10 +251,6 @@ async function init() {
         let newChannel = new channelSchema({
           name,
           email,
-          type: 'twitch',
-          premium: false,
-          premium_until: null,
-          actived: false,
           twitch_user_id: id,
         });
 
