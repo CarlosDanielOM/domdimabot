@@ -15,15 +15,15 @@ let commandOptions = {
 
 async function promo(channel, streamer) {
     let user = await getUserID(streamer);
-    if (!user) return { clip: null };
+    if (!user) { console.log({ user, where: 'promo', for: channel }); return { clip: null } };
     let channelUserData = await getUser(user);
-    if (channelUserData.error) return { clip: null };
+    if (channelUserData.error) { console.log({ channelUserData, where: 'promo', for: channel }); return { clip: null } };
     let channelData = await getChannel(user);
     let clips = await getClips(user);
-    if (!clips) return { clip: null };
+    if (!clips) { console.log({ clips, where: 'promo', for: channel }); return { clip: null } };
     let clip = await showClip(channel, clips, channelData, channelUserData);
 
-    if (clip.error) return { clip: null };
+    if (clip.error) { console.log({ clip, where: 'promo', for: channel }); return { clip: null } };
 
     channelData = {
         name: channelData.broadcaster_name,

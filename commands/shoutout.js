@@ -18,9 +18,9 @@ async function shoutout(channel, streamer, modID) {
     let soCD = shoutouts;
     let channelID = await getUserID(channel);
     let streamerID = await getUserID(streamer);
-    if (!channelID || !streamerID) return { clip: null };
+    if (!channelID || !streamerID) { console.log({ channelID, streamerID, where: 'shoutout', for: channel }); return { clip: null } };
     let streamerUserData = await getUser(streamerID);
-    if (streamerUserData.error) return { clip: null };
+    if (streamerUserData.error) { console.log({ streamerUserData, where: 'shoutout', for: channel }); return { clip: null } };
     let streamerChannel = await getChannel(streamerID);
     let clips = await getClips(streamerID);
     let clip = await showClip(channel, clips, streamerChannel, streamerUserData);
