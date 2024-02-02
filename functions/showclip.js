@@ -3,8 +3,8 @@ const CHAT = require('./chat');
 const getGameByID = require('./getgamebyid');
 
 async function showClip(channel, clipData, streamerData, streamerChannelData) {
-    if (!clipData || clipData === undefined || clipData.length === 0) return { error: 'No data', reason: 'No data was provided to the function' };
-    if (!streamerData || streamerData === undefined || streamerData.length === 0) return { error: 'No data', reason: 'No data was provided to the function' };
+    if (!clipData || clipData === undefined || clipData.length === 0) return { error: 'No data', reason: 'No Clip data was provided to the function' };
+    if (!streamerData || streamerData === undefined || streamerData.length === 0) return { error: 'No data', reason: 'No Streamer data was provided to the function' };
     let streamerID = streamerChannelData.id;
 
     await CHAT.init(channel, null);
