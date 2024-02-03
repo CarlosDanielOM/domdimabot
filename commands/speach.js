@@ -11,6 +11,7 @@ const commandOptions = {
     enabled: false,
     description: `Habla en el chat | Ejemplo: !s <mensaje> | Ejemplo: !s Hola como estas`,
     premium: false,
+    readEmotes: false,
     premium_config: {
         auto_start: {
             enabled: false,
@@ -31,7 +32,7 @@ async function speachChat(tags, argument, channel) {
 
     let emotesToReplace = [];
 
-    if (tags.emotes) {
+    if (tags.emotes && !commandOptions.readEmotes) {
         for (let emote in tags.emotes) {
             let emoteData = tags.emotes[emote];
             for (let i = 0; i < emoteData.length; i++) {

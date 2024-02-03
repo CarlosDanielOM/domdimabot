@@ -38,7 +38,9 @@ async function message(client, channel, tags, message) {
 
     let hasLink = message.match(linkRegex);
     if (hasLink) {
-        // let q = await CHAT.deleteMessage(tags.id);
+        if (channel == 'ariascarletvt') {
+            let q = await CHAT.deleteMessage(tags.id);
+        }
     }
 
     let onCooldown = false;
