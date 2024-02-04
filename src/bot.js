@@ -17,7 +17,7 @@ async function init() {
     await connectChannels(CLIENT.connectChannels, client);
 
     client.on('raided', (channel, username, viewers, tags) => {
-        raid(client, channel, username, viewers, tags);
+        raid(client, channel.replace('#', ''), username, viewers, tags);
     });
 
     client.on('resub', (channel, username, months, message, userstate, methods) => {
