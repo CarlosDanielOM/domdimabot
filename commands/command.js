@@ -47,11 +47,6 @@ async function command(action, channel, argument, type = null) {
         userLevel: 0,
         userLevelName: 'everyone',
         func: null,
-        date: {
-            day: null,
-            month: null,
-            year: null,
-        }
     }
     if (action === 'CREATE') {
         let time = TIME.getDateinString();
@@ -100,12 +95,6 @@ async function command(action, channel, argument, type = null) {
 
         if (func.length > maxFuncLength) return { error: true, reason: `command cannot be longer than ${maxFuncLength} characters` };
 
-        cmdOptions.createdAt = TIME.getTimeNow();
-        cmdOptions.date = {
-            day: time.day,
-            month: time.month,
-            year: time.year
-        }
         cmdOptions.name = name;
         cmdOptions.func = func;
         cmdOptions.type = type;

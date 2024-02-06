@@ -27,7 +27,7 @@ async function game(channel, argument = null, isMod = false) {
         return data;
     }
 
-    let game = await CHANNEL.setGame(argument);
+    let game = await CHANNEL.setGame(argument, channel);
     if (game.error) return game;
 
     game.cooldown = commandOptions.cooldown;

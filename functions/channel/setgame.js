@@ -1,5 +1,9 @@
-async function setGame(game) {
-    let { userID, channel, streamerHeaders, helixURL } = this;
+const getUserID = require('../getuserid');
+
+async function setGame(game, channel = null) {
+    let { streamerHeaders, helixURL } = this;
+
+    let userID = await getUserID(channel);
 
     let response = await fetch(`${helixURL}/games?name=${game}`, {
         method: 'get',
@@ -16,6 +20,7 @@ async function setGame(game) {
         });
         data = await response.json();
         gameData = data.data[0] || undefined;
+
         if (!gameData) return { error: true, reason: `No se ha encontrado el juego "${game}"` };
     }
 

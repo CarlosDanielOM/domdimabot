@@ -38,7 +38,7 @@ async function message(client, channel, tags, message) {
 
     let hasLink = message.match(linkRegex);
     if (hasLink) {
-        if (channel == 'ariascarletvt') {
+        if (channel == 'ariascarletvt' || channel == 'cdom201') {
             let q = await CHAT.deleteMessage(tags.id);
         }
     }
@@ -77,7 +77,7 @@ async function message(client, channel, tags, message) {
         osito = true;
     }
 
-    if (!osito && !onCooldown && command && !onCooldown) {
+    if (!osito && !onCooldown && command) {
         switch (command) {
             case 'ruletarusa':
                 if ((tags.username !== channel) && !tags.mod) { isMod = false; }
@@ -174,7 +174,7 @@ async function message(client, channel, tags, message) {
                 client.say(channel, `${tags['display-name']} --> ${title.message}`);
                 commandCD = title.cooldown;
                 break;
-            case 's':
+            case 'speach':
                 let s = await commands.speachChat(tags, argument, channel);
                 if (s.error) return client.say(channel, `${s.reason}`);
                 commandCD = s.cooldown;
@@ -213,19 +213,19 @@ async function message(client, channel, tags, message) {
                 client.say(channel, `Siempre dominante, nunca sumiso.`);
                 commandCD = 10;
                 break;
-            case 'cc':
+            case 'createCommand':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
                 let cc = await commands.cmd('CREATE', channel, argument, 'command');
                 if (cc.error) return client.say(channel, `${cc.reason}`);
                 client.say(channel, cc.message);
                 break;
-            case 'dc':
+            case 'deleteCommand':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
                 let dc = await commands.cmd('DELETE', channel, argument);
                 if (dc.error) return client.say(channel, `${dc.reason}`);
                 client.say(channel, dc.message);
                 break;
-            case 'ec':
+            case 'editCommand':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
                 let ec = await commands.cmd('EDIT', channel, argument);
                 if (ec.error) return client.say(channel, `${ec.reason}`);
@@ -246,7 +246,6 @@ async function message(client, channel, tags, message) {
                 client.say(channel, ip.message);
                 break;
             case 'clip':
-                return true;
                 client.say(channel, `Guardando clip...`);
                 let saveClip = await commands.createClip(channel);
                 if (saveClip.error) return client.say(channel, `${saveClip.reason}`);
