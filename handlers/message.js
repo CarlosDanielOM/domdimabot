@@ -213,19 +213,19 @@ async function message(client, channel, tags, message) {
                 client.say(channel, `Siempre dominante, nunca sumiso.`);
                 commandCD = 10;
                 break;
-            case 'createCommand':
+            case 'cc':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
                 let cc = await commands.cmd('CREATE', channel, argument, 'command');
                 if (cc.error) return client.say(channel, `${cc.reason}`);
                 client.say(channel, cc.message);
                 break;
-            case 'deleteCommand':
+            case 'dc':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
                 let dc = await commands.cmd('DELETE', channel, argument);
                 if (dc.error) return client.say(channel, `${dc.reason}`);
                 client.say(channel, dc.message);
                 break;
-            case 'editCommand':
+            case 'ec':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
                 let ec = await commands.cmd('EDIT', channel, argument);
                 if (ec.error) return client.say(channel, `${ec.reason}`);
