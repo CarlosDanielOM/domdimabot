@@ -30,7 +30,7 @@ async function createClip(channel) {
 
     data = data.data[0];
 
-    return { error: false, clipID: data.id, clipURL: data.url, status: 200 }
+    return { error: false, clipID: data.id, clipURL: data.edit_url, status: 200 }
 
 }
 

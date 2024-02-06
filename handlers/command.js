@@ -22,6 +22,7 @@ module.exports = commandHandler;
 function specialCommands(tags, argument, cmdFunc) {
     let specials = cmdFunc.match(specialCommandsFunc) || [];
     for (let i = 0; i < specials.length; i++) {
+        specialCommandsFunc.lastIndex = 0;
         let special = specialCommandsFunc.exec(cmdFunc);
         switch (special[1]) {
             case 'user':

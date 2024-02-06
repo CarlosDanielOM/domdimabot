@@ -24,6 +24,10 @@ async function getClip(channel, clipID) {
         }
     }
 
+    if (data.data.length === 0) {
+        return { error: 'Not found', reason: 'Clip not found', status: 404 };
+    }
+
     data = data.data[0];
 
     return { error: false, data: data, status: 200 }
