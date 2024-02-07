@@ -174,7 +174,7 @@ async function message(client, channel, tags, message) {
                 client.say(channel, `${tags['display-name']} --> ${title.message}`);
                 commandCD = title.cooldown;
                 break;
-            case 'speach':
+            case 's':
                 let s = await commands.speachChat(tags, argument, channel);
                 if (s.error) return client.say(channel, `${s.reason}`);
                 commandCD = s.cooldown;
