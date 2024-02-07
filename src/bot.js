@@ -8,6 +8,8 @@ const raid = require('../handlers/raided');
 
 let client = null;
 
+let newChatter = false;
+
 async function init() {
 
     client = await CLIENT.getClient();
@@ -71,6 +73,13 @@ async function init() {
         if (self) return;
 
         messages(client, channel.replace('#', ''), tags, message);
+
+        if (tags.username == 'elkenozvt') {
+            if (channel == 'ariascarletvt' && !newChatter) {
+                client.say(channel, `Funen al Kenoz!`)
+                setTimeout(() => { newChatter = false }, 1000 * 30);
+            }
+        }
 
         if (message.toLowerCase().includes('panda') && !pandaSent && channel !== '#d0jiart') {
             client.say(channel, `Panda? Donde?`);
