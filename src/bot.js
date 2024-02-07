@@ -77,7 +77,7 @@ async function init() {
         if (tags.username == 'elkenozvt') {
             if (channel == 'ariascarletvt' && !newChatter) {
                 client.say(channel, `Funen al Kenoz!`)
-                setTimeout(() => { newChatter = false }, 1000 * 30);
+                setTimeout(() => { newChatter = false }, 1000 * 60 * 60 * 5);
             }
         }
 
