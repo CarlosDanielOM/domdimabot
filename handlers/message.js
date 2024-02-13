@@ -261,6 +261,12 @@ async function message(client, channel, tags, message) {
                 client.say(channel, commandList.message);
                 commandCD = commandList.cooldown
                 break;
+            case 'chiste':
+                let chiste = await commands.chiste(argument);
+                if (chiste.error) return client.say(channel, `${chiste.reason}`);
+                client.say(channel, chiste.message);
+                commandCD = chiste.cooldown;
+                break;
             default:
                 let cmdHandler = await commandHandler(channel, tags, command, argument, userlevel);
                 if (!cmdHandler.exists) return;
