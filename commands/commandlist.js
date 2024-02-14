@@ -22,12 +22,12 @@ let commandOptions = {
 };
 
 async function getCommandListDB(channel, type = 'all') {
-    let commands = await commandSchema.find({ channel: channel, enabled: true }, 'name type')
+    let commands = await commandSchema.find({ channel: channel, enabled: true }, 'name cmd type')
 
     if (!commands) return { error: true, reason: 'No se encontraron comandos', status: 404 }
 
     commands = commands.map(command => {
-        if (command.type !== 'timer') return `!${command.name}`
+        if (command.type !== 'timer') return `!${command.cmd}`
     });
 
     let message = `Los comandos disponibles son: ${commands.join(', ')}`;
