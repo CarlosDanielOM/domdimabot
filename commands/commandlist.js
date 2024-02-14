@@ -27,7 +27,7 @@ async function getCommandListDB(channel, type = 'all') {
     if (!commands) return { error: true, reason: 'No se encontraron comandos', status: 404 }
 
     commands = commands.map(command => {
-        if (command.type === 'command') return `!${command.name}`
+        if (command.type !== 'timer') return `!${command.name}`
     });
 
     let message = `Los comandos disponibles son: ${commands.join(', ')}`;

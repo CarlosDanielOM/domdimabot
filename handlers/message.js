@@ -7,8 +7,8 @@ const ChatLog = require('../schemas/chat_log.schema.js');
 
 const COOLDOWNS = require('../class/cooldown.js');
 
-const commandsRegex = new RegExp(/^!([\p{L}\p{N}]+)(?:\W+)?(.*)?$/u);
-const linkRegex = new RegExp(/((http|https):\/\/)?(www\.)?[a-zA-Z-]+(\.[a-zA-Z-]+)+(:\d+)?(\/\S*)?(\?\S+)?/gi);
+const commandsRegex = new RegExp(/^!([\p{L}\p{N}]+)(?:\W@?)?(.*)?$/u);
+const linkRegex = new RegExp(/((http|https):\/\/)?(www\.)?[a-zA-Z-]+(\.[a-zA-Z-]{2})+(:\d+)?(\/\S*)?(\?\S+)?/gi);
 
 const commandHandler = require('./command.js');
 

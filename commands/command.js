@@ -59,6 +59,8 @@ async function command(action, channel, argument, type = null) {
                 case 'cd':
                     if (opt.value > 5) {
                         cmdOptions.cooldown = parseInt(opt.value);
+                    } else {
+                        cmdOptions.cooldown = 20;
                     }
                     break;
                 case 'ul':

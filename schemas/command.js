@@ -5,7 +5,7 @@ const commandSchema = new Schema({
     name: String,
     cmd: String,
     func: String,
-    message: String,
+    message: { type: String, default: '' },
     type: String,
     description: { type: String, default: 'No description provided.' },
     cooldown: { type: Number, default: 20 },
