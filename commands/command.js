@@ -29,6 +29,7 @@ commandPermissions = {
 const cmdOptionsExistsRegex = new RegExp(/^\-([a-z]+\=[a-zA-Z0-9]+)(?:\W)?(.*)?$/);
 const firstCmdOptionRegex = new RegExp(/([a-z]+\=[a-zA-Z0-9]+)(?:\W)?(.*)?$/)
 const cmdOptionValueRegex = new RegExp(/([a-z]+)\=([a-zA-Z0-9]+)?$/);
+const specialCommandsFunc = (/\$\((.*?)\)/g);
 
 let maxFuncLength = 300;
 
@@ -47,6 +48,7 @@ async function command(action, channel, argument, type = null) {
         userLevel: 0,
         userLevelName: 'everyone',
         func: null,
+        message: null
     }
     if (action === 'CREATE') {
         let time = TIME.getDateinString();
@@ -98,9 +100,14 @@ async function command(action, channel, argument, type = null) {
         if (func.length > maxFuncLength) return { error: true, reason: `command cannot be longer than ${maxFuncLength} characters` };
 
         cmdOptions.name = name;
-        cmdOptions.func = func;
+        cmdOptions.func = name;
+        cmdOptions.message = func;
         cmdOptions.type = type;
         cmdOptions.cmd = name;
+
+        if (specialCommands(null, null, cmdOptions.message)) {
+            cmdOptions.type = 'countable';
+        }
 
         let cmd = await COMMAND.createCommand(cmdOptions);
 
@@ -185,7 +192,10 @@ async function command(action, channel, argument, type = null) {
 
             if (func.length > maxFuncLength) return { error: true, reason: `command cannot be longer than ${maxFuncLength} characters` };
             if (oldCommand.type !== 'reserved') {
-                oldCommand.func = func;
+                if (specialCommands(null, null, func)) {
+                    oldCommand.type = 'countable';
+                }
+                oldCommand.message = func;
             }
         }
 
@@ -232,4 +242,21 @@ function getCMDOpt(text) {
 
     return { options, text };
 
+}
+
+function specialCommands(tags, argument, cmdFunc) {
+    let countable = false;
+    let specials = cmdFunc.match(specialCommandsFunc) || [];
+    for (let i = 0; i < specials.length; i++) {
+        specialCommandsFunc.lastIndex = 0;
+        let special = specialCommandsFunc.exec(cmdFunc);
+        switch (special[1]) {
+            case 'count':
+                countable = true;
+                break;
+            default:
+                break;
+        }
+    }
+    return countable;
 }

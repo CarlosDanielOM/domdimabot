@@ -283,7 +283,7 @@ async function message(client, channel, tags, message) {
                 if (cmdHandler.error) return client.say(channel, `${cmdHandler.reason}`);
                 let cmd = cmdHandler.command;
                 if (!cmd.enabled) return;
-                client.say(channel, cmd.func);
+                client.say(channel, cmd.message);
                 channelInstance.setCooldown(cmd.name, cmd.cooldown)
                 return true;
         }

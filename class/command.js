@@ -103,6 +103,12 @@ class COMMAND {
         if (updated.nModified === 0) return { error: 'Command could not be updated', reason: 'command could not be updated', updated: false };
         return { error: false, message: null, updated: true, command: command };
     }
+
+    async updateCountableCommandInDB(command, count) {
+        let updated = await this.schema.updateOne({ name: command, channel: this.channel }, { count: count });
+        if (updated.nModified === 0) return { error: 'Command could not be updated', reason: 'command could not be updated', updated: false };
+        return { error: false, message: null, updated: true, command: command };
+    }
 }
 
 module.exports = new COMMAND();

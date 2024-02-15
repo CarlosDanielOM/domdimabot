@@ -9,6 +9,7 @@ const commandSchema = new Schema({
     type: String,
     description: { type: String, default: 'No description provided.' },
     cooldown: { type: Number, default: 20 },
+    count: { type: Number, default: 0 },
     userLevelName: { type: String, default: 'everyone' },
     userLevel: { type: Number, default: 0 },
     enabled: { type: Boolean, default: true },
