@@ -17,7 +17,6 @@ const modID = 698614112;
 
 let isMod;
 let user;
-let osito;
 
 let channelInstances = new Map();
 
@@ -38,7 +37,7 @@ async function message(client, channel, tags, message) {
     }
 
     let hasLink = message.match(linkRegex);
-    if (hasLink) {
+    if (hasLink && !tags.mod && !tags.username === channel && !tags.username === 'cdom201' && !tags.username === 'domdimabot') {
         if (channel == 'ariascarletvt' || channel == 'cdom201') {
             let q = await CHAT.deleteMessage(tags.id);
         }
@@ -57,8 +56,6 @@ async function message(client, channel, tags, message) {
         isMod = false;
     }
 
-    osito = false;
-
     const [raw, command, argument] = message.match(commandsRegex) || [];
 
     if (!command) return;
@@ -72,18 +69,7 @@ async function message(client, channel, tags, message) {
         onCooldown = true;
     }
 
-    if (channel == 'unositopolar' && !onCooldown) {
-        if (channelInstance.hasCooldown('sumimetro')) return;
-        if (command == 'sumimetro') {
-            user = argument || tags['display-name'];
-            let sumimetro = await commands.sumimetro(channel, tags['display-name'], user);
-            client.say(channel, sumimetro.message);
-            channelInstance.setCooldown('sumimetro', 5);
-        }
-        osito = true;
-    }
-
-    if (!osito && !onCooldown) {
+    if (!onCooldown) {
         switch (commandData.func) {
             case 'ruletarusa':
                 if ((tags.username !== channel) && !tags.mod) { isMod = false; }
