@@ -6,6 +6,7 @@
             "func": "ruletarusa",
             "type": "reserved",
             "description": "Tiraras del gatillo y si tenia bala te mueres",
+            "enabled": true,
             "cooldown": 10,
             "canTimeout": false,
             "canTimeoutMods": false,
@@ -16,6 +17,7 @@
             "cmd": "anuncio",
             "func": "anuncio",
             "type": "reserved",
+            "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
             "userLevel": 6,
@@ -28,6 +30,7 @@
             "type": "reserved",
             "cooldown": 10,
             "userLevelName": "mod",
+            "enabled": true,
             "userLevel": 6,
             "description": "Es otra forma de lanzar un shoutout pero sin activar el shoutout y la respuesta es por texto en vez de por anuncio para que los que esten en movil puedan ver el mensaje",
             "showClip": true
@@ -39,9 +42,10 @@
             "type": "reserved",
             "cooldown": 10,
             "userLevelName": "mod",
+            "enabled": true,
             "userLevel": 6,
             "description": "Menciona a un usuario y si tienes activado lo de los clips mandara un clip al canal",
-            "showClip": true
+            "showClip": false
         },
         {
             "name": "Create Prediction",
@@ -50,6 +54,7 @@
             "type": "reserved",
             "cooldown": 10,
             "userLevelName": "mod",
+            "enabled": true,
             "userLevel": 6,
             "description": "Crea una prediccion con la siguiente sintaxis: !predi <titulo>;<opcion1>/<opcion2>;<tiempo en segundos> | Ejemplo: !predi ¿Ganara el streamer?;Si/No;60 | El tiempo maximo es de 5 minutos y minimo de 30 segundos | El titulo no puede ser mayor a 100 caracteres | Las opciones no pueden ser mayor a 100 caracteres | Minimo 2 opciones y maximo 10 opciones y deben ser separadas por /"
         },
@@ -60,6 +65,7 @@
             "type": "reserved",
             "cooldown": 10,
             "userLevelName": "mod",
+            "enabled": true,
             "userLevel": 6,
             "description": "Termina la prediccion actual y da el resultado ganador | Ejemplo: !endpredi <numero de opcion> | Ejemplo: !endpredi 1 | El numero de opcion debe ser el numero de la opcion ganadora"
         },
@@ -70,6 +76,7 @@
             "type": "reserved",
             "cooldown": 10,
             "userLevelName": "mod",
+            "enabled": true,
             "userLevel": 6,
             "description": "Cancela la prediccion actual | Ejemplo: !cancelpredi | No necesita argumentos | Solo funciona si la prediccion esta activa o si esta bloqueada"
         },
@@ -80,6 +87,7 @@
             "type": "reserved",
             "cooldown": 10,
             "userLevelName": "mod",
+            "enabled": true,
             "userLevel": 6,
             "description": "Bloquea la prediccion actual lo cual inhabilita que los usuarios puedan votar | Ejemplo: !lockpredi | No necesita argumentos | Solo funciona si la prediccion esta activa"
         },
@@ -90,6 +98,7 @@
             "type": "reserved",
             "cooldown": 10,
             "userLevelName": "mod",
+            "enabled": true,
             "userLevel": 6,
             "description": "Crea una encuesta con la siguiente sintaxis: !poll <titulo>;<opcion1>/<opcion2>;<tiempo en segundos> | Ejemplo: !poll ¿Ganara el streamer?;Si/No;60 | El tiempo maximo es de 5 minutos y minimo de 30 segundos | El titulo no puede ser mayor a 100 caracteres | Las opciones no pueden ser mayor a 100 caracteres | Minimo 2 opciones y maximo 5 opciones y deben ser separadas por /"
         },
@@ -98,6 +107,7 @@
             "cmd": "endpoll",
             "func": "endpoll",
             "type": "reserved",
+            "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
             "userLevel": 6,
@@ -108,6 +118,7 @@
             "cmd": "cancelpoll",
             "func": "cancelpoll",
             "type": "reserved",
+            "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
             "userLevel": 6,
@@ -118,6 +129,7 @@
             "cmd": "game",
             "func": "game",
             "type": "reserved",
+            "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
             "userLevel": 6,
@@ -128,6 +140,7 @@
             "cmd": "title",
             "func": "title",
             "type": "reserved",
+            "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
             "userLevel": 6,
@@ -147,6 +160,7 @@
             "cmd": "sumimetro",
             "func": "sumimetro",
             "type": "reserved",
+            "enabled": true,
             "cooldown": 10,
             "description": "Te da tu lectura de sumimetro que va desde 0% hasta 100% en cuanto a dominante o sumiso | Ejemplo: !sumimetro | Ejemplo de respuesta: (user) ha salido 65% sumiso y 35% dominante | Si se pasa un nombre de usuario como argumento te da la lectura de sumimetro de ese usuario | Ejemplo: !sumimetro (user) | Ejemplo de respuesta: (user) ha salido 65% sumiso y 35% dominante"
         },
@@ -155,6 +169,7 @@
             "cmd": "memide",
             "func": "memide",
             "type": "reserved",
+            "enabled": true,
             "cooldown": 10,
             "description": "Te da tu supuesta medida de tu imaginario miembro viril | Ejemplo: !memide | Ejemplo de respuesta: (user) le mide 15cm | No necesita argumentos"
         },
@@ -163,6 +178,7 @@
             "cmd": "amor",
             "func": "amor",
             "type": "reserved",
+            "enabled": true,
             "cooldown": 10,
             "description": "Te dice cuanto amor hay entre dos usuarios | Ejemplo: !amor (touser) | Ejemplo: !amor <nombre de usuario> | Ejemplo de respuesta: (user) y (touser) tienen 100% de amor | Si se pasan dos nombres de usuario como argumentos te dice cuanto amor hay entre esos dos usuarios | Ejemplo: !amor (user) (touser) | Ejemplo de respuesta: (user) y (touser) tienen 100% de amor | Si se pasa el mismo nombre de usuario que utilizo el comando como argumento le dira una frase negativa | Ejemplo: !amor (user) | Ejemplo de respuesta: (user) no se puede amar a si mismo | Si no se pasa ningun argumento se le dara un recordatorio de como se usa el comando y le dira algo negativo | Ejemplo: !amor | Ejemplo de respuesta: (user) debes pasar un nombre de usuario como argumento, por eso te quedaras solo"
         },
@@ -171,6 +187,7 @@
             "cmd": "ponerla",
             "func": "ponerla",
             "type": "reserved",
+            "enabled": true,
             "cooldown": 10,
             "description": "Te dice el porcentaje de posibilidades de que pongas la | Ejemplo: !ponerla | Ejemplo de respuesta: (user) tiene 100% de posibilidades de ponerla | No necesita argumentos"
         },
@@ -179,6 +196,7 @@
             "cmd": "mecabe",
             "func": "mecabe",
             "type": "reserved",
+            "enabled": true,
             "cooldown": 10,
             "description": "Te dice que tan grande de un miembro viril te cabe mas un texto extra | Ejemplo: !mecabe | Ejemplo de respuesta: (user) te cabe 15cm | No necesita argumentos"
         },
@@ -187,6 +205,7 @@
             "cmd": "onlyemotes",
             "func": "onlyemotes",
             "type": "reserved",
+            "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
             "userLevel": 6,
@@ -197,6 +216,7 @@
             "cmd": "cc",
             "func": "createCommand",
             "type": "reserved",
+            "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
             "userLevel": 6,
@@ -207,6 +227,7 @@
             "cmd": "dc",
             "func": "deleteCommand",
             "type": "reserved",
+            "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
             "userLevel": 6,
@@ -217,6 +238,7 @@
             "cmd": "ec",
             "func": "editCommand",
             "type": "reserved",
+            "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
             "userLevel": 6,
@@ -227,6 +249,7 @@
             "cmd": "followage",
             "func": "followAge",
             "type": "reserved",
+            "enabled": true,
             "cooldown": 10,
             "description": "Te dice cuanto tiempo llevas siguiendo al canal | Ejemplo: !followage | Ejemplo de respuesta: (user) lleva siguiendo al canal 1 año, 2 meses y 3 dias | Si se pasa un nombre de usuario como argumento te dice cuanto tiempo lleva siguiendo al canal ese usuario | Ejemplo: !followage (user) | Ejemplo de respuesta: (user) lleva siguiendo al canal 1 año, 2 meses y 3 dias"
         },
@@ -262,6 +285,7 @@
             "cmd": "clearchat",
             "func": "clearChat",
             "type": "reserved",
+            "enabled": false,
             "cooldown": 10,
             "userLevelName": "mod",
             "userLevel": 6,

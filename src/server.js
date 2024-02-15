@@ -235,6 +235,7 @@ async function init() {
               channel: username,
               channelID: updatedChannel.twitch_user_id,
               cooldown: commandsJSON[command].cooldown,
+              enabled: commandsJSON[command].enabled,
             });
 
             await newCommand.save();
