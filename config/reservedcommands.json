@@ -290,6 +290,28 @@
             "userLevelName": "mod",
             "userLevel": 6,
             "description": "Limpia el chat | Ejemplo: !clearchat | Ejemplo de respuesta: Chat limpiado por <Mod> | No necesita argumentos"
+        },
+        {
+            "name": "Enable Command",
+            "cmd": "enable",
+            "func": "enableCommand",
+            "type": "reserved",
+            "enabled": true,
+            "cooldown": 10,
+            "userLevelName": "mod",
+            "userLevel": 6,
+            "description": "Activa un comando | Ejemplo: !enable <nombre del comando> | Ejemplo: !enable discord | Ejemplo de respuesta: El comando !discord ha sido activado"
+        },
+        {
+            "name": "Disable Command",
+            "cmd": "disable",
+            "func": "disableCommand",
+            "type": "reserved",
+            "enabled": true,
+            "cooldown": 10,
+            "userLevelName": "mod",
+            "userLevel": 6,
+            "description": "Desactiva un comando | Ejemplo: !disable <nombre del comando> | Ejemplo: !disable discord | Ejemplo de respuesta: El comando !discord ha sido desactivado"
         }
     ]
 }
