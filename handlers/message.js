@@ -267,6 +267,8 @@ async function message(client, channel, tags, message) {
                 client.say(channel, chiste.message);
                 commandCD = chiste.cooldown;
                 break;
+            case 'clearchat':
+                CHAT.clearChat();
             default:
                 let cmdHandler = await commandHandler(channel, tags, command, argument, userlevel);
                 if (!cmdHandler.exists) return;
