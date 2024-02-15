@@ -238,6 +238,34 @@
             "cooldown": 10,
             "enabled": false,
             "description": "Crea un clip del streamer con una duracion de 30 segundos despues de usar el comando | Ejemplo: !clip | Ejemplo de respuesta: Guardando clip... | Si la funcion es exitosa la respuesta dira Clip guardado con exito | No necesita argumentos"
+        },
+        {
+            "name": "Commands List",
+            "cmd": "commands",
+            "func": "commands",
+            "type": "reserved",
+            "cooldown": 10,
+            "enabled": true,
+            "description": "Muestra una lista de todos los comandos disponibles al usuario dependiendo su nivel de permisos | Ejemplo: !commands | Ejemplo de respuesta: (user) los comandos disponibles para ti son: <Lista de comandos>"
+        },
+        {
+            "name": "Chistes",
+            "cmd": "chistes",
+            "func": "chistes",
+            "type": "reserved",
+            "cooldown": 10,
+            "enabled": true,
+            "description": "Te cuenta un chiste | Ejemplo: !chistes | Ejemplo de respuesta: (user) ¿Por que los pájaros no usan Facebook? Porque ya tienen Twitter | Si le pasas una categoria como argumento te contara un chiste de esa categoria | Ejemplo: !chistes <categoria> | Ejemplo: !chistes carros | Ejemplo de respuesta: (user) ¿Por qué los coches no pueden jugar al fútbol? Porque son descapotables"
+        },
+        {
+            "name": "Clear Chat",
+            "cmd": "clearchat",
+            "func": "clearChat",
+            "type": "reserved",
+            "cooldown": 10,
+            "userLevelName": "mod",
+            "userLevel": 6,
+            "description": "Limpia el chat | Ejemplo: !clearchat | Ejemplo de respuesta: Chat limpiado por <Mod> | No necesita argumentos"
         }
     ]
 }

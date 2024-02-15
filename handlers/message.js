@@ -269,6 +269,7 @@ async function message(client, channel, tags, message) {
                 break;
             case 'clearchat':
                 CHAT.clearChat();
+                client.say(channel, `Chat limpiado por ${tags['display-name']}`);
             default:
                 let cmdHandler = await commandHandler(channel, tags, command, argument, userlevel);
                 if (!cmdHandler.exists) return;
