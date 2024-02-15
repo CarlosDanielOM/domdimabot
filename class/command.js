@@ -86,7 +86,7 @@ class COMMAND {
     }
 
     async commandExistsInDB(name) {
-        let command = await this.schema.findOne({ name: name, channel: this.channel });
+        let command = await this.schema.findOne({ cmd: name, channel: this.channel });
         if (command === null) return false;
         return true;
     }
@@ -106,6 +106,12 @@ class COMMAND {
 
     async updateCountableCommandInDB(command, count) {
         let updated = await this.schema.updateOne({ name: command, channel: this.channel }, { count: count });
+        if (updated.nModified === 0) return { error: 'Command could not be updated', reason: 'command could not be updated', updated: false };
+        return { error: false, message: null, updated: true, command: command };
+    }
+
+    async updateCommandIfActive(command, enabled) {
+        let updated = await this.schema.updateOne({ name: command, channel: this.channel }, { enabled: enabled });
         if (updated.nModified === 0) return { error: 'Command could not be updated', reason: 'command could not be updated', updated: false };
         return { error: false, message: null, updated: true, command: command };
     }

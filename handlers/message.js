@@ -277,6 +277,19 @@ async function message(client, channel, tags, message) {
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
                 CHAT.clearChat();
                 client.say(channel, `Chat limpiado por ${tags['display-name']}`);
+                break;
+            case 'enableCommand':
+                if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
+                let enableCommand = await commands.enableCommand(channel, argument);
+                if (enableCommand.error) return client.say(channel, `${enableCommand.reason}`);
+                client.say(channel, enableCommand.message);
+                break;
+            case 'disableCommand':
+                if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
+                let disableCommand = await commands.disableCommand(channel, argument);
+                if (disableCommand.error) return client.say(channel, `${disableCommand.reason}`);
+                client.say(channel, disableCommand.message);
+                break;
             default:
                 let cmdHandler = await commandHandler(channel, tags, command, argument, userlevel);
                 if (!cmdHandler.exists) return;

@@ -14,6 +14,8 @@ const createClip = require('./createclip');
 const commandList = require('./commandlist');
 const speachChat = require('./speach');
 const chiste = require('./chiste');
+const enableCommand = require('./enablecommand');
+const disableCommand = require('./disablecommand');
 
 module.exports = {
     shoutout,
@@ -32,5 +34,7 @@ module.exports = {
     createClip,
     commandList,
     speachChat,
-    chiste
+    chiste,
+    enableCommand,
+    disableCommand
 }
