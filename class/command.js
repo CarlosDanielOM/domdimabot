@@ -73,6 +73,18 @@ class COMMAND {
         return { error: false, message: command.func, cd: command.cooldown, enabled: command.enabled, userLevel: command.userLevel };
     }
 
+    async getReservedCommandFromDB(cmd) {
+        let command = await this.schema.findOne({ cmd: cmd, channel: this.channel });
+        if (command === null) return { error: 'Command does not exist', reason: 'command does not exist', command: null };
+        return { error: false, command };
+    }
+
+    async reservedCommandExistsInDB(cmd) {
+        let command = await this.schema.findOne({ cmd: cmd, channel: this.channel });
+        if (command === null) return false;
+        return true;
+    }
+
     async commandExistsInDB(name) {
         let command = await this.schema.findOne({ name: name, channel: this.channel });
         if (command === null) return false;

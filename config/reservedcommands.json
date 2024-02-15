@@ -247,7 +247,7 @@
         {
             "name": "Follow Age",
             "cmd": "followage",
-            "func": "followAge",
+            "func": "followage",
             "type": "reserved",
             "enabled": true,
             "cooldown": 10,
@@ -273,8 +273,8 @@
         },
         {
             "name": "Chistes",
-            "cmd": "chistes",
-            "func": "chistes",
+            "cmd": "chiste",
+            "func": "chiste",
             "type": "reserved",
             "cooldown": 10,
             "enabled": true,

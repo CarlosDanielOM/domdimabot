@@ -116,6 +116,7 @@ async function command(action, channel, argument, type = null) {
         if (!exists) return { error: true, reason: 'command does not exist' };
         let cmd = await COMMAND.getCommandFromDB(argument);
         cmd = cmd.command;
+        if (cmd.type === 'reserved') return { error: true, reason: 'You cannot delete a reserved command' };
         let deleted = await COMMAND.deleteCommandFromDB(cmd);
         if (!deleted) return { error: true, reason: 'command could not be deleted' };
         return { error: false, message: `Command !${cmd.name} deleted!` };
@@ -126,17 +127,31 @@ async function command(action, channel, argument, type = null) {
         let opts = text.split(' ');
         let name = opts[0];
 
-        let extis = await COMMAND.commandExistsInDB(name);
-        if (!extis) return { error: true, reason: 'command does not exist' };
+        let oldCommand = '';
 
-        let oldCommand = await COMMAND.getCommandFromDB(name);
+        let exist = await COMMAND.commandExistsInDB(name);
+        if (!exist) {
+            let reservedExist = await COMMAND.reservedCommandExistsInDB(name);
+            if (reservedExist) {
+                oldCommand = await COMMAND.getReservedCommandFromDB(name);
+            } else {
+                return { error: true, reason: 'command does not exist' };
+            }
+        } else {
+            oldCommand = await COMMAND.getCommandFromDB(name);
+        }
+
         oldCommand = oldCommand.command;
 
         for (let i = 0; i < options.length; i++) {
             let opt = options[i];
             switch (opt.name) {
                 case 'cd':
-                    oldCommand.cooldown = parseInt(opt.value);
+                    if (opt.value >= 5 || (oldCommand.func == "speach")) {
+                        oldCommand.cooldown = parseInt(opt.value);
+                    } else {
+                        oldCommand.cooldown = 20;
+                    }
                     break;
                 case 'ul':
                     if (opt.value.length > 1) {
@@ -169,8 +184,9 @@ async function command(action, channel, argument, type = null) {
             let func = opts[1];
 
             if (func.length > maxFuncLength) return { error: true, reason: `command cannot be longer than ${maxFuncLength} characters` };
-
-            oldCommand.func = func;
+            if (oldCommand.type !== 'reserved') {
+                oldCommand.func = func;
+            }
         }
 
         let updated = await COMMAND.updateCommandInDB(oldCommand);

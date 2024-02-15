@@ -4,6 +4,7 @@ const func = require('../functions/index.js');
 const CHAT = require('../functions/chat/index.js');
 const CHANNEL = require('../functions/channel/index.js');
 const ChatLog = require('../schemas/chat_log.schema.js');
+const commandSchema = require('../schemas/command.js');
 
 const COOLDOWNS = require('../class/cooldown.js');
 
@@ -62,6 +63,11 @@ async function message(client, channel, tags, message) {
 
     if (!command) return;
 
+    let commandData = await commandSchema.findOne({ channel: channel, cmd: command, enabled: true }, 'name type cooldown userLevel func');
+
+    if (!commandData) return;
+    if (commandData.enabled === false) return;
+
     if (channelInstance.hasCooldown(command)) {
         onCooldown = true;
     }
@@ -77,8 +83,8 @@ async function message(client, channel, tags, message) {
         osito = true;
     }
 
-    if (!osito && !onCooldown && command) {
-        switch (command) {
+    if (!osito && !onCooldown) {
+        switch (commandData.func) {
             case 'ruletarusa':
                 if ((tags.username !== channel) && !tags.mod) { isMod = false; }
                 let ruletarusa = await commands.ruletarusa(channel, tags['display-name'], modID, isMod);
@@ -111,7 +117,7 @@ async function message(client, channel, tags, message) {
                 client.say(channel, message)
                 commandCD = promo.cooldown;
                 break;
-            case 'so':
+            case 'shoutout':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
                 const shoutoutRes = await commands.shoutout(channel, argument, modID);
                 if (!shoutoutRes.clip) return client.say(channel, `No se ha podido reproducir el clip.`);
@@ -174,7 +180,7 @@ async function message(client, channel, tags, message) {
                 client.say(channel, `${tags['display-name']} --> ${title.message}`);
                 commandCD = title.cooldown;
                 break;
-            case 's':
+            case 'speach':
                 let s = await commands.speachChat(tags, argument, channel);
                 if (s.error) return client.say(channel, `${s.reason}`);
                 commandCD = s.cooldown;
@@ -213,19 +219,19 @@ async function message(client, channel, tags, message) {
                 client.say(channel, `Siempre dominante, nunca sumiso.`);
                 commandCD = 10;
                 break;
-            case 'cc':
+            case 'createCommand':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
                 let cc = await commands.cmd('CREATE', channel, argument, 'command');
                 if (cc.error) return client.say(channel, `${cc.reason}`);
                 client.say(channel, cc.message);
                 break;
-            case 'dc':
+            case 'deleteCommand':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
                 let dc = await commands.cmd('DELETE', channel, argument);
                 if (dc.error) return client.say(channel, `${dc.reason}`);
                 client.say(channel, dc.message);
                 break;
-            case 'ec':
+            case 'editCommand':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
                 let ec = await commands.cmd('EDIT', channel, argument);
                 if (ec.error) return client.say(channel, `${ec.reason}`);
@@ -245,7 +251,7 @@ async function message(client, channel, tags, message) {
                 if (ip.error) return client.say(channel, `${ip.reason}`);
                 client.say(channel, ip.message);
                 break;
-            case 'clip':
+            case 'createClip':
                 client.say(channel, `Guardando clip...`);
                 let saveClip = await commands.createClip(channel);
                 if (saveClip.error) return client.say(channel, `${saveClip.reason}`);
@@ -267,7 +273,8 @@ async function message(client, channel, tags, message) {
                 client.say(channel, chiste.message);
                 commandCD = chiste.cooldown;
                 break;
-            case 'clearchat':
+            case 'clearChat':
+                if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
                 CHAT.clearChat();
                 client.say(channel, `Chat limpiado por ${tags['display-name']}`);
             default:
