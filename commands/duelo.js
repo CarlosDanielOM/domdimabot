@@ -22,7 +22,7 @@ async function duelo(client, channel, user, argument) {
 
     message += ` ${responses[Math.floor(Math.random() * responses.length)]}`;
 
-    return message;
+    return { error: false, message: message };
 }
 
 module.exports = duelo;
