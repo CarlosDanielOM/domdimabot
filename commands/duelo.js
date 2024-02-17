@@ -5,7 +5,7 @@ async function duelo(client, channel, user, argument) {
     let random = Math.floor(Math.random() * 100);
     let winner;
     let loser;
-    client.say(channel, `@${user.username} ha retado a ${argument} a un duelo!`);
+    client.say(channel, `@${user} ha retado a ${argument} a un duelo!`);
     if (random % 2 == 0) {
         winner = user;
         loser = argument;
