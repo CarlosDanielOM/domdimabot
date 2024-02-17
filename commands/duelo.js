@@ -20,7 +20,7 @@ async function duelo(client, channel, user, argument) {
         `${winner} user su ataque especial y ha derrotado a ${loser}!`,
     ]
 
-    message += ` ${responses[Math.floor(Math.random() * responses.length)]}`;
+    let message = ` ${responses[Math.floor(Math.random() * responses.length)]}`;
 
     return { error: false, message: message };
 }
