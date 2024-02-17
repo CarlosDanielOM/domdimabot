@@ -67,6 +67,9 @@ async function init() {
 
 
   //? DEV ROUTES ?//
+
+  
+
   //! Routes !//
   app.get('/eventsubs', async (req, res) => {
     let data = await getEventsubs();
@@ -232,10 +235,13 @@ async function init() {
               cmd: commandsJSON[command].cmd,
               func: commandsJSON[command].func,
               type: commandsJSON[command].type,
-              channel: username,
-              channelID: updatedChannel.twitch_user_id,
+              channel: channel.name,
+              channelID: channel.twitch_user_id,
               cooldown: commandsJSON[command].cooldown,
               enabled: commandsJSON[command].enabled,
+              userLevel: commandsJSON[command].userLevel,
+              userLevelName: commandsJSON[command].userLevelName,
+              reserved: commandsJSON[command].reserved,
             });
 
             await newCommand.save();

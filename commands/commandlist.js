@@ -27,6 +27,7 @@ async function getCommandListDB(channel, userlevel = 0, type = 'all') {
     if (!commands) return { error: true, reason: 'No se encontraron comandos', status: 404 }
 
     commands = commands.map(command => {
+        if (command.type == 'timer' || command.userLevel >= userlevel) return;
         if (command.type !== 'timer' && command.userLevel <= userlevel) return `!${command.cmd}`
     });
 
