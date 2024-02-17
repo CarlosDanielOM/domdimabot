@@ -248,7 +248,7 @@ async function message(client, channel, tags, message) {
                 console.log(await CHANNEL.setModerator(channel, 533538623));
                 break;
             case 'commands':
-                let commandList = await commands.commandList(channel);
+                let commandList = await commands.commandList(channel, userlevel);
                 if (commandList.error) return client.say(channel, `${commandList.reason}`);
                 client.say(channel, commandList.message);
                 commandCD = commandList.cooldown
@@ -275,6 +275,11 @@ async function message(client, channel, tags, message) {
                 let disableCommand = await commands.disableCommand(channel, argument);
                 if (disableCommand.error) return client.say(channel, `${disableCommand.reason}`);
                 client.say(channel, disableCommand.message);
+                break;
+            case 'duelo':
+                let duelo = await commands.duelo(client, channel, tags['display-name'], argument);
+                if (duelo.error) return client.say(channel, `${duelo.reason}`);
+                client.say(channel, duelo.message);
                 break;
             default:
                 let cmdHandler = await commandHandler(channel, tags, command, argument, userlevel);

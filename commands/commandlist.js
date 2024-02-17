@@ -21,13 +21,13 @@ let commandOptions = {
     }
 };
 
-async function getCommandListDB(channel, type = 'all') {
+async function getCommandListDB(channel, userlevel = 0, type = 'all') {
     let commands = await commandSchema.find({ channel: channel, enabled: true }, 'name cmd type userLevel')
 
     if (!commands) return { error: true, reason: 'No se encontraron comandos', status: 404 }
 
     commands = commands.map(command => {
-        if (command.type !== 'timer' && command.userLevel === 0) return `!${command.cmd}`
+        if (command.type !== 'timer' && command.userLevel <= userlevel) return `!${command.cmd}`
     });
 
     let message = `Los comandos disponibles son: ${commands.join(', ')}`;

@@ -16,6 +16,7 @@ const speachChat = require('./speach');
 const chiste = require('./chiste');
 const enableCommand = require('./enablecommand');
 const disableCommand = require('./disablecommand');
+const duelo = require('./duelo');
 
 module.exports = {
     shoutout,
@@ -36,5 +37,6 @@ module.exports = {
     speachChat,
     chiste,
     enableCommand,
-    disableCommand
+    disableCommand,
+    duelo
 }
