@@ -1,6 +1,6 @@
 async function duelo(client, channel, user, argument) {
     if (!argument) {
-        return `@${user.username} debes retar a alguien a un duelo!`;
+        return { error: true, reason: 'Debes retar a alguien!' };
     }
     let random = Math.floor(Math.random() * 100);
     let winner;
