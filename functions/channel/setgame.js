@@ -11,7 +11,7 @@ async function setGame(game, channel = null) {
     });
 
     let data = await response.json();
-    let gameData = data.data[0];
+    let gameData = data.data[0] || undefined;
 
     if (gameData === undefined) {
         response = await fetch(`${helixURL}/search/categories?query=${game}`, {
