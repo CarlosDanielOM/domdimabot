@@ -31,6 +31,7 @@ async function getCommandListDB(channel, userlevel = 0, type = 'all') {
         if (command.type !== 'timer' && command.userLevel <= userlevel) return `!${command.cmd}`
     });
 
+    commands = commands.filter(command => command !== undefined);
     let message = `Los comandos disponibles son: ${commands.join(', ')}`;
 
     return { error: false, commands: commands, message: message, status: 200, cooldown: commandOptions.cooldown }
