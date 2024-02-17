@@ -342,16 +342,6 @@
             "userLevelName": "mod",
             "userLevel": 6,
             "description": "Desactiva un comando | Ejemplo: !disable <nombre del comando> | Ejemplo: !disable discord | Ejemplo de respuesta: El comando !discord ha sido desactivado"
-        },
-        {
-            "name": "Duel",
-            "cmd": "duelo",
-            "func": "duel",
-            "type": "response",
-            "reserved": true,
-            "enabled": false,
-            "cooldown": 10,
-            "description": "Retas a un usuario a un duelo | Ejemplo: !duelo <nombre de usuario> | Ejemplo: !duelo (touser) | Ejemplo de respuesta: (user) ha retado a (touser) a un duelo | Si el usuario al que retas acepta el duelo se lanzara una moneda y si sale cara ganara el retador y si sale cruz ganara el retado | Si el usuario al que retas no acepta el duelo se le dira que no acepto el duelo"
         }
     ]
 }
