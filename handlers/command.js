@@ -46,7 +46,6 @@ function specialCommands(tags, argument, cmdFunc, count = 0) {
                 cmdFunc = cmdFunc.replace(special[0], random);
                 break;
             case 'count':
-                let addNew = 0;
                 if (argument === '' || argument === undefined || argument === ' ') argument = 0;
                 if (argument != 0) argument = argument.replace(/\+/g, '');
                 if (count === undefined) count = 0;
@@ -54,6 +53,9 @@ function specialCommands(tags, argument, cmdFunc, count = 0) {
                 cmdFunc = cmdFunc.replace(special[0], newCount);
                 count = newCount;
                 break;
+            case 'scount':
+                count++;
+                cmdFunc = cmdFunc.replace(special[0], count);
             default:
                 break;
         }

@@ -61,7 +61,7 @@
             "userLevelName": "mod",
             "enabled": true,
             "userLevel": 6,
-            "description": "Crea una prediccion con la siguiente sintaxis: !predi <titulo>;<opcion1>/<opcion2>;<tiempo en segundos> | Ejemplo: !predi ¿Ganara el streamer?;Si/No;60 | El tiempo maximo es de 5 minutos y minimo de 30 segundos | El titulo no puede ser mayor a 100 caracteres | Las opciones no pueden ser mayor a 100 caracteres | Minimo 2 opciones y maximo 10 opciones y deben ser separadas por /"
+            "description": "Crea una prediccion con la siguiente sintaxis: !predi <titulo>;<opcion1>/<opcion2>;<tiempo en segundos> | Ejemplo: !predi ¿Ganara el streamer?;Si/No;60 | El tiempo maximo es de 5 minutos y minimo de 30 segundos | El titulo no puede ser mayor a 30 caracteres | Las opciones no pueden ser mayor a 20 caracteres | Minimo 2 opciones y maximo 10 opciones y deben ser separadas por /"
         },
         {
             "name": "End Prediction",

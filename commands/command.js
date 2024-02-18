@@ -255,6 +255,9 @@ function specialCommands(tags, argument, cmdFunc) {
             case 'count':
                 countable = true;
                 break;
+            case 'scount':
+                countable = true;
+                break;
             default:
                 break;
         }
