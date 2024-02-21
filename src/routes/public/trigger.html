@@ -4,38 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speach Chat </title>
+    <title>Triggers</title>
 </head>
 
 <body>
-
-    <div id="voices"></div>
-
+    <h1>HOla</h1>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
     <script>
         let channel = window.location.pathname.split('/')[2];
-        let lastMsgID = '';
 
         const socket = io.connect('https://domdimabot.com/', {
             reconnection: true,
             transports: ['websocket']
         });
-        const channelSocket = io(`/speach/${channel}`, {
+
+        const triggerSocket = io(`/trigger/${channel}`, {
             forceNew: true,
             transports: ['websocket']
         });
 
-        const synth = window.speechSynthesis;
-        let speach = new SpeechSynthesisUtterance();
-        speach.lang = 'es-US';
+        triggerSocket.on('trigger', (data) => {
+            console.log(data);
+        });
 
-        channelSocket.on('speach', (data) => {
-            if (lastMsgID !== data.id) {
-                let msg = data.message;
-                lastMsgID = data.id;
-                speach.text = msg;
-                synth.speak(speach);
-            }
+        socket.on('connect', () => {
+            console.log('Connected to server');
         });
     </script>
 </body>

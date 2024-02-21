@@ -7,6 +7,7 @@ const fs = require('fs');
 const https = require('https');
 const http = require('http');
 const axios = require('axios');
+const multer = require('multer');
 
 const STREAMERS = require('../class/streamers.js');
 const CLIENT = require('../util/client.js');
@@ -14,10 +15,14 @@ const CLIENT = require('../util/client.js');
 const { encrypt, decrypt } = require('../util/crypto');
 
 const channelSchema = require('../schemas/channel.schema');
-const commandSchema = require('../schemas/command')
+const commandSchema = require('../schemas/command');
+const redemptionRewardSchema = require('../schemas/redemptionreward');
+const triggerSchema = require('../schemas/trigger');
+const triggerFileSchema = require('../schemas/triggerfile');
 const appConfigSchema = require('../schemas/app_config');
 const eventsubSchema = require('../schemas/eventsub');
 const { getTwitchHelixURL } = require('../util/links.js');
+const { getUrl } = require('../util/dev.js');
 const { getNewAppToken, getAppToken } = require('../util/token.js');
 const { getStreamerHeader } = require('../util/headers.js');
 
@@ -27,9 +32,14 @@ const eventsubHandler = require('../handlers/eventsub.js');
 const { subscribeTwitchEventFollow, getEventsubs, SubscritpionsData, unsubscribeTwitchEvent, subscribeTwitchEvent } = require('../util/eventsub.js');
 
 const downloadPath = `${__dirname}/routes/public/downloads/`;
+const triggerUploadErrorPath = `${__dirname}/routes/public/uploads/triggers/error/`;
 const htmlPath = `${__dirname}/routes/public/`;
 
-const COMMANDSJSON = require('../config/reservedcommands.json')
+const aceptableFileExtensions = ['mp4', 'mov', 'avi', 'flv', 'wmv', 'webm', 'mkv', 'gif', 'jpg', 'jpeg', 'png', 'bmp', 'tiff', 'svg', 'webp', 'mp3', 'flac', 'wav', 'ogg', 'aac', 'wma', 'm4a'];
+const acceptableMimeTypes = ['video/mp4', 'video/mov', 'video/avi', 'video/flv', 'video/wmv', 'video/webm', 'video/mkv', 'image/gif', 'image/jpg', 'image/jpeg', 'image/png', 'image/bmp', 'image/tiff', 'image/svg', 'image/webp', 'audio/mp3', 'audio/flac', 'audio/wav', 'audio/ogg', 'audio/aac', 'audio/wma', 'audio/m4a'];
+
+const COMMANDSJSON = require('../config/reservedcommands.json');
+const eventsub = require('../schemas/eventsub');
 
 async function init() {
   const PORT = process.env.PORT || 3000;
@@ -54,6 +64,11 @@ async function init() {
     io.of(`/sumimetro/${type}/${channel}`).emit('active');
   });
 
+  io.of(/^\/trigger\/\w+$/).on('connection', (socket) => {
+    const channel = socket.nsp.name.split('/')[2];
+    io.of(`/trigger/${channel}`).emit('active');
+  });
+
   //* Routes *//
   const clipRoute = require('./routes/clip.route.js');
 
@@ -62,13 +77,8 @@ async function init() {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(express.static(__dirname + "/routes/public"));
-  // app.use("/", express.static(__dirname + "/routes/public"));
-  // app.use(express.static('routes/public/assets'));
-
 
   //? DEV ROUTES ?//
-
-  
 
   //! Routes !//
   app.get('/eventsubs', async (req, res) => {
@@ -349,14 +359,289 @@ async function init() {
     res.status(204).send();
   });
 
+  //? Trigger ROUTES ?//
+
+  app.get('/overlay/trigger/:channel', async (req, res) => {
+    res.sendFile(`${htmlPath}trigger.html`);
+  });
+
+  app.get('/trigger/manage/:channel', async (req, res) => {
+    res.sendFile(`${htmlPath}triggerupload.html`);
+  });
+
+  app.post('/trigger/upload/:channel', async (req, res) => {
+    try {
+      const { channel } = req.params;
+      if (!fs.existsSync(`${__dirname}/routes/public/uploads/triggers/${channel}`)) {
+        fs.mkdirSync(`${__dirname}/routes/public/uploads/triggers/${channel}`, { recursive: true });
+      }
+      const storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+          cb(null, `${__dirname}/routes/public/uploads/triggers/${channel}`)
+        },
+        filename: function (req, file, cb) {
+          cb(null, `${req.body.triggerName}.${file.mimetype.split('/')[1]}`);
+        }
+      });
+      multer({
+        storage: storage, fileFilter: async (req, file, cb) => {
+          if (acceptableMimeTypes.includes(file.mimetype)) {
+            if (await triggerFileSchema.exists({ name: req.body.triggerName, fileType: file.mimetype })) {
+              cb(null, false);
+            } else {
+              cb(null, true);
+            }
+          } else {
+            cb(null, false);
+          }
+        }
+      }).single('trigger')(req, res, async (err) => {
+        if (err) {
+          console.log(err);
+          res.status(400).json({ message: 'Error uploading file', error: true });
+          return false;
+        }
+
+        if (!req.file) return res.status(400).json({ message: 'File type not supported or file with same name already exists', error: true });
+
+        let exists = await triggerFileSchema.exists({ name: req.body.triggerName, fileType: req.file.mimetype });
+
+        if (exists) return res.status(400).json({ message: 'File with that name already exists', error: true });
+
+        const streamer = await STREAMERS.getStreamer(channel);
+
+        let fileNameUrlEncoded = encodeURIComponent(req.file.filename);
+        let fileData = {
+          name: req.body.triggerName,
+          fileName: req.file.filename,
+          fileSize: req.file.size,
+          fileType: req.file.mimetype,
+          fileUrl: `https://domdimabot.com/media/${channel}/${fileNameUrlEncoded}`,
+          channel: channel,
+          channelID: streamer.user_id,
+        }
+
+        await new triggerFileSchema(fileData).save();
+
+        return res.status(200).json({ message: 'File uploaded', file: fileData, error: false });
+      });
+    } catch (error) {
+      console.log({ error, where: 'server.js', for: 'trigger upload' });
+    }
+  });
+
+  app.get('/media/:channel/:trigger', async (req, res) => {
+    const { channel, trigger } = req.params;
+    if (!fs.existsSync(`${__dirname}/routes/public/uploads/triggers/${channel}/${trigger}`)) return res.status(404).json({ message: 'File not found', error: true });
+    res.sendFile(`${__dirname}/routes/public/uploads/triggers/${channel}/${trigger}`);
+  });
+
+  app.post('/trigger/create/:channel', async (req, res) => {
+    const { channel } = req.params;
+    const { name, file, type, mediaType, cost, prompt, fileID } = req.body;
+
+    const streamer = await STREAMERS.getStreamer(channel);
+
+    let exists = await triggerFileSchema.exists({ name: file, fileType: mediaType });
+
+    if (!exists) return res.status(400).json({ message: 'File not found', error: true });
+
+    let rewardResponse = await fetch(`${getUrl()}/${channel}/create/reward`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ title: name, cost, skipQueue: true, prompt })
+    });
+
+    let rewardData = await rewardResponse.json();
+    rewardData = rewardData.rewardData;
+
+    let newTrigger = new triggerSchema({
+      name: name,
+      channel: channel,
+      channelID: streamer.user_id,
+      rewardID: rewardData.rewardID,
+      file,
+      fileID,
+      type,
+      mediaType
+    });
+
+    await newTrigger.save();
+
+    res.status(200).json({ message: 'Trigger created', error: false });
+  });
+
+  app.delete('/trigger/delete/:channel/:id', async (req, res) => {
+    const { channel, id } = req.params;
+
+    let trigger = await triggerSchema.findOne({ channel, _id: id });
+
+    if (!trigger) return res.status(404).json({ message: 'Trigger not found', error: true });
+
+    let response = await fetch(`${getUrl()}/${channel}/delete/reward/${trigger.rewardID}`, {
+      method: 'DELETE'
+    });
+
+    if (response.status !== 200) return res.status(response.status).json({ message: 'Error deleting reward', error: true });
+
+    await trigger.deleteOne({ id: trigger.id });
+
+    res.status(200).json({ message: 'Trigger deleted', error: false });
+  });
+
+  app.get('/points', async (req, res) => {
+    let streamer = await STREAMERS.getStreamer('cdom201');
+    let response = await fetch(`https://api.twitch.tv/helix/channel_points/custom_rewards?broadcaster_id=${streamer.user_id}`, {
+      method: 'GET',
+      headers: {
+        'Client-ID': process.env.CLIENT_ID,
+        'Authorization': `Bearer ${decrypt(streamer.token)}`
+      }
+    })
+
+    let data = await response.json();
+
+    res.status(200).json(data);
+
+  });
+
+  app.get('/trigger/:channel', async (req, res) => {
+    const { channel } = req.params;
+
+    let triggers = await triggerSchema.find({ channel: channel }, '_id name file type mediaType date');
+
+    res.status(200).json({ triggers });
+
+  });
+
+  app.get('/trigger/files/:channel', async (req, res) => {
+    const { channel } = req.params;
+
+    let files = await triggerFileSchema.find({ channel: channel }, '_id name fileName fileType fileSize fileUrl');
+
+    res.status(200).json({ files });
+
+  });
+
+  app.delete('/trigger/files/:channel/:id', async (req, res) => {
+    const { channel, id } = req.params;
+
+    let exists = await triggerSchema.exists({ fileID: id });
+
+    if (exists) return res.status(400).json({ message: 'File is being used in a trigger', error: true });
+
+    let file = await triggerFileSchema.findOne({ channel, _id: id });
+
+    if (!file) return res.status(404).json({ message: 'File not found', error: true });
+
+    fs.rm(`${__dirname}/routes/public/uploads/triggers/${channel}/${file.fileName}`, { recursive: false, force: true, maxRetries: 5 }, async (err) => {
+      if (err) {
+        console.log(err);
+        return res.status(400).json({ message: 'Error deleting file', error: true });
+      }
+
+      await triggerFileSchema.deleteOne({ _id: id });
+
+      return res.status(200).json({ message: 'File deleted', error: false });
+    });
+
+  });
+
+  //? REDEMPTION ROUTES ?//
+  app.post('/:channel/create/reward', async (req, res) => {
+    const { channel } = req.params;
+    const { title, cost, skipQueue } = req.body;
+
+    const prompt = req.body.prompt || '';
+
+    if (title.length > 45) return res.status(400).json({ message: 'Title too long', error: true });
+
+    let streamer = await STREAMERS.getStreamer(channel);
+
+    let body = {
+      title,
+      cost,
+      should_redemptions_skip_request_queue: skipQueue,
+      prompt,
+    }
+
+    let response = await fetch(`${getTwitchHelixURL()}/channel_points/custom_rewards?broadcaster_id=${streamer.user_id}`, {
+      method: 'POST',
+      headers: {
+        'Client-ID': process.env.CLIENT_ID,
+        'Authorization': `Bearer ${decrypt(streamer.token)}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    let data = await response.json();
+
+    if (data.error) return res.status(data.status).json(data);
+
+    let newReward = data.data[0];
+
+    const eventData = await subscribeTwitchEvent(channel, 'channel.channel_points_custom_reward_redemption.add', '1', { broadcaster_user_id: streamer.user_id, reward_id: newReward.id });
+
+    let rewardData = {
+      eventsubID: eventData.id,
+      channelID: streamer.user_id,
+      channel: channel,
+      rewardID: newReward.id,
+      rewardTitle: newReward.title,
+      rewardPrompt: newReward.prompt,
+      rewardCost: newReward.cost,
+      rewardIsEnabled: newReward.is_enabled,
+    }
+
+    await new redemptionRewardSchema(rewardData).save();
+
+    res.status(200).json({ data, rewardData, error: false });
+  });
+
+  app.delete('/:channel/delete/reward/:id', async (req, res) => {
+    const { channel, id } = req.params;
+
+    let reward = await redemptionRewardSchema.findOne({ channel: channel, rewardID: id });
+
+    if (!reward) return res.status(404).json({ message: 'Reward not found', error: true });
+
+    let streamer = await STREAMERS.getStreamer(channel);
+
+    let response = await fetch(`${getTwitchHelixURL()}/channel_points/custom_rewards?broadcaster_id=${streamer.user_id}&id=${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Client-ID': process.env.CLIENT_ID,
+        'Authorization': `Bearer ${decrypt(streamer.token)}`,
+      }
+    });
+
+    if (response.error) return res.status(response.status).json(response);
+
+    if (response.status !== 204) return res.status(response.status).json({ message: 'Error deleting reward', error: true });
+
+    await unsubscribeTwitchEvent(reward.eventsubID);
+
+    await reward.deleteOne({ id: reward.id });
+
+    res.status(200).json({ message: 'Reward deleted', error: false });
+  });
+
   //? Server ?//
   server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
 }
 
+function sendTrigger(channel, trigger) {
+  io.of(`/trigger/${channel}`).emit('trigger', trigger);
+}
+
 module.exports = {
-  init
+  init,
+  sendTrigger
 }
 
 function getVideoURL(thumbnailUrl) {
