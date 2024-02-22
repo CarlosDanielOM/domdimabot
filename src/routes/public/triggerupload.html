@@ -17,21 +17,7 @@
     <script>
         let channel = window.location.pathname.split('/')[3];
 
-        document.getElementById('UploadFileForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            var form = e.target;
-            var formData = new FormData(form);
-            var request = new XMLHttpRequest();
-            request.open(form.method, `https://domdimabot.com/trigger/upload/${channel}`, true);
-            request.send(formData);
-
-            request.onload = function () {
-                if (request.status >= 200 && request.status < 400) {
-                    console.log(request.responseText);
-                    alert('Archivo subido correctamente');
-                }
-            };
-        });
+        document.getElementById('UploadFileForm').setAttribute('action', `https://domdimabot.com/trigger/upload/${channel}`);
     </script>
 </body>
 
