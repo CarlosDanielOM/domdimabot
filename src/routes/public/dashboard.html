@@ -5,9 +5,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <style>
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background-color: #000;
+            color: #fff;
+        }
+
+        nav h1 {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #42a5fa;
+        }
+    </style>
 </head>
 
 <body>
+    <nav>
+        <div class="container">
+            <div class="logo">
+                <h1>DomDimaBot</h1>
+            </div>
+            <div class="menu">
+                <ul>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="" id="triggerRef">Triggers</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <button id="join">Join Channel</button>
     <button id="leave">Leave Channel</button>
     <h2>Only if you haven't gaved permissions</h2>

@@ -9,6 +9,8 @@ let joinBtn = document.getElementById('join');
 let leaveBtn = document.getElementById('leave');
 let permissionBtn = document.getElementById('permissions');
 
+document.getElementById('triggerRef').setAttribute('href', `/trigger/manage/${channel}`);
+
 joinBtn.addEventListener('click', async (e) => {
     let res = await fetch(baseUrl + '/bot/join', {
         method: 'POST',
