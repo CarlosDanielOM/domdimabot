@@ -9,6 +9,8 @@ let joinBtn = document.getElementById('join');
 let leaveBtn = document.getElementById('leave');
 let permissionBtn = document.getElementById('permissions');
 
+let channel = localStorage.getItem('channel');
+
 document.getElementById('triggerRef').setAttribute('href', `/trigger/manage/${channel}`);
 
 joinBtn.addEventListener('click', async (e) => {
