@@ -391,11 +391,7 @@ async function init() {
             if (await triggerFileSchema.exists({ name: req.body.triggerName, fileType: file.mimetype })) {
               cb(null, false);
             } else {
-              if (file.size > 5000000) {
-                cb(null, false);
-              } else {
-                cb(null, true);
-              }
+              cb(null, true);
             }
           } else {
             cb(null, false);
@@ -408,7 +404,14 @@ async function init() {
           return false;
         }
 
-        if (!req.file) return res.status(400).json({ message: 'File type not supported or file with same name already exists or File is bigger than 5MB', error: true });
+        if (!req.file) return res.status(400).json({ message: 'File type not supported or file with same name already exists', error: true });
+
+        if (req.file.size > 5000000) {
+          fs.rm(`${__dirname}/routes/public/uploads/triggers/${channel}/${req.file.filename}`, { recursive: false, force: true, maxRetries: 5 }, (err) => {
+            if (err) console.log({ err, where: 'server.js', for: 'trigger upload' });
+            return res.status(400).json({ message: 'File size should not exceed 5MB', error: true });
+          });
+        }
 
         let exists = await triggerFileSchema.exists({ name: req.body.triggerName, fileType: req.file.mimetype });
 
