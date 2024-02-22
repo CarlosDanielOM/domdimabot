@@ -375,7 +375,7 @@ async function init() {
   });
 
   app.post('/trigger/upload/:channel', async (req, res) => {
-    console.log({ ip: req.ip })
+    console.log({ ip: req.ip, for: req.params.channel })
     if (cooldown.hasCooldown(req.ip)) return res.status(429).json({ message: 'You are being rate limited', error: true });
     cooldown.setCooldown(req.ip, 5);
     try {
