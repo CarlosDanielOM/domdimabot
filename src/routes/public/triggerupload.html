@@ -18,6 +18,24 @@
         let channel = window.location.pathname.split('/')[3];
 
         document.getElementById('UploadFileForm').setAttribute('action', `https://domdimabot.com/trigger/upload/${channel}`);
+
+        const uploadForm = document.getElementById('UploadFileForm');
+
+        uploadForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(uploadForm);
+
+            fetch(uploadForm.getAttribute('action'), {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    alert(data.message);
+                });
+        });
+
     </script>
 </body>
 
