@@ -16,9 +16,10 @@ uploadFileBtn.addEventListener('click', async () => {
 
 fileUploadForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    console.log(fileInput.files[0].size)
     let fileNameInput = document.getElementById('triggerName');
     if (fileInput.files.length === 0) return createAlert('Please select a file', 'error');
-    if (fileInput.files[0].size > 500000) return createAlert('File size should not exceed 5MB', 'error');
+    if (fileInput.files[0].size > 5000000) return createAlert('File size should not exceed 5MB', 'error');
 
     if (fileNameInput.textContent == '') return createAlert('Please enter a valid File Name', 'error');
 
