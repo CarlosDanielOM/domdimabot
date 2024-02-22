@@ -644,6 +644,10 @@ async function init() {
     res.status(200).json({ message: 'Reward deleted', error: false });
   });
 
+  app.get('/logout', async (req, res) => {
+    res.status(200).sendFile(`${htmlPath}logout.html`);
+  });
+
   //? Server ?//
   server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
