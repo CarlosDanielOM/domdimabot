@@ -42,6 +42,9 @@ const acceptableMimeTypes = ['video/mp4', 'video/mov', 'video/avi', 'video/flv',
 const COMMANDSJSON = require('../config/reservedcommands.json');
 const eventsub = require('../schemas/eventsub');
 
+const COOLDOWN = require('../class/cooldown.js');
+const cooldown = new COOLDOWN();
+
 async function init() {
   const PORT = process.env.PORT || 3000;
 
@@ -372,6 +375,9 @@ async function init() {
   });
 
   app.post('/trigger/upload/:channel', async (req, res) => {
+    console.log({ ip: req.ip })
+    if (cooldown.hasCooldown(req.ip)) return res.status(429).json({ message: 'You are being rate limited', error: true });
+    cooldown.setCooldown(req.ip, 5);
     try {
       const { channel } = req.params;
       if (!fs.existsSync(`${__dirname}/routes/public/uploads/triggers/${channel}`)) {
