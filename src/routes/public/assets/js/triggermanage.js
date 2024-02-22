@@ -10,6 +10,8 @@ const fileInput = document.getElementById('file');
 
 const uploadFileBtn = document.getElementById('uploadFileBtn');
 
+let files;
+
 uploadFileBtn.addEventListener('click', async () => {
     document.getElementById('uploadContainer').style.display = 'flex';
 });
@@ -47,6 +49,7 @@ document.getElementById('exitUpload').addEventListener('click', () => {
 });
 
 window.onload = async () => {
+    document.getElementById('triggerRef').setAttribute('href', `/trigger/manage/${channel}`);
 
     fileInput.addEventListener('change', async (e) => {
         let selectedFile = e.target.files[0];
@@ -56,7 +59,7 @@ window.onload = async () => {
         document.getElementById('videoElement').load();
         document.getElementById('fileSize').innerText = `File size: ${(e.target.files[0].size / 1024 / 1024).toFixed(2)} MB`;
     });
-    let files = await fetch(`https://domdimabot.com/trigger/files/${channel}`);
+    files = await fetch(`https://domdimabot.com/trigger/files/${channel}`);
 
     const data = await files.json();
     files = data.files;
