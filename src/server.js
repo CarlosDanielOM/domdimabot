@@ -8,6 +8,7 @@ const https = require('https');
 const http = require('http');
 const axios = require('axios');
 const multer = require('multer');
+const cors = require('cors');
 
 const STREAMERS = require('../class/streamers.js');
 const CLIENT = require('../util/client.js');
@@ -77,6 +78,7 @@ async function init() {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(express.static(__dirname + "/routes/public"));
+  app.use(cors());
 
   //? DEV ROUTES ?//
 
@@ -366,7 +368,7 @@ async function init() {
   });
 
   app.get('/trigger/manage/:channel', async (req, res) => {
-    res.sendFile(`${htmlPath}triggerupload.html`);
+    res.sendFile(`${htmlPath}managetriggers.html`);
   });
 
   app.post('/trigger/upload/:channel', async (req, res) => {
