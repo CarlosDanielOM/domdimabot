@@ -8,11 +8,31 @@
 </head>
 
 <body>
-    <form action="http://localhost:3000/trigger/upload/cdom201" method="post" enctype="multipart/form-data">
+    <form id="UploadFileForm" method="post" enctype="multipart/form-data">
         <input type="text" name="triggerName" id="triggerName" placeholder="Nombre del trigger">
         <input type="file" name="trigger" id="file">
         <input type="submit" value="Submit">
     </form>
+
+    <script>
+        let channel = window.location.pathname.split('/')[2];
+
+        document.getElementById('UploadFileForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var form = e.target;
+            var formData = new FormData(form);
+            var request = new XMLHttpRequest();
+            request.open(form.method, `https://domdimabot.com/trigger/upload/${channel}`, true);
+            request.send(formData);
+
+            request.onload = function () {
+                if (request.status >= 200 && request.status < 400) {
+                    console.log(request.responseText);
+                    alert('Archivo subido correctamente');
+                }
+            };
+        });
+    </script>
 </body>
 
 </html>
