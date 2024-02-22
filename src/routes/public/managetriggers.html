@@ -5,9 +5,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Triggers</title>
+    <link rel="stylesheet" href="/assets/css/managetriggers.css">
 </head>
 
 <body>
+    <nav>
+        <div class="container">
+            <div class="logo">
+                <h1>DomDimaBot</h1>
+            </div>
+            <div class="menu">
+                <ul>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/trigger/manage/cdom201">Triggers</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section id="mediaSection" class="mediaSection">
+        <div class="container">
+            <div class="media-container" id="mediaContainer">
+            </div>
+        </div>
+    </section>
+    <section id="main"></section>
+    <button class="btn btn-info" id="uploadFileBtn">Upload File</button>
+    <div id="systemAlerts" class="systemAlerts">
+        <div class="container" id="alertContainer"></div>
+    </div>
+    <div id="createTrigger" class="createTrigger">
+        <button class="exitUpload">x</button>
+        <div class="trigger-header"></div>
+        <div class="trigger-content"></div>
+        <div class="trigger-footer"></div>
+    </div>
+    <div class="uploadContainer" id="uploadContainer">
+        <button id="exitUpload" class="exitUpload">x</button>
+        <div class="upload-header">
+            <h2>File Upload</h2>
+        </div>
+        <div class="upload-content">
+            <form id="fileUploadForm">
+                <input type="text" name="triggerName" id="triggerName" placeholder="File Name" class="triggerName">
+                <div class="form-group">
+                    <input type="file" name="trigger" id="file" class="file">
+                    <p id="fileSize"></p>
+                </div>
+                <button id="submitBtn" type="submit" value="Upload" name="submit" class="submit">Upload</button>
+            </form>
+        </div>
+        <div class="upload-footer">
+            <div class="file-preview" id="preview">
+                <video id="videoElement">
+                    <source src="" id="videoPreview" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </div>
     <script src="/assets/js/triggermanage.js"></script>
 </body>
 
