@@ -6,6 +6,8 @@ const fileUploadForm = document.getElementById('fileUploadForm');
 const alertContainer = document.getElementById('alertContainer');
 const mediaContainer = document.getElementById('mediaContainer');
 
+const fileInput = document.getElementById('file');
+
 const uploadFileBtn = document.getElementById('uploadFileBtn');
 
 uploadFileBtn.addEventListener('click', async () => {
@@ -44,7 +46,6 @@ document.getElementById('exitUpload').addEventListener('click', () => {
 });
 
 window.onload = async () => {
-    const fileInput = document.getElementById('file');
 
     fileInput.addEventListener('change', async (e) => {
         let selectedFile = e.target.files[0];
