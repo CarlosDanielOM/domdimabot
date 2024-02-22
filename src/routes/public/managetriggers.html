@@ -47,12 +47,13 @@
         </div>
         <div class="upload-content">
             <form id="fileUploadForm">
-                <input type="text" name="triggerName" id="triggerName" placeholder="File Name" class="triggerName">
+                <input type="text" name="triggerName" id="triggerName" placeholder="File Name" class="triggerName" required>
                 <div class="form-group">
                     <input type="file" name="trigger" id="file" class="file">
                     <p id="fileSize"></p>
                 </div>
-                <button id="submitBtn" type="submit" value="Upload" name="submit" class="submit">Upload</button>
+                <button id="submitBtn" type="submit" value="Upload" name="submit" class="submit"
+                    disabled>Upload</button>
             </form>
         </div>
         <div class="upload-footer">

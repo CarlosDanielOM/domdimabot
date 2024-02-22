@@ -14,6 +14,12 @@ uploadFileBtn.addEventListener('click', async () => {
 
 fileUploadForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    let fileNameInput = document.getElementById('triggerName');
+    if (fileInput.files.length === 0) return createAlert('Please select a file', 'error');
+    if (fileInput.files[0].size > 500000) return createAlert('File size should not exceed 5MB', 'error');
+
+    if (fileNameInput.textContent == '') return createAlert('Please enter a valid File Name', 'error');
+
     const formData = new FormData(fileUploadForm);
     const response = await fetch(`https://domdimabot.com/trigger/upload/${channel}`, {
         method: 'POST',
@@ -42,6 +48,7 @@ window.onload = async () => {
 
     fileInput.addEventListener('change', async (e) => {
         let selectedFile = e.target.files[0];
+        document.getElementById('submitBtn').disabled = false;
         let fileUrl = window.URL.createObjectURL(selectedFile);
         document.getElementById('videoPreview').src = fileUrl;
         document.getElementById('videoElement').load();
