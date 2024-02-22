@@ -21,7 +21,7 @@ fileUploadForm.addEventListener('submit', async (e) => {
     if (fileInput.files.length === 0) return createAlert('Please select a file', 'error');
     if (fileInput.files[0].size > 5000000) return createAlert('File size should not exceed 5MB', 'error');
 
-    if (fileNameInput.textContent == '') return createAlert('Please enter a valid File Name', 'error');
+    // if (fileNameInput.textContent == '') return createAlert('Please enter a valid File Name', 'error');
 
     const formData = new FormData(fileUploadForm);
     const response = await fetch(`https://domdimabot.com/trigger/upload/${channel}`, {
