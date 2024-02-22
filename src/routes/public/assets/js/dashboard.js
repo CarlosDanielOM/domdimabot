@@ -9,7 +9,7 @@ let joinBtn = document.getElementById('join');
 let leaveBtn = document.getElementById('leave');
 let permissionBtn = document.getElementById('permissions');
 
-let channel = localStorage.getItem('channel');
+let channel = localStorage.getItem('name');
 
 document.getElementById('triggerRef').setAttribute('href', `/trigger/manage/${channel}`);
 
