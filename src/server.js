@@ -372,8 +372,17 @@ async function init() {
 
   app.get('/trigger/manage/:channel', async (req, res) => {
     let channel = req.params.channel;
-    let ip = req.ip;
-    console.log({ socket: req.socket._peername, socketIP: req.socket.remoteAddress, headerIP: req.headers['x-forwarded-for'], ip, for: channel, realIP: req.headers['x-real-ip'] });
+    let IPS = {
+      xforforwarded: req.headers['x-forwarded-for'],
+      xrealip: req.headers['x-real-ip'],
+      socket: req.socket._peername,
+      socketIP: req.socket.remoteAddress,
+      xforwarded: req.headers['x-forwarded'],
+      forforwarded: req.headers['forwarded-for'],
+      forwarded: req.headers['forwarded'],
+    }
+
+    console.log({ socket: IPS, for: channel });
     res.sendFile(`${htmlPath}managetriggers.html`);
   });
 
