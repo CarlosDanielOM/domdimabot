@@ -371,6 +371,8 @@ async function init() {
   });
 
   app.get('/trigger/manage/:channel', async (req, res) => {
+    let ip = req.ip;
+    console.log({ socket: req.socket._peername, headers: req.headers });
     res.sendFile(`${htmlPath}managetriggers.html`);
   });
 
