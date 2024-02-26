@@ -28,8 +28,10 @@
             const { mediaType, url } = data;
             if (mediaType === 'image') {
                 triggerContainer.innerHTML = `<img src="${url}" alt="trigger" />`;
+                console.log('Image triggered');
             } else if (mediaType === 'video') {
                 triggerContainer.innerHTML = `<video autoplay><source src="${url}" type="${mediaType}" /></video>`;
+                console.log('Video triggered');
             }
         });
 
