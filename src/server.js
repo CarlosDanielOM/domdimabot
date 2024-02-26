@@ -45,12 +45,14 @@ const eventsub = require('../schemas/eventsub');
 const COOLDOWN = require('../class/cooldown.js');
 const cooldown = new COOLDOWN();
 
+let io;
+
 async function init() {
   const PORT = process.env.PORT || 3000;
 
   const app = express();
   const server = http.createServer(app);
-  const io = await socketio(server);
+  io = await socketio(server);
 
   io.of(/^\/clip\/\w+$/).on('connection', (socket) => {
     const channel = socket.nsp.name.split('/')[2];
