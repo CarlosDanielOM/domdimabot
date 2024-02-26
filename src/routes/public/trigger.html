@@ -49,7 +49,7 @@
             let videoPlayer = document.createElement('video');
             videoPlayer.setAttribute('width', '400px');
             videoPlayer.setAttribute('autoplay', 'true');
-            videoPlayer.id = triggerCount;
+            videoPlayer.setAttribute('id', triggerCount);
             videoPlayer.innerHTML = `<source src="${url}" type="video/mp4" />`;
 
             document.getElementById(triggerCount).addEventListener('ended', () => {
