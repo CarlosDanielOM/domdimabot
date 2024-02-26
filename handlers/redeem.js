@@ -16,13 +16,18 @@ async function redeem(client, eventData) {
 
     if (!trigger) return;
 
-    let file = await triggerFileSchema.findOne({ name: trigger.file, fileType: trigger.mediaType }, 'fileUrl');
+    let file = await triggerFileSchema.findOne({ name: trigger.file, fileType: trigger.mediaType }, 'fileUrl fileType');
 
     if (!file) return;
 
     let url = file.fileUrl;
 
-    sendTrigger(broadcaster_user_login, url);
+    let triggerData = {
+        url: url,
+        mediaType: file.fileType,
+    }
+
+    sendTrigger(broadcaster_user_login, triggerData);
 
 }
 
