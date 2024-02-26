@@ -681,9 +681,9 @@ async function init() {
   });
 }
 
-function sendTrigger(channel, trigger) {
-  console.log(`Sending trigger to ${channel}`)
-  io.of(`/triggers/${channel}`).emit('trigger', trigger);
+function sendTrigger(channel, triggerData) {
+  console.log(`Sending trigger to ${channel} with data: ${triggerData}`)
+  io.of(`/triggers/${channel}`).emit('trigger', triggerData);
 }
 
 module.exports = {
