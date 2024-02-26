@@ -70,8 +70,8 @@ async function init() {
     io.of(`/sumimetro/${type}/${channel}`).emit('active');
   });
 
-  io.of(/^\/trigger\/\w+$/).on('connection', (socket) => {
-    const channel = socket.nsp.name.split('/')[2];
+  io.of(/^\/overlay\/triggers\/\w+$/).on('connection', (socket) => {
+    const channel = socket.nsp.name.split('/')[3];
     io.of(`/trigger/${channel}`).emit('prepareTriggers');
   });
 
