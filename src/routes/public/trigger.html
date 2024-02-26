@@ -29,10 +29,8 @@
             let triggerType = mediaType.split('/')[0];
             if (triggerType === 'image') {
                 triggerContainer.innerHTML = `<img src="${url}" alt="trigger" />`;
-                console.log('Image triggered');
             } else if (triggerType === 'video') {
                 triggerContainer.innerHTML = `<video autoplay><source src="${url}" type="${mediaType}" /></video>`;
-                console.log('Video triggered');
             }
         });
 
@@ -43,6 +41,19 @@
         socket.on('connected', () => {
             console.log('Connection Established');
         });
+
+        function createVideoPlayer(url) {
+            let videoPlayer = document.createElement('video');
+            videoPlayer.setAttribute('width', '400px');
+            videoPlayer.setAttribute('autoplay', 'true');
+            videoPlayer.innerHTML = `<source src="${url}" type="video/mp4" />`;
+
+            videoPlayer.addEventListener('ended', () => {
+                videoPlayer.remove();
+            });
+
+            return videoPlayer;
+        }
     </script>
 </body>
 
