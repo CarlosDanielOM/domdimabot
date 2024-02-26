@@ -14,6 +14,13 @@
         let channel = window.location.pathname.split('/')[3];
         const triggerContainer = document.getElementById('triggerContainer');
 
+        triggerContainer.style.display = 'flex';
+        triggerContainer.style.justifyContent = 'center';
+        triggerContainer.style.alignItems = 'center';
+        triggerContainer.style.height = '500px';
+        triggerContainer.style.width = '800px';
+        triggerContainer.style.border = '1px solid black';
+
         let triggerCount = 0;
 
         const socket = io.connect('https://domdimabot.com/', {
@@ -47,8 +54,13 @@
         });
 
         function createVideoPlayer(url) {
+            let randomX = Math.floor(Math.random() * 800) - 250;
+            let randomY = Math.floor(Math.random() * 500) - 250;
             let videoPlayer = document.createElement('video');
-            videoPlayer.setAttribute('width', '400px');
+            videoPlayer.style.position = 'absolute';
+            videoPlayer.style.top = `${randomY}px`;
+            videoPlayer.style.left = `${randomX}px`;
+            videoPlayer.setAttribute('width', '250px');
             videoPlayer.setAttribute('autoplay', 'true');
             videoPlayer.setAttribute('id', triggerCount);
             videoPlayer.innerHTML = `<source src="${url}" type="video/mp4" />`;
