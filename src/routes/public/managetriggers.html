@@ -29,19 +29,15 @@
             </div>
         </div>
     </section>
-    <section id="main"></section>
-    <button class="btn btn-info" id="uploadFileBtn">Upload File</button>
+    <section id="main">
+        <button class="btn btn-info" id="uploadFileBtn">Upload File</button>
+        <button class="btn btn-info" id="createTriggerBtn">Create Trigger</button>
+    </section>
     <div id="systemAlerts" class="systemAlerts">
         <div class="container" id="alertContainer"></div>
     </div>
-    <div id="createTrigger" class="createTrigger">
-        <button class="exitUpload">x</button>
-        <div class="trigger-header"></div>
-        <div class="trigger-content"></div>
-        <div class="trigger-footer"></div>
-    </div>
     <div class="uploadContainer" id="uploadContainer">
-        <button id="exitUpload" class="exitUpload">x</button>
+        <button id="exitUpload" class="exit">x</button>
         <div class="upload-header">
             <h2>File Upload</h2>
         </div>
@@ -53,7 +49,7 @@
                     <input type="file" name="trigger" id="file" class="file">
                     <p id="fileSize"></p>
                 </div>
-                <button id="submitBtn" type="submit" value="Upload" name="submit" class="submit"
+                <button id="submitBtn" type="submit" value="Upload" name="submit" class="submit submitBtn"
                     disabled>Upload</button>
             </form>
         </div>
@@ -63,6 +59,52 @@
                     <source src="" id="videoPreview" type="video/mp4">
                 </video>
             </div>
+        </div>
+    </div>
+    <div id="createTrigger" class="createTrigger">
+        <button id="exitCreateTrigger" class="exit">x</button>
+        <div class="upload-header">
+            <h2>Create Trigger</h2>
+        </div>
+        <div class="createTrigger-content">
+            <form id="createTriggerForm">
+                <div class="row">
+                    <div class="form-group">
+                        <label for="triggerNameCreate">Name of the Redemption</label>
+                        <input type="text" name="triggerName" id="triggerNameCreate" placeholder="File Name"
+                            class="triggerName" required>
+                        <!-- <p class="info">Es el nombre del canje</p> -->
+                    </div>
+                    <div class="form-group">
+                        <label for="cost">Cost</label>
+                        <input type="number" name="cost" id="triggerCost" placeholder="500" min="1" value="1">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label for="triggerType">Type</label>
+                        <select name="type" id="triggerType">
+                            <option value="redemption">Redemption</option>
+                            <option value="bits" disabled>Bits</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="file">File</label>
+                        <select name="file" id="fileSelect">
+                            <option value="0">Select File</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="triggerCooldown">Cooldown in seconds</label>
+                        <input type="number" name="cooldown" id="triggerCooldown" placeholder="0" min="0" value="0">
+                    </div>
+                </div>
+                <button id="createSubmitBtn" type="submit" value="Create" name="submit" class="submit submitBtn"
+                    disabled>Upload</button>
+            </form>
+        </div>
+        <div class="createTrigger-footer">
+            <div class="file-preview" id="preview"></div>
         </div>
     </div>
     <script src="/assets/js/triggermanage.js"></script>

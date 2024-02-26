@@ -112,6 +112,12 @@ nav ul li a:hover {
     object-fit: scale-down;
 }
 
+#mediaSection .container .mediaContainer .media .content img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 /*? UPLOAD CONTAINER ?*/
 
 #uploadContainer {
@@ -139,7 +145,7 @@ nav ul li a:hover {
     margin-bottom: 20px;
 }
 
-#uploadContainer #submitBtn {
+#uploadContainer .submitBtn {
     padding: 10px 20px;
     background-color: #64fa42;
     color: #000;
@@ -148,31 +154,31 @@ nav ul li a:hover {
     cursor: pointer;
 }
 
-#uploadContainer #submitBtn:hover {
+#uploadContainer .submitBtn:hover {
     background-color: #2df700;
     color: #000;
 }
 
-#uploadContainer #submitBtn:active {
+#uploadContainer .submitBtn:active {
     transform: scale(0.95);
 }
 
-#uploadContainer #submitBtn:focus {
+#uploadContainer .submitBtn:focus {
     outline: none;
 }
 
-#uploadContainer #submitBtn:disabled {
+#uploadContainer .submitBtn:disabled {
     background-color: #ff6060;
     color: #000;
     cursor: not-allowed;
 }
 
-#uploadContainer #submitBtn:disabled:hover {
+#uploadContainer .submitBtn:disabled:hover {
     background-color: #ff4949;
     color: #000;
 }
 
-#uploadContainer #submitBtn:disabled:active {
+#uploadContainer .submitBtn:disabled:active {
     transform: scale(1);
 }
 
@@ -183,7 +189,7 @@ nav ul li a:hover {
     margin: 3%;
 }
 
-.exitUpload {
+.exit {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -193,6 +199,153 @@ nav ul li a:hover {
     border-radius: 5px;
     background: none;
     cursor: pointer;
+}
+
+/*? TRIGGERS CONTAINER ?*/
+
+#createTrigger {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 80vh;
+    width: 40vw;
+    background-color: #c2c2c2;
+    border: 2px solid #000;
+    border-radius: 5%;
+    z-index: 50;
+}
+
+#createTrigger .createTrigger-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+#createTrigger .createTrigger-content #createTriggerForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+#createTrigger .row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 20px 0;
+}
+
+#createTrigger .row .form-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+#createTrigger .row .form-group label {
+    margin-bottom: 10px;
+}
+
+#createTrigger .row .form-group p.info {
+    font-size: .6rem;
+    font-weight: 100;
+    text-transform: uppercase;
+}
+
+#createTrigger h1 {
+    margin-bottom: 20px;
+}
+
+#createTrigger .row .form-group input {
+    margin-bottom: 20px;
+}
+
+#createTrigger .row .form-group select {
+    margin-bottom: 20px;
+}
+
+#createTrigger .row .form-group select option {
+    padding: 10px;
+}
+
+#createTrigger .row .form-group select option:hover {
+    background-color: #42a5fa;
+    color: #fff;
+}
+
+#createTrigger .row .form-group select option:active {
+    transform: scale(0.95);
+}
+
+#createTrigger .row .form-group select option:focus {
+    outline: none;
+}
+
+#createTrigger .row .form-group select option:disabled {
+    background-color: #c2c2c2;
+    color: #000;
+    cursor: not-allowed;
+}
+
+#createTrigger .row .form-group select option:disabled:hover {
+    background-color: #616161;
+    color: #000;
+    cursor: not-allowed;
+}
+
+#createTrigger .submitBtn {
+    padding: 10px 20px;
+    background-color: #64fa42;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#createTrigger .submitBtn:hover {
+    background-color: #2df700;
+    color: #000;
+}
+
+#createTrigger .submitBtn:active {
+    transform: scale(0.95);
+}
+
+#createTrigger .submitBtn:focus {
+    outline: none;
+}
+
+#createTrigger .submitBtn:disabled {
+    background-color: #ff6060;
+    color: #000;
+    cursor: not-allowed;
+}
+
+#createTrigger .submitBtn:disabled:hover {
+    background-color: #ff4949;
+    color: #000;
+}
+
+#createTrigger .submitBtn:disabled:active {
+    transform: scale(1);
+}
+
+#createTrigger .upload-footer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 3%;
 }
 
 /*? FILE PREVIEW ?*/

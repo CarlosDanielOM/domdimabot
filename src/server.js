@@ -372,6 +372,10 @@ async function init() {
 
   app.get('/trigger/manage/:channel', async (req, res) => {
     let channel = req.params.channel;
+    res.sendFile(`${htmlPath}managetriggers.html`);
+  });
+
+  app.post('/trigger/upload/:channel', async (req, res) => {
     let IPS = {
       xforforwarded: req.headers['x-forwarded-for'],
       xrealip: req.headers['x-real-ip'],
@@ -383,11 +387,6 @@ async function init() {
     }
 
     console.log({ socket: IPS, for: channel });
-    res.sendFile(`${htmlPath}managetriggers.html`);
-  });
-
-  app.post('/trigger/upload/:channel', async (req, res) => {
-    console.log({ ip: req.ip, for: req.params.channel })
     if (cooldown.hasCooldown(req.ip)) return res.status(429).json({ message: 'You are being rate limited', error: true });
     cooldown.setCooldown(req.ip, 5);
     try {
@@ -465,7 +464,7 @@ async function init() {
 
   app.post('/trigger/create/:channel', async (req, res) => {
     const { channel } = req.params;
-    const { name, file, type, mediaType, cost, prompt, fileID } = req.body;
+    const { name, file, type, mediaType, cost, prompt, fileID, cooldown } = req.body;
 
     const streamer = await STREAMERS.getStreamer(channel);
 
@@ -473,15 +472,33 @@ async function init() {
 
     if (!exists) return res.status(400).json({ message: 'File not found', error: true });
 
+    let requestBody = {
+      title: name,
+      cost,
+      skipQueue: true,
+      prompt
+    }
+
+    if (cooldown > 0) {
+      requestBody.is_global_cooldown_enabled = true;
+      requestBody.global_cooldown_seconds = cooldown;
+    }
+
+    if (prompt == null) delete requestBody.prompt;
+
+
     let rewardResponse = await fetch(`${getUrl()}/${channel}/create/reward`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ title: name, cost, skipQueue: true, prompt })
+      body: JSON.stringify(requestBody)
     });
 
     let rewardData = await rewardResponse.json();
+
+    if (rewardData.error) return res.status(rewardData.status).json(rewardData);
+
     rewardData = rewardData.rewardData;
 
     let newTrigger = new triggerSchema({
@@ -587,12 +604,8 @@ async function init() {
 
     let streamer = await STREAMERS.getStreamer(channel);
 
-    let body = {
-      title,
-      cost,
-      should_redemptions_skip_request_queue: skipQueue,
-      prompt,
-    }
+    let body = req.body;
+    body.prompt = prompt;
 
     let response = await fetch(`${getTwitchHelixURL()}/channel_points/custom_rewards?broadcaster_id=${streamer.user_id}`, {
       method: 'POST',
