@@ -14,6 +14,8 @@
         let channel = window.location.pathname.split('/')[3];
         const triggerContainer = document.getElementById('triggerContainer');
 
+        let triggerCount = 0;
+
         const socket = io.connect('https://domdimabot.com/', {
             reconnection: true,
             transports: ['websocket']
@@ -25,6 +27,7 @@
         });
 
         triggerSocket.on('trigger', (data) => {
+            triggerCount++;
             const { mediaType, url } = data;
             let triggerType = mediaType.split('/')[0];
             if (triggerType === 'image') {
@@ -46,10 +49,11 @@
             let videoPlayer = document.createElement('video');
             videoPlayer.setAttribute('width', '400px');
             videoPlayer.setAttribute('autoplay', 'true');
+            videoPlayer.id = triggerCount;
             videoPlayer.innerHTML = `<source src="${url}" type="video/mp4" />`;
 
-            videoPlayer.addEventListener('ended', () => {
-                videoPlayer.remove();
+            document.getElementById(triggerCount).addEventListener('ended', () => {
+                document.getElementById(triggerCount).remove();
             });
 
             return videoPlayer;
