@@ -35,8 +35,12 @@
             }
         });
 
-        socket.on('prepareTriggers', () => {
-            console.log('Triggers ready');
+        triggerSocket.on('prepareTriggers', (data) => {
+            console.log('Preparing triggers');
+        });
+
+        socket.on('connected', () => {
+            console.log('Connection Established');
         });
     </script>
 </body>
