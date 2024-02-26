@@ -8,10 +8,11 @@
 </head>
 
 <body>
-    <h1>HOla</h1>
+    <div class="triggerContainer" id="triggerContainer"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
     <script>
         let channel = window.location.pathname.split('/')[3];
+        const triggerContainer = document.getElementById('triggerContainer');
 
         const socket = io.connect('https://domdimabot.com/', {
             reconnection: true,
@@ -24,7 +25,12 @@
         });
 
         triggerSocket.on('trigger', (data) => {
-            console.log(data);
+            const { mediaType, url } = data;
+            if (mediaType === 'image') {
+                triggerContainer.innerHTML = `<img src="${url}" alt="trigger" />`;
+            } else if (mediaType === 'video') {
+                triggerContainer.innerHTML = `<video autoplay><source src="${url}" type="${mediaType}" /></video>`;
+            }
         });
 
         socket.on('prepareTriggers', () => {
