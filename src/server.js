@@ -388,7 +388,7 @@ async function init() {
       forwarded: req.headers['forwarded'],
     }
 
-    console.log({ socket: IPS, for: channel });
+    console.log({ socket: IPS, for: req.params.channel });
     if (cooldown.hasCooldown(req.ip)) return res.status(429).json({ message: 'You are being rate limited', error: true });
     cooldown.setCooldown(req.ip, 5);
     try {
