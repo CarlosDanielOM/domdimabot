@@ -72,7 +72,7 @@ async function init() {
 
   io.of(/^\/overlay\/triggers\/\w+$/).on('connection', (socket) => {
     const channel = socket.nsp.name.split('/')[3];
-    io.of(`/trigger/${channel}`).emit('prepareTriggers');
+    io.of(`/overlay/triggers/${channel}`).emit('prepareTriggers');
   });
 
   //* Routes *//
