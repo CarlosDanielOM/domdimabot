@@ -70,7 +70,7 @@ async function init() {
     io.of(`/sumimetro/${type}/${channel}`).emit('active');
   });
 
-  io.of(/^\/overlay\/triggers\/\w+$/).on('connection', (socket) => {
+  io.of(/^\/overlays\/triggers\/\w+$/).on('connection', (socket) => {
     const channel = socket.nsp.name.split('/')[3];
     io.of(`/overlay/triggers/${channel}`).emit('prepareTriggers');
   });
@@ -368,7 +368,7 @@ async function init() {
 
   //? Trigger ROUTES ?//
 
-  app.get('/overlay/triggers/:channel', async (req, res) => {
+  app.get('/overlays/triggers/:channel', async (req, res) => {
     res.sendFile(`${htmlPath}trigger.html`);
   });
 
@@ -683,7 +683,7 @@ async function init() {
 
 function sendTrigger(channel, triggerData) {
   console.log(`Sending trigger to ${channel} with data: ${triggerData}`)
-  io.of(`/overlay/triggers/${channel}`).emit('trigger', triggerData);
+  io.of(`/overlays/triggers/${channel}`).emit('trigger', triggerData);
 }
 
 module.exports = {
