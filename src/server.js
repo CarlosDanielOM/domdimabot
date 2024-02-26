@@ -72,7 +72,7 @@ async function init() {
 
   io.of(/^\/trigger\/\w+$/).on('connection', (socket) => {
     const channel = socket.nsp.name.split('/')[2];
-    io.of(`/trigger/${channel}`).emit('active');
+    io.of(`/trigger/${channel}`).emit('prepareTriggers');
   });
 
   //* Routes *//
