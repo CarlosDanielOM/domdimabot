@@ -22,7 +22,7 @@ async function redeem(client, eventData) {
 
     let url = file.fileUrl;
 
-    sendTrigger(broadcaster_user_id, url);
+    sendTrigger(broadcaster_user_login, url);
 
 }
 

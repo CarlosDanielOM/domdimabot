@@ -368,7 +368,7 @@ async function init() {
 
   //? Trigger ROUTES ?//
 
-  app.get('/overlay/trigger/:channel', async (req, res) => {
+  app.get('/overlay/triggers/:channel', async (req, res) => {
     res.sendFile(`${htmlPath}trigger.html`);
   });
 
@@ -682,7 +682,7 @@ async function init() {
 }
 
 function sendTrigger(channel, trigger) {
-  io.of(`/trigger/${channel}`).emit('trigger', trigger);
+  io.of(`/triggers/${channel}`).emit('trigger', trigger);
 }
 
 module.exports = {
