@@ -33,7 +33,8 @@
             if (triggerType === 'image') {
                 triggerContainer.innerHTML = `<img src="${url}" alt="trigger" />`;
             } else if (triggerType === 'video') {
-                triggerContainer.innerHTML = `<video autoplay><source src="${url}" type="${mediaType}" /></video>`;
+                let videoPlayer = createVideoPlayer(url);
+                triggerContainer.appendChild(videoPlayer);
             }
         });
 
@@ -52,8 +53,8 @@
             videoPlayer.setAttribute('id', triggerCount);
             videoPlayer.innerHTML = `<source src="${url}" type="video/mp4" />`;
 
-            document.getElementById(triggerCount).addEventListener('ended', () => {
-                document.getElementById(triggerCount).remove();
+            videoPlayer.addEventListener('ended', () => {
+                videoPlayer.remove();
             });
 
             return videoPlayer;
