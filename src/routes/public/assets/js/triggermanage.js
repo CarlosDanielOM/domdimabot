@@ -1,4 +1,4 @@
-// if (!localStorage.getItem('token')) window.location.href = '/';
+if (!localStorage.getItem('token')) window.location.href = '/';
 
 const channel = window.location.pathname.split('/')[3];
 
@@ -17,6 +17,7 @@ const uploadFileBtn = document.getElementById('uploadFileBtn');
 const createTriggerBtn = document.getElementById('createTriggerBtn');
 
 let files;
+let triggers;
 
 uploadFileBtn.addEventListener('click', async () => {
     document.getElementById('uploadContainer').style.display = 'flex';
@@ -33,7 +34,7 @@ fileUploadForm.addEventListener('submit', async (e) => {
     if (fileInput.files.length === 0) return createAlert('Please select a file', 'error');
     if (fileInput.files[0].size > 5000000) return createAlert('File size should not exceed 5MB', 'error');
 
-    // if (fileNameInput.textContent == '') return createAlert('Please enter a valid File Name', 'error');
+    if (fileNameInput.value == '') return createAlert('Please enter a valid File Name', 'error');
 
     const formData = new FormData(fileUploadForm);
     const response = await fetch(`https://domdimabot.com/trigger/upload/${channel}`, {
@@ -48,7 +49,7 @@ fileUploadForm.addEventListener('submit', async (e) => {
     }
 
     createAlert(data.message, 'success');
-    createFileView(data.file);
+    createVideoFileView(data.file);
     document.getElementById('uploadContainer').style.display = 'none';
     fileUploadForm.reset();
 
@@ -123,17 +124,22 @@ window.onload = async () => {
     const data = await files.json();
     files = data.files;
 
-    console.log(files);
-
     for (let file in files) {
         let fileType = files[file].fileType.split('/')[0];
-        console.log({ file: files[file], fileType })
         if (fileType == 'video') {
             createVideoFileView(files[file]);
         } else if (fileType == 'image') {
             createImageFileView(files[file]);
         }
         populateFileSelect(files[file]);
+    }
+
+    triggers = await fetch(`https://domdimabot.com/triggers/${channel}`);
+    const triggerData = await triggers.json();
+    triggers = triggerData.triggers;
+
+    for (let trigger in triggers) {
+        createTriggerView(triggers[trigger]);
     }
 
 };
@@ -203,3 +209,79 @@ function populateFileSelect(file) {
     option.setAttribute('fileType', file.fileType);
     fileSelect.appendChild(option);
 }
+
+function createTriggerView(trigger) {
+    const triggerCon = document.createElement('div');
+    const headerContainer = document.createElement('div');
+    const contentContainer = document.createElement('div');
+    const footerContainer = document.createElement('div');
+    const infoContainer = document.createElement('div');
+    const actionContainer = document.createElement('div');
+    const actionFooterContainer = document.createElement('div');
+    const editBtn = document.createElement('button');
+    const deleteBtn = document.createElement('button');
+
+    triggerCon.classList.add('trigger');
+    headerContainer.classList.add('trigger-header');
+    contentContainer.classList.add('trigger-content');
+    footerContainer.classList.add('trigger-footer');
+    infoContainer.classList.add('trigger-info');
+    actionContainer.classList.add('trigger-actions');
+    actionFooterContainer.classList.add('trigger-actions');
+    editBtn.classList.add('btn', 'btn-warning');
+    deleteBtn.classList.add('btn', 'btn-danger');
+
+    headerContainer.innerHTML = `<h2>${trigger.name}</h2>`;
+    infoContainer.innerHTML = `<p>Cost: ${trigger.cost}</p><p>Type: ${trigger.type}</p><p>Cooldown: ${trigger.cooldown}</p>`;
+    editBtn.innerText = 'Edit';
+    deleteBtn.innerText = 'Delete';
+    deleteBtn.id = trigger._id;
+
+    triggerCon.id = `${trigger._id}-trigger`;
+
+    actionContainer.appendChild(editBtn);
+    actionFooterContainer.appendChild(deleteBtn);
+    contentContainer.appendChild(infoContainer);
+    contentContainer.appendChild(actionContainer);
+    footerContainer.appendChild(actionFooterContainer);
+    triggerCon.appendChild(headerContainer);
+    triggerCon.appendChild(contentContainer);
+    triggerCon.appendChild(footerContainer);
+    document.getElementById('triggerContainer').appendChild(triggerCon);
+
+    deleteBtn.addEventListener('click', async (e) => {
+        const response = await fetch(`https://domdimabot.com/trigger/delete/${channel}/${e.target.id}`, {
+            method: 'DELETE'
+        });
+
+        const data = await response.json();
+
+        if (data.error) return createAlert(data.message, 'error');
+
+        createAlert(data.message, 'success');
+        document.getElementById(`${e.target.id}-trigger`).remove();
+    });
+
+    editBtn.addEventListener('click', async (e) => { });
+}
+
+{/* <div class="trigger">
+    <div class="trigger-header">
+        <h2>{{ Name }}</h2>
+    </div>
+    <div class="trigger-content">
+        <div class="trigger-info">
+            <p>Cost: {{ Cost }}</p>
+            <p>Type: {{ Type }}</p>
+            <p>Cooldown: {{ Cooldown }}</p>
+        </div>
+        <div class="trigger-actions">
+            <button class="btn btn-warning" id="editTriggerBtn">Edit</button>
+        </div>
+    </div>
+    <div class="trigger-footer">
+        <div class="trigger-actions">
+            <button class="btn btn-danger" id="deleteTriggerBtn">Delete</button>
+        </div>
+    </div>
+</div> */}

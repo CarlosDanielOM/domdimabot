@@ -63,7 +63,7 @@ nav ul li a:hover {
     right: 0;
     width: 25vw;
     height: 90vh;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
 }
 
@@ -406,6 +406,8 @@ nav ul li a:hover {
 #main .container .triggers-section .triggers {
     width: 100%;
     height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #main .container .triggers-section .triggers .title {
@@ -413,6 +415,81 @@ nav ul li a:hover {
     font-size: 2rem;
     font-weight: bold;
     margin-bottom: 20px;
+}
+
+#main .container .triggers-section .triggers .trigger {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100px;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #c2c2c2;
+    border: 2px solid #000;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#main .container .triggers-section .triggers .trigger:hover {
+    background-color: #42a5fa;
+    border: 2px solid #000;
+}
+
+#main .container .triggers-section .triggers .trigger:active {
+    transform: scale(0.95);
+}
+
+#main .container .triggers-section .triggers .trigger:focus {
+    outline: none;
+}
+
+#main .container .triggers-section .triggers .trigger:disabled {
+    background-color: #c2c2c2;
+    color: #000;
+    cursor: not-allowed;
+}
+
+#main .container .triggers-section .triggers .trigger:disabled:hover {
+    background-color: #616161;
+    color: #000;
+    cursor: not-allowed;
+}
+
+#main .container .triggers-section .triggers .trigger-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 15%;
+    height: 100%;
+}
+
+#main .container .triggers-section .triggers .trigger .trigger-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    width: 70%;
+    height: 100%;
+}
+
+#main .container .triggers-section .triggers .trigger .trigger-content .trigger-info {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+}
+
+#main .container .triggers-section .triggers .trigger .trigger-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 15%;
+    height: 100%;
 }
 
 
@@ -555,6 +632,24 @@ nav ul li a:hover {
 
 .btn-info:hover {
     background-color: #2d7cf7;
+}
+
+.btn-warning {
+    background-color: #ff9f42;
+    color: #000;
+}
+
+.btn-warning:hover {
+    background-color: #ff7c2d;
+}
+
+.btn-danger {
+    background-color: #ff4242;
+    color: #000;
+}
+
+.btn-danger:hover {
+    background-color: #ff2d2d;
 }
 
 /*? MEDIA QUERIES ?*/
