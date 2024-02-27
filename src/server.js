@@ -553,7 +553,7 @@ async function init() {
 
   });
 
-  app.get('/trigger/:channel', async (req, res) => {
+  app.get('/triggers/:channel', async (req, res) => {
     const { channel } = req.params;
 
     let triggers = await triggerSchema.find({ channel: channel }, '_id name file type mediaType date');

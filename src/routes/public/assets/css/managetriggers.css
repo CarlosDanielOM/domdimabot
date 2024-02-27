@@ -54,7 +54,7 @@ nav ul li a:hover {
 
 #mediaSection {
     background-color: aqua;
-    position: absolute;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -63,6 +63,8 @@ nav ul li a:hover {
     right: 0;
     width: 25vw;
     height: 90vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 #mediaSection .container {
@@ -85,7 +87,8 @@ nav ul li a:hover {
     background-color: #c2c2c2;
     border: 2px solid #000;
     border-radius: 5%;
-    overflow: hidden;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 #mediaSection .container .mediaContainer .media {
@@ -366,6 +369,53 @@ nav ul li a:hover {
     object-fit: cover;
 }
 
+/*? MAIN CONTAINER ?*/
+#main {
+    width: 100vw;
+    height: 100vh;
+}
+
+#main .button-group {
+    position: relative;
+    display: flex;
+    justify-content: end;
+    width: 75vw;
+    padding-top: 1%;
+    padding-right: 1%;
+}
+
+#main .button-group .btn {
+    margin: 0 10px;
+}
+
+#main .container {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+}
+
+#main .container .triggers-section {
+    position: relative;
+    width: 75vw;
+    height: 100%;
+    padding: 1%;
+}
+
+#main .container .triggers-section .triggers {
+    width: 100%;
+    height: 100%;
+}
+
+#main .container .triggers-section .triggers .title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+
 /*? ALERT SYSTEM ?*/
 
 #systemAlerts {
@@ -438,6 +488,76 @@ nav ul li a:hover {
     border: 2px solid #000;
 }
 
+/*? BUTTONS ?*/
+
+.btn {
+    padding: 10px 20px;
+    background-color: #42a5fa;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #2d7cf7;
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+.btn:focus {
+    outline: none;
+}
+
+.btn:disabled {
+    background-color: #c2c2c2;
+    color: #000;
+    cursor: not-allowed;
+}
+
+.btn:disabled:hover {
+    background-color: #616161;
+    color: #000;
+    cursor: not-allowed;
+}
+
+.btn:disabled:active {
+    transform: scale(1);
+}
+
+.btn-success {
+    background-color: #64fa42;
+    color: #000;
+}
+
+.btn-success:hover {
+    background-color: #2df700;
+    color: #000;
+}
+
+.btn-error {
+    background-color: #ff6060;
+    color: #000;
+}
+
+.btn-error:hover {
+    background-color: #ff4949;
+    color: #000;
+}
+
+.btn-info {
+    background-color: #42a5fa;
+    color: #fff;
+}
+
+.btn-info:hover {
+    background-color: #2d7cf7;
+}
+
+/*? MEDIA QUERIES ?*/
 
 
 @media screen and (max-width: 768px) {

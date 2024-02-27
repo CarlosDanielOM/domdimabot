@@ -23,15 +23,35 @@
             </div>
         </div>
     </nav>
-    <section id="mediaSection" class="mediaSection">
-        <div class="container">
-            <div class="media-container" id="mediaContainer">
-            </div>
-        </div>
-    </section>
     <section id="main">
-        <button class="btn btn-info" id="uploadFileBtn">Upload File</button>
-        <button class="btn btn-info" id="createTriggerBtn">Create Trigger</button>
+        <div class="container">
+            <section class="triggers-section">
+                <div class="row">
+                    <div class="button-group">
+                        <button class="btn btn-info" id="uploadFileBtn">Upload File</button>
+                        <button class="btn btn-info" id="createTriggerBtn">Create Trigger</button>
+                    </div>
+                </div>
+                <div class="triggers">
+                    <div class="row">
+                        <header>
+                            <h2 class="title">Triggers</h2>
+                        </header>
+                    </div>
+                    <div class="trigger">
+                        <div class="trigger-header">
+                            <h2>{{Name}}</h2>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="mediaSection" class="mediaSection">
+                <div class="container">
+                    <div class="media-container" id="mediaContainer">
+                    </div>
+                </div>
+            </section>
+        </div>
     </section>
     <div id="systemAlerts" class="systemAlerts">
         <div class="container" id="alertContainer"></div>
