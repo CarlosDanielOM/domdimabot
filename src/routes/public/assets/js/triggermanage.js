@@ -241,6 +241,8 @@ function createTriggerView(trigger) {
     deleteBtn.id = `${trigger._id}-delete`;
     editBtn.id = `${trigger._id}-edit`;
 
+    editBtn.setAttribute('disabled', true);
+
     triggerCon.id = `${trigger._id}-trigger`;
 
     actionContainer.appendChild(editBtn);
