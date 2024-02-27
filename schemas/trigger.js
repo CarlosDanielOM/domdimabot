@@ -11,6 +11,7 @@ const triggerSchema = new Schema({
     type: { type: String, default: 'redemption' },
     mediaType: { type: String, required: true }, // The type of media to be played in mime type
     volume: { type: Number, default: 100 },
+    cost: { type: Number, default: 1 },
     createdAt: { type: Date, default: Date.now },
     date: {
         day: { type: Number, default: () => new Date().getDate() },

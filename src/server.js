@@ -511,7 +511,8 @@ async function init() {
       file,
       fileID,
       type,
-      mediaType
+      mediaType,
+      cost
     });
 
     await newTrigger.save();
