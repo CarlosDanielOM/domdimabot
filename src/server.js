@@ -512,7 +512,8 @@ async function init() {
       fileID,
       type,
       mediaType,
-      cost
+      cost,
+      cooldown
     });
 
     await newTrigger.save();
@@ -557,7 +558,7 @@ async function init() {
   app.get('/triggers/:channel', async (req, res) => {
     const { channel } = req.params;
 
-    let triggers = await triggerSchema.find({ channel: channel }, '_id name file type mediaType date');
+    let triggers = await triggerSchema.find({ channel: channel }, '_id name file type mediaType date cost cooldown');
 
     res.status(200).json({ triggers });
 
