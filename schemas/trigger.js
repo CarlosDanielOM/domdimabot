@@ -12,6 +12,7 @@ const triggerSchema = new Schema({
     mediaType: { type: String, required: true }, // The type of media to be played in mime type
     volume: { type: Number, default: 100 },
     cost: { type: Number, default: 1 },
+    cooldown: { type: Number, default: 0 }, // The cooldown in seconds
     createdAt: { type: Date, default: Date.now },
     date: {
         day: { type: Number, default: () => new Date().getDate() },
