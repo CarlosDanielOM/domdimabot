@@ -518,7 +518,7 @@ async function init() {
 
     await newTrigger.save();
 
-    res.status(200).json({ message: 'Trigger created', error: false });
+    res.status(200).json({ message: 'Trigger created', error: false, trigger: newTrigger });
   });
 
   app.delete('/trigger/delete/:channel/:id', async (req, res) => {

@@ -84,6 +84,8 @@ createTriggerForm.addEventListener('submit', async (e) => {
 
     if (res.error) return createAlert(res.message, 'error');
 
+    createTriggerView(res.trigger);
+
     createAlert(res.message, 'success');
     document.getElementById('createTrigger').style.display = 'none';
     createTriggerForm.reset();
@@ -235,7 +237,9 @@ function createTriggerView(trigger) {
     infoContainer.innerHTML = `<p>Cost: ${trigger.cost}</p><p>Type: ${trigger.type}</p><p>Cooldown: ${trigger.cooldown}</p>`;
     editBtn.innerText = 'Edit';
     deleteBtn.innerText = 'Delete';
-    deleteBtn.id = trigger._id;
+
+    deleteBtn.id = `${trigger._id}-delete`;
+    editBtn.id = `${trigger._id}-edit`;
 
     triggerCon.id = `${trigger._id}-trigger`;
 
@@ -250,7 +254,12 @@ function createTriggerView(trigger) {
     document.getElementById('triggerContainer').appendChild(triggerCon);
 
     deleteBtn.addEventListener('click', async (e) => {
-        const response = await fetch(`https://domdimabot.com/trigger/delete/${channel}/${e.target.id}`, {
+        let confirmDelete = confirm('Are you sure you want to delete this trigger?');
+        if (!confirmDelete) return;
+
+        const id = e.target.id.split('-')[0];
+
+        const response = await fetch(`https://domdimabot.com/trigger/delete/${channel}/${id}`, {
             method: 'DELETE'
         });
 
@@ -259,29 +268,8 @@ function createTriggerView(trigger) {
         if (data.error) return createAlert(data.message, 'error');
 
         createAlert(data.message, 'success');
-        document.getElementById(`${e.target.id}-trigger`).remove();
+        document.getElementById(`${id}-trigger`).remove();
     });
 
     editBtn.addEventListener('click', async (e) => { });
 }
-
-{/* <div class="trigger">
-    <div class="trigger-header">
-        <h2>{{ Name }}</h2>
-    </div>
-    <div class="trigger-content">
-        <div class="trigger-info">
-            <p>Cost: {{ Cost }}</p>
-            <p>Type: {{ Type }}</p>
-            <p>Cooldown: {{ Cooldown }}</p>
-        </div>
-        <div class="trigger-actions">
-            <button class="btn btn-warning" id="editTriggerBtn">Edit</button>
-        </div>
-    </div>
-    <div class="trigger-footer">
-        <div class="trigger-actions">
-            <button class="btn btn-danger" id="deleteTriggerBtn">Delete</button>
-        </div>
-    </div>
-</div> */}
