@@ -55,70 +55,82 @@ nav ul li a:hover {
 #mediaSection {
     background-color: aqua;
     position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding: 5%;
+    padding: 1%;
     right: 0;
     width: 25vw;
-    height: 90vh;
+    height: 86%;
     overflow-y: auto;
     overflow-x: hidden;
 }
 
 #mediaSection .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
     width: 100%;
     height: 100%;
 }
 
-#mediaSection .container .mediaContainer {
+#mediaSection .container .media-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    width: 100%;
+    height: 100%;
+}
+
+#mediaSection .container .media-container .media {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     width: 100%;
-    height: 80%;
+    height: 100%;
+    max-height: 190px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#mediaSection .container .media-container .media:active {
+    transform: scale(0.95);
+}
+
+#mediaSection .container .media-container .media:focus {
+    outline: none;
+}
+
+#mediaSection .container .media-container .media:disabled {
     background-color: #c2c2c2;
-    border: 2px solid #000;
-    border-radius: 5%;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    color: #000;
+    cursor: not-allowed;
 }
 
-#mediaSection .container .mediaContainer .media {
-    width: 25%;
-    height: 25%;
+#mediaSection .container .media-container .media:disabled:hover {
+    background-color: #616161;
+    color: #000;
+    cursor: not-allowed;
+}
+
+#mediaSection .container .media-container .media .media-footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
-}
-
-#mediaSection .container .mediaContainer .media .content {
-    width: 100px;
-    height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-
-#mediaSection .container .mediaContainer .media .content video {
     width: 100%;
-    height: 100%;
-    object-fit: scale-down;
+    height: 10%;
 }
 
-#mediaSection .container .mediaContainer .media .content img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+#mediaSection .container .media-container .media .media-footer button {
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+#mediaSection .container .media-container .media:hover .media-footer button {
+    opacity: 1;
 }
 
 /*? UPLOAD CONTAINER ?*/

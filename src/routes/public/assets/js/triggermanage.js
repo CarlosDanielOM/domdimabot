@@ -164,6 +164,8 @@ function createVideoFileView(file) {
     const contentContainer = document.createElement('div');
     const videoElement = document.createElement('video');
     const sourceElement = document.createElement('source');
+    const footerContainer = document.createElement('div');
+    const deleteBtn = document.createElement('button');
 
     videoElement.style.width = '100%';
     videoElement.style.height = '100%';
@@ -171,15 +173,39 @@ function createVideoFileView(file) {
     mediaCon.classList.add('media');
     headerContainer.classList.add('header');
     contentContainer.classList.add('content');
+    footerContainer.classList.add('media-footer');
+    deleteBtn.classList.add('btn', 'btn-danger');
+    deleteBtn.innerText = 'Delete';
+    deleteBtn.id = `${file._id}-delete`;
     sourceElement.setAttribute('src', file.fileUrl);
     sourceElement.setAttribute('type', file.fileType);
     mediaCon.id = file._id;
     headerContainer.innerText = file.name;
+    footerContainer.appendChild(deleteBtn);
     videoElement.appendChild(sourceElement);
     contentContainer.appendChild(videoElement);
     mediaCon.appendChild(headerContainer);
     mediaCon.appendChild(contentContainer);
+    mediaCon.appendChild(footerContainer);
     mediaContainer.appendChild(mediaCon);
+
+    deleteBtn.addEventListener('click', async (e) => {
+        let confirmDelete = confirm('Are you sure you want to delete this file?');
+        if (!confirmDelete) return;
+
+        const id = e.target.id.split('-')[0];
+
+        const response = await fetch(`https://domdimabot.com/trigger/files/${channel}/${id}`, {
+            method: 'DELETE'
+        });
+
+        const data = await response.json();
+
+        if (data.error) return createAlert(data.message, 'error');
+
+        createAlert(data.message, 'success');
+        document.getElementById(id).remove();
+    });
 }
 
 function createImageFileView(file) {
