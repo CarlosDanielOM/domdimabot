@@ -50,6 +50,7 @@ fileUploadForm.addEventListener('submit', async (e) => {
 
     createAlert(data.message, 'success');
     createVideoFileView(data.file);
+    populateFileSelect(data.file);
     document.getElementById('uploadContainer').style.display = 'none';
     fileUploadForm.reset();
 

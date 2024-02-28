@@ -448,9 +448,9 @@ async function init() {
           channelID: streamer.user_id,
         }
 
-        await new triggerFileSchema(fileData).save();
+        let newFile = await new triggerFileSchema(fileData).save();
 
-        return res.status(200).json({ message: 'File uploaded', file: fileData, error: false });
+        return res.status(200).json({ message: 'File uploaded', file: newFile, error: false });
       });
     } catch (error) {
       console.log({ error, where: 'server.js', for: 'trigger upload' });
