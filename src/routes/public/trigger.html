@@ -53,13 +53,13 @@
         });
 
         function createVideoPlayer(url) {
-            let randomX = Math.floor(Math.random() * (1000 - 500));
-            let randomY = Math.floor(Math.random() * (600 - 500));
+            let randomX = Math.floor(Math.random() * (1000 - 600));
+            let randomY = Math.floor(Math.random() * (600 - 600));
             let videoPlayer = document.createElement('video');
             videoPlayer.style.position = 'fixed';
             videoPlayer.style.top = `${randomY}px`;
             videoPlayer.style.left = `${randomX}px`;
-            videoPlayer.setAttribute('width', '500px');
+            videoPlayer.setAttribute('width', '600px');
             videoPlayer.setAttribute('autoplay', 'true');
             videoPlayer.setAttribute('id', triggerCount);
             videoPlayer.innerHTML = `<source src="${url}" type="video/mp4" />`;
