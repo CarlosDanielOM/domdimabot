@@ -57,9 +57,9 @@
             let randomY = Math.floor(Math.random() * (600 - 500));
             let videoPlayer = document.createElement('video');
             videoPlayer.style.position = 'fixed';
-            videoPlayer.style.top = `${randomY}px`;
-            videoPlayer.style.left = `${randomX}px`;
-            videoPlayer.setAttribute('width', '700px');
+            videoPlayer.style.top = `0px`;
+            videoPlayer.style.left = `0px`;
+            videoPlayer.setAttribute('width', '1000px');
             videoPlayer.setAttribute('autoplay', 'true');
             videoPlayer.setAttribute('id', triggerCount);
             videoPlayer.innerHTML = `<source src="${url}" type="video/mp4" />`;
