@@ -538,8 +538,9 @@ async function init() {
     res.status(200).json({ message: 'Trigger deleted', error: false });
   });
 
-  app.get('/points', async (req, res) => {
-    let streamer = await STREAMERS.getStreamer('cdom201');
+  app.get('/points/:channel', async (req, res) => {
+let ch = req.params.channel;
+    let streamer = await STREAMERS.getStreamer(ch);
     let response = await fetch(`https://api.twitch.tv/helix/channel_points/custom_rewards?broadcaster_id=${streamer.user_id}`, {
       method: 'GET',
       headers: {
