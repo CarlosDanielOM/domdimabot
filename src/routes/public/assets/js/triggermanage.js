@@ -20,6 +20,8 @@ const createTriggerBtn = document.getElementById('createTriggerBtn');
 let files;
 let triggers;
 
+let updateTriggerID;
+
 uploadFileBtn.addEventListener('click', async () => {
     document.getElementById('uploadContainer').style.display = 'flex';
 });
@@ -103,6 +105,33 @@ createTriggerForm.addEventListener('change', (e) => {
         document.getElementById('createSubmitBtn').setAttribute('disabled', true);
         console.log('disabled');
     }
+});
+
+updateTriggerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+        name: document.getElementById('updateName').value,
+        cost: document.getElementById('updateCost').value,
+        prompt: null,
+        cooldown: document.getElementById('updateCooldown').value,
+        volume: document.getElementById('updateVolume').value
+    }
+
+    const response = await fetch(`https://domdimabot.com/trigger/${channel}/${updateTriggerID}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+
+    const res = await response.json();
+
+    if (res.error) return createAlert(res.message, 'error');
+
+    createAlert(res.message, 'success');
+    document.getElementById('updateTrigger').style.display = 'none';
+    updateTriggerForm.reset();
 });
 
 document.getElementById('triggerVolume').addEventListener('change', (e) => {
@@ -312,6 +341,8 @@ function createTriggerView(trigger) {
         let id = e.target.id.split('-')[0];
 
         let trigger = triggers.find(trigger => trigger._id == id);
+
+        updateTriggerID = trigger._id;
 
         document.getElementById('updateName').value = trigger.name;
         document.getElementById('updateCost').value = trigger.cost;
