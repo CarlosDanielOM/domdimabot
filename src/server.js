@@ -547,7 +547,7 @@ async function init() {
 
     rewardData = rewardData.rewardData;
 
-    let updateResult = await triggerSchema.updateOne({ _id: id }, { name, cost, prompt, cooldown, volume });
+    let updateResult = await triggerSchema.findByIdAndUpdate(id, { name, cost, prompt, cooldown, volume });
     if (!updateResult) return res.status(400).json({ message: 'Error updating trigger', error: true });
 
     res.status(200).json({ message: 'Trigger updated', error: false, trigger });
@@ -716,11 +716,13 @@ async function init() {
       body.prompt = '';
     }
 
-    let reward = await redemptionRewardSchema.findOne({ channel: channel, _id: id });
+    let reward = await redemptionRewardSchema.findOne({ channel: channel, rewardID: id });
+
+    if (!reward) return res.status(404).json({ message: 'Reward not found', error: true });
 
     const streamer = await STREAMERS.getStreamer(channel);
 
-    let updateResponse = await fetch(`${getTwitchHelixURL()}/channel_points/custom_rewards?broadcaster_id=${streamer.user_id}&id=${reward.rewardID}`, {
+    let updateResponse = await fetch(`${getTwitchHelixURL()}/channel_points/custom_rewards?broadcaster_id=${streamer.user_id}&id=${id}`, {
       method: 'PATCH',
       headers: {
         'Client-ID': process.env.CLIENT_ID,
@@ -734,7 +736,7 @@ async function init() {
 
     if (data.error) return res.status(data.status).json(data);
 
-    let updateResult = await redemptionRewardSchema.updateOne({ _id: reward.id }, { rewardTitle: body.title, rewardPrompt: body.prompt, rewardCost: body.cost });
+    let updateResult = await redemptionRewardSchema.findByIdAndUpdate(reward._id, { rewardTitle: body.title, rewardPrompt: body.prompt, rewardCost: body.cost });
 
     if (!updateResult) return res.status(400).json({ message: 'Error updating reward', error: true });
 
