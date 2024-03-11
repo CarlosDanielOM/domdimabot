@@ -138,6 +138,10 @@ document.getElementById('triggerVolume').addEventListener('change', (e) => {
     document.getElementById('triggerVolumeValue').innerText = e.target.value + '%';
 });
 
+document.getElementById('updateVolume').addEventListener('change', (e) => {
+    document.getElementById('updateVolumeValue').innerText = e.target.value + '%';
+});
+
 document.getElementById('exitUpload').addEventListener('click', () => {
     document.getElementById('uploadContainer').style.display = 'none';
 });
