@@ -417,7 +417,7 @@ nav ul li a:hover {
 
 #main .container .triggers-section .triggers {
     width: 100%;
-    height: 100%;
+    height: 80%;
     overflow-y: auto;
     overflow-x: hidden;
 }

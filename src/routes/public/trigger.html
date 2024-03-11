@@ -34,12 +34,12 @@
 
         triggerSocket.on('trigger', (data) => {
             triggerCount++;
-            const { mediaType, url } = data;
+            const { mediaType, url, volume } = data;
             let triggerType = mediaType.split('/')[0];
             if (triggerType === 'image') {
                 triggerContainer.innerHTML = `<img src="${url}" alt="trigger" />`;
             } else if (triggerType === 'video') {
-                let videoPlayer = createVideoPlayer(url);
+                let videoPlayer = createVideoPlayer(url, volume);
                 triggerContainer.appendChild(videoPlayer);
             }
         });
@@ -52,7 +52,7 @@
             console.log('Connection Established');
         });
 
-        function createVideoPlayer(url) {
+        function createVideoPlayer(url, volume) {
             let randomX = Math.floor(Math.random() * (1000 - 700));
             let randomY = Math.floor(Math.random() * (600 - 500));
             let videoPlayer = document.createElement('video');
@@ -62,6 +62,7 @@
             videoPlayer.setAttribute('width', '1000px');
             videoPlayer.setAttribute('autoplay', 'true');
             videoPlayer.setAttribute('id', triggerCount);
+            videoPlayer.volume = (volume / 100);
             videoPlayer.innerHTML = `<source src="${url}" type="video/mp4" />`;
 
             videoPlayer.addEventListener('ended', () => {

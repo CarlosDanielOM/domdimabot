@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Triggers</title>
-    <link rel="stylesheet" href="/assets/css/min/managetriggers.min.css">
+    <link rel="stylesheet" href="/assets/css/managetriggers.css">
 </head>
 
 <body>
@@ -111,6 +111,12 @@
                     <div class="form-group">
                         <label for="triggerCooldown">Cooldown in seconds</label>
                         <input type="number" name="cooldown" id="triggerCooldown" placeholder="0" min="0" value="0">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label for="volume">Volumen</label>
+                        <input type="range" name="volume" id="trigger-volume" min="1" max="100" value="100">
                     </div>
                 </div>
                 <button id="createSubmitBtn" type="submit" value="Create" name="submit" class="submit submitBtn"

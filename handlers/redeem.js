@@ -12,7 +12,7 @@ async function redeem(client, eventData) {
     const { broadcaster_user_id, broadcaster_user_login, user_id, user_login, user_input } = eventData;
     const { reward } = eventData;
 
-    let trigger = await triggerSchema.findOne({ channelID: broadcaster_user_id, name: reward.title, type: 'redemption' }, 'file mediaType');
+    let trigger = await triggerSchema.findOne({ channelID: broadcaster_user_id, name: reward.title, type: 'redemption' }, 'file mediaType volume');
 
     if (!trigger) return;
 
@@ -25,6 +25,7 @@ async function redeem(client, eventData) {
     let triggerData = {
         url: url,
         mediaType: file.fileType,
+        volume: trigger.volume
     }
 
     sendTrigger(broadcaster_user_login, triggerData);
