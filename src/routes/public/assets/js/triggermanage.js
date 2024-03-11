@@ -70,7 +70,8 @@ createTriggerForm.addEventListener('submit', async (e) => {
         cost: document.getElementById('triggerCost').value,
         prompt: null,
         fileID: fileSelect.value,
-        cooldown: document.getElementById('triggerCooldown').value
+        cooldown: document.getElementById('triggerCooldown').value,
+        volume: document.getElementById('triggerVolume').value
     }
 
     const response = await fetch(`https://domdimabot.com/trigger/create/${channel}`, {

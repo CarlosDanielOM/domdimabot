@@ -453,7 +453,7 @@ async function init() {
 
   app.post('/trigger/create/:channel', async (req, res) => {
     const { channel } = req.params;
-    const { name, file, type, mediaType, cost, prompt, fileID, cooldown } = req.body;
+    const { name, file, type, mediaType, cost, prompt, fileID, cooldown, volume } = req.body;
 
     const streamer = await STREAMERS.getStreamer(channel);
 
@@ -500,7 +500,8 @@ async function init() {
       type,
       mediaType,
       cost,
-      cooldown
+      cooldown,
+      volume
     });
 
     await newTrigger.save();
