@@ -363,6 +363,153 @@ nav ul li a:hover {
     margin: 3%;
 }
 
+/*? UPDATE TRIGGER ?*/
+
+#uploadTrigger {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 80vh;
+    width: 40vw;
+    background-color: #c2c2c2;
+    border: 2px solid #000;
+    border-radius: 5%;
+    z-index: 50;
+}
+
+#uploadTrigger .uploadTrigger-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+#uploadTrigger .uploadTrigger-content #uploadTriggerForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+#uploadTrigger .row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 20px 0;
+}
+
+#uploadTrigger .row .form-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+#uploadTrigger .row .form-group label {
+    margin-bottom: 10px;
+}
+
+#uploadTrigger .row .form-group p.info {
+    font-size: .6rem;
+    font-weight: 100;
+    text-transform: uppercase;
+}
+
+#uploadTrigger h1 {
+    margin-bottom: 20px;
+}
+
+#uploadTrigger .row .form-group input {
+    margin-bottom: 20px;
+}
+
+#uploadTrigger .row .form-group select {
+    margin-bottom: 20px;
+}
+
+#uploadTrigger .row .form-group select option {
+    padding: 10px;
+}
+
+#uploadTrigger .row .form-group select option:hover {
+    background-color: #42a5fa;
+    color: #fff;
+}
+
+#uploadTrigger .row .form-group select option:active {
+    transform: scale(0.95);
+}
+
+#uploadTrigger .row .form-group select option:focus {
+    outline: none;
+}
+
+#uploadTrigger .row .form-group select option:disabled {
+    background-color: #c2c2c2;
+    color: #000;
+    cursor: not-allowed;
+}
+
+#uploadTrigger .row .form-group select option:disabled:hover {
+    background-color: #616161;
+    color: #000;
+    cursor: not-allowed;
+}
+
+#uploadTrigger .submitBtn {
+    padding: 10px 20px;
+    background-color: #64fa42;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#uploadTrigger .submitBtn:hover {
+    background-color: #2df700;
+    color: #000;
+}
+
+#uploadTrigger .submitBtn:active {
+    transform: scale(0.95);
+}
+
+#uploadTrigger .submitBtn:focus {
+    outline: none;
+}
+
+#uploadTrigger .submitBtn:disabled {
+    background-color: #ff6060;
+    color: #000;
+    cursor: not-allowed;
+}
+
+#uploadTrigger .submitBtn:disabled:hover {
+    background-color: #ff4949;
+    color: #000;
+}
+
+#uploadTrigger .submitBtn:disabled:active {
+    transform: scale(1);
+}
+
+#uploadTrigger .upload-footer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 3%;
+}
+
 /*? FILE PREVIEW ?*/
 
 #preview {

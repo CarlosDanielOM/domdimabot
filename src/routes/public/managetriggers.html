@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Triggers</title>
-    <link rel="stylesheet" href="/assets/css/min/managetriggers.min.css">
+    <link rel="stylesheet" href="/assets/css/managetriggers.css">
 </head>
 
 <body>
@@ -115,19 +115,57 @@
                 </div>
                 <div class="row">
                     <div class="form-group">
-                        <label for="volume">Volumen</label>
+                        <label for="volume">Volumen: <span id="triggerVolumeValue">100%</span></label>
                         <input type="range" name="volume" id="triggerVolume" min="1" max="100" value="100">
                     </div>
                 </div>
                 <button id="createSubmitBtn" type="submit" value="Create" name="submit" class="submit submitBtn"
-                    disabled>Upload</button>
+                    disabled>Submit</button>
             </form>
         </div>
         <div class="createTrigger-footer">
             <div class="file-preview" id="preview"></div>
         </div>
     </div>
-    <script src="/assets/js/min/triggermanage.min.js"></script>
+    <div id="uploadTrigger" class="uploadTrigger">
+        <button id="exitUpdateTrigger" class="exit">x</button>
+        <div class="upload-header">
+            <h2>Upload Trigger</h2>
+        </div>
+        <div class="uploadTrigger-content">
+            <form id="updateTriggerForm">
+                <div class="row">
+                    <div class="form-group">
+                        <label for="updateName">Name of the Redemption</label>
+                        <input type="text" name="updateName" id="updateName" placeholder="File Name" class="triggerName"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cost">Cost</label>
+                        <input type="number" name="cost" id="updateCost" placeholder="500" min="1" value="1">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label for="updateCooldown">Cooldown in seconds</label>
+                        <input type="number" name="cooldown" id="updateCooldown" placeholder="0" min="0" value="0">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label for="volume">Volumen: <span id="updateVolumeValue">100%</span></label>
+                        <input type="range" name="volume" id="updateVolume" min="1" max="100" value="100">
+                    </div>
+                </div>
+                <button id="updateSubmitBtn" type="submit" value="Update" name="submit"
+                    class="submit submitBtn">Update</button>
+            </form>
+        </div>
+        <div class="uploadTrigger-footer">
+            <div class="file-preview" id="preview"></div>
+        </div>
+    </div>
+    <script src="/assets/js/triggermanage.js"></script>
 </body>
 
 </html>

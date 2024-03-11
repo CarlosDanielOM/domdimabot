@@ -509,6 +509,49 @@ async function init() {
     res.status(200).json({ message: 'Trigger created', error: false, trigger: newTrigger });
   });
 
+  app.patch('/trigger/:channel/:id', async (req, res) => {
+    const { channel, id } = req.params;
+    const { name, cost, prompt, cooldown, volume } = req.body;
+
+    let trigger = await triggerSchema.findOne({ channel, _id: id });
+
+    if (!trigger) return res.status(404).json({ message: 'Trigger not found', error: true });
+
+    let requestBody = {
+      title: name,
+      cost,
+      prompt
+    }
+
+    if (cooldown > 0) {
+      requestBody.is_global_cooldown_enabled = true;
+      requestBody.global_cooldown_seconds = cooldown;
+    } else {
+      requestBody.is_global_cooldown_enabled = false;
+      requestBody.global_cooldown_seconds = 0;
+    }
+
+    if (prompt == null) delete requestBody.prompt;
+
+    let rewardResponse = await fetch(`${getUrl()}/rewards/${channel}/${trigger.rewardID}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody)
+    });
+
+    let rewardData = await rewardResponse.json();
+
+    if (rewardData.error) return res.status(rewardData.status).json(rewardData);
+
+    rewardData = rewardData.rewardData;
+
+    trigger.updateOne({ name, cost, prompt, cooldown, volume });
+
+    res.status(200).json({ message: 'Trigger updated', error: false, trigger });
+  });
+
   app.delete('/trigger/delete/:channel/:id', async (req, res) => {
     const { channel, id } = req.params;
 
@@ -547,7 +590,7 @@ async function init() {
   app.get('/triggers/:channel', async (req, res) => {
     const { channel } = req.params;
 
-    let triggers = await triggerSchema.find({ channel: channel }, '_id name file type mediaType date cost cooldown');
+    let triggers = await triggerSchema.find({ channel: channel }, '_id name file type mediaType date cost cooldown volume');
 
     res.status(200).json({ triggers });
 
@@ -660,6 +703,36 @@ async function init() {
     await reward.deleteOne({ id: reward.id });
 
     res.status(200).json({ message: 'Reward deleted', error: false });
+  });
+
+  app.patch('/rewards/:channel/:id', async (req, res) => {
+    const { channel, id } = req.params;
+    const body = req.body;
+
+    if (body.title.length > 45) return res.status(400).json({ message: 'Title too long', error: true });
+
+    let reward = await redemptionRewardSchema.findOne({ channel: channel, rewardID: id });
+
+    const streamer = await STREAMERS.getStreamer(channel);
+
+    let updateResponse = await fetch(`${getTwitchHelixURL()}/channel_points/custom_rewards?broadcaster_id=${streamer.user_id}&id=${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Client-ID': process.env.CLIENT_ID,
+        'Authorization': `Bearer ${decrypt(streamer.token)}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    let data = await updateResponse.json();
+
+    if (data.error) return res.status(data.status).json(data);
+
+    reward.updateOne({ rewardTitle: body.title, rewardPrompt: body.prompt, rewardCost: body.cost });
+
+    res.status(200).json({ data, error: false });
+
   });
 
   app.get('/logout', async (req, res) => {

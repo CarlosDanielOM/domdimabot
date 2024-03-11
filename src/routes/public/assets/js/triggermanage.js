@@ -4,6 +4,7 @@ const channel = window.location.pathname.split('/')[3];
 
 const fileUploadForm = document.getElementById('fileUploadForm');
 const createTriggerForm = document.getElementById('createTriggerForm');
+const updateTriggerForm = document.getElementById('updateTriggerForm');
 
 const alertContainer = document.getElementById('alertContainer');
 const mediaContainer = document.getElementById('mediaContainer');
@@ -104,12 +105,20 @@ createTriggerForm.addEventListener('change', (e) => {
     }
 });
 
+document.getElementById('triggerVolume').addEventListener('change', (e) => {
+    document.getElementById('triggerVolumeValue').innerText = e.target.value + '%';
+});
+
 document.getElementById('exitUpload').addEventListener('click', () => {
     document.getElementById('uploadContainer').style.display = 'none';
 });
 
 document.getElementById('exitCreateTrigger').addEventListener('click', () => {
     document.getElementById('createTrigger').style.display = 'none';
+});
+
+document.getElementById('exitUpdateTrigger').addEventListener('click', () => {
+    document.getElementById('uploadTrigger').style.display = 'none';
 });
 
 window.onload = async () => {
@@ -269,8 +278,6 @@ function createTriggerView(trigger) {
     deleteBtn.id = `${trigger._id}-delete`;
     editBtn.id = `${trigger._id}-edit`;
 
-    editBtn.setAttribute('disabled', true);
-
     triggerCon.id = `${trigger._id}-trigger`;
 
     actionContainer.appendChild(editBtn);
@@ -301,5 +308,17 @@ function createTriggerView(trigger) {
         document.getElementById(`${id}-trigger`).remove();
     });
 
-    editBtn.addEventListener('click', async (e) => { });
+    editBtn.addEventListener('click', async (e) => {
+        let id = e.target.id.split('-')[0];
+
+        let trigger = triggers.find(trigger => trigger._id == id);
+
+        document.getElementById('updateName').value = trigger.name;
+        document.getElementById('updateCost').value = trigger.cost;
+        document.getElementById('updateCooldown').value = trigger.cooldown;
+        document.getElementById('updateVolume').value = trigger.volume;
+        document.getElementById('updateVolumeValue').innerText = trigger.volume + '%';
+
+        document.getElementById('uploadTrigger').style.display = 'flex';
+    });
 }
