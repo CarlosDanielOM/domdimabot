@@ -378,18 +378,6 @@ async function init() {
   });
 
   app.post('/trigger/upload/:channel', async (req, res) => {
-    console.log({
-      xforforwarded: req.headers['x-forwarded-for'],
-      xrealip: req.headers['x-real-ip'],
-      socket: req.socket._peername,
-      socketIP: req.socket.remoteAddress,
-      xforwarded: req.headers['x-forwarded'],
-      forforwarded: req.headers['forwarded-for'],
-      forwarded: req.headers['forwarded'],
-      for: req.params.channel
-    });
-    if (cooldown.hasCooldown(req.ip)) return res.status(429).json({ message: 'You are being rate limited', error: true });
-    cooldown.setCooldown(req.ip, 5);
     try {
       const { channel } = req.params;
       if (!fs.existsSync(`${__dirname}/routes/public/uploads/triggers/${channel}`)) {
