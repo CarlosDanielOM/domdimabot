@@ -131,7 +131,9 @@ updateTriggerForm.addEventListener('submit', async (e) => {
 
     createAlert(res.message, 'success');
     document.getElementById('updateTrigger').style.display = 'none';
-    updateTriggerForm.reset();
+    setTimeout(() => {
+        window.location.reload();
+    }, 1500);
 });
 
 document.getElementById('triggerVolume').addEventListener('change', (e) => {
