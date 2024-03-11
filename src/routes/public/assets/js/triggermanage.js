@@ -117,7 +117,7 @@ updateTriggerForm.addEventListener('submit', async (e) => {
         volume: document.getElementById('updateVolume').value
     }
 
-    const response = await fetch(`https://domdimabot.com/trigger/${channel}/${updateTriggerID}`, {
+    const response = await fetch(`https://api.domdimabot.com/trigger/${channel}/${updateTriggerID}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
