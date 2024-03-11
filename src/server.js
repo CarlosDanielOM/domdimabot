@@ -547,7 +547,8 @@ async function init() {
 
     rewardData = rewardData.rewardData;
 
-    trigger.updateOne({ name, cost, prompt, cooldown, volume });
+    let updateResult = await triggerSchema.updateOne({ _id: id }, { name, cost, prompt, cooldown, volume });
+    if (!updateResult) return res.status(400).json({ message: 'Error updating trigger', error: true });
 
     res.status(200).json({ message: 'Trigger updated', error: false, trigger });
   });
@@ -711,6 +712,10 @@ async function init() {
 
     if (body.title.length > 45) return res.status(400).json({ message: 'Title too long', error: true });
 
+    if (!body.prompt) {
+      body.prompt = '';
+    }
+
     let reward = await redemptionRewardSchema.findOne({ channel: channel, rewardID: id });
 
     const streamer = await STREAMERS.getStreamer(channel);
@@ -729,7 +734,9 @@ async function init() {
 
     if (data.error) return res.status(data.status).json(data);
 
-    reward.updateOne({ rewardTitle: body.title, rewardPrompt: body.prompt, rewardCost: body.cost });
+    let updateResult = await redemptionRewardSchema.updateOne({ _id: reward.id }, { rewardTitle: body.title, rewardPrompt: body.prompt, rewardCost: body.cost });
+
+    if (!updateResult) return res.status(400).json({ message: 'Error updating reward', error: true });
 
     res.status(200).json({ data, error: false });
 
