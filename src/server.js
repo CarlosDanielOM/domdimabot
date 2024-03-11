@@ -716,11 +716,11 @@ async function init() {
       body.prompt = '';
     }
 
-    let reward = await redemptionRewardSchema.findOne({ channel: channel, rewardID: id });
+    let reward = await redemptionRewardSchema.findOne({ channel: channel, _id: id });
 
     const streamer = await STREAMERS.getStreamer(channel);
 
-    let updateResponse = await fetch(`${getTwitchHelixURL()}/channel_points/custom_rewards?broadcaster_id=${streamer.user_id}&id=${id}`, {
+    let updateResponse = await fetch(`${getTwitchHelixURL()}/channel_points/custom_rewards?broadcaster_id=${streamer.user_id}&id=${reward.rewardID}`, {
       method: 'PATCH',
       headers: {
         'Client-ID': process.env.CLIENT_ID,
