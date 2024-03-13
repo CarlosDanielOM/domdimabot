@@ -17,6 +17,7 @@ const chiste = require('./chiste');
 const enableCommand = require('./enablecommand');
 const disableCommand = require('./disablecommand');
 const duelo = require('./duelo');
+const furrometro = require('./furrometro');
 
 module.exports = {
     shoutout,
@@ -38,5 +39,6 @@ module.exports = {
     chiste,
     enableCommand,
     disableCommand,
-    duelo
+    duelo,
+    furrometro
 }

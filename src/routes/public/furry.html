@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sumimetro Supremo</title>
+    <title>Furrimetro</title>
 </head>
 
 <body>
@@ -14,12 +14,10 @@
         const type = window.location.pathname.split('/')[2];
         const channel = window.location.pathname.split('/')[3];
 
-        console.log(type, channel);
-
         const socket = io.connect('https://domdimabot.com/', { reconnection: true, transports: ['websocket'] });
-        const supremoSocket = io(`/sumimetro/${type}/${channel}`, { reconnection: true, transports: ['websocket'] });
+        const supremoSocket = io(`/overlays/ariascarletvt/furry`, { reconnection: true, transports: ['websocket'] });
 
-        supremoSocket.on('sumimetro', (data) => {
+        supremoSocket.on('furry', (data) => {
             let { username, value } = data;
             console.log(data);
             let text = `${username}: ${value}%`;

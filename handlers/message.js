@@ -281,6 +281,11 @@ async function message(client, channel, tags, message) {
                 if (duelo.error) return client.say(channel, `${duelo.reason}`);
                 client.say(channel, duelo.message);
                 break;
+            case 'furrometro':
+                let furrometro = await commands.furrometro(channel, tags['display-name'], argument, userlevel);
+                if (furrometro.error) return client.say(channel, `${furrometro.reason}`);
+                client.say(channel, furrometro.message);
+                break;
             default:
                 let cmdHandler = await commandHandler(channel, tags, command, argument, userlevel);
                 if (!cmdHandler.exists) return;

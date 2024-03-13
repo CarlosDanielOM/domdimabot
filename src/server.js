@@ -748,6 +748,20 @@ async function init() {
     res.status(200).sendFile(`${htmlPath}logout.html`);
   });
 
+  //? OVERLAY ROUTES ?//
+
+  app.get('/overlays/:channel/furry', async (req, res) => {
+    res.sendFile(`${htmlPath}furry.html`);
+  });
+
+  app.post('/overlays/:channel/furry', async (req, res) => {
+    const { channel } = req.params;
+    const { username, value } = req.body;
+
+    io.of(`/overlays/${channel}/furry`).emit('furry', { username, value });
+    res.status(204).send();
+  });
+
   //? Server ?//
   server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
