@@ -28,7 +28,7 @@ async function furrometro(channel, username, argument, userlevel) {
     if (rand > supremeFurry) {
         supremeFurry = rand;
 
-        await fetch('https://api.domdimabot.com/overlays', {
+        await fetch(`https://api.domdimabot.com/overlays/${channel}/furry`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
