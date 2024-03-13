@@ -75,6 +75,11 @@ async function init() {
     io.of(`/overlay/triggers/${channel}`).emit('prepareTriggers');
   });
 
+  io.of(/^\/overlays\/ariascarletvt\/furry/).on('connection', (socket) => {
+    const channel = socket.nsp.name.split('/')[3];
+    io.of(`/overlays/${channel}/furry`).emit('active');
+  });
+
   //* Routes *//
   const clipRoute = require('./routes/clip.route.js');
 
