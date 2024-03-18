@@ -17,6 +17,8 @@ async function setModerator(channel, user = 698614112) {
         return { error: true, reason: json.message, status: json.status };
     }
 
+    return { error: false, message: '', status: response.status };
+
 }
 
 module.exports = setModerator;
