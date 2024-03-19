@@ -12,24 +12,25 @@ async function refreshAllTokens() {
         try {
             let channel = await STREAMER.getStreamer(streamer);
 
-            if (channel.refresh_token.iv === null || channel.refresh_token.content === null) {
-                return console.log(`Error on refreshAllTokens: ${streamer} refresh_token is null`)
+            if (channel.refresh_token.iv == '' || channel.refresh_token.content == '') {
+                console.log(`Error on refreshAllTokens: ${streamer} refresh_token is null`)
+                return;
+            } else {
+                const { tokenEncrypt, refresh_tokenEncrypt } = await refreshToken(decrypt(channel.refresh_token));
+
+                if (!tokenEncrypt || !refresh_tokenEncrypt) {
+                    CLIENT.disconnectChannel(channel.name);
+                    let nullToken = { iv: null, content: null };
+                    let nullRefreshToken = { iv: null, content: null };
+                    await channelSchema.findOneAndUpdate({ name: channel.name }, { actived: false, twitch_user_token: nullToken, twitch_user_refresh_token: nullRefreshToken });
+                    return console.log('Error on refreshAllTokens: tokenEncrypt or refresh_tokenEncrypt is null')
+                };
+
+                channel.token = tokenEncrypt;
+                channel.refresh_token = refresh_tokenEncrypt;
+
+                await channelSchema.findOneAndUpdate({ name: channel.name }, { twitch_user_token: channel.token, twitch_user_refresh_token: channel.refresh_token });
             }
-
-            const { tokenEncrypt, refresh_tokenEncrypt } = await refreshToken(decrypt(channel.refresh_token));
-
-            if (!tokenEncrypt || !refresh_tokenEncrypt) {
-                CLIENT.disconnectChannel(channel.name);
-                let nullToken = { iv: null, content: null };
-                let nullRefreshToken = { iv: null, content: null };
-                await channelSchema.findOneAndUpdate({ name: channel.name }, { actived: false, twitch_user_token: nullToken, twitch_user_refresh_token: nullRefreshToken });
-                return console.log('Error on refreshAllTokens: tokenEncrypt or refresh_tokenEncrypt is null')
-            };
-
-            channel.token = tokenEncrypt;
-            channel.refresh_token = refresh_tokenEncrypt;
-
-            await channelSchema.findOneAndUpdate({ name: channel.name }, { twitch_user_token: channel.token, twitch_user_refresh_token: channel.refresh_token });
         } catch (error) {
             console.error(`Error processing ${streamer}:`, error);
         }

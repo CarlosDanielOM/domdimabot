@@ -54,7 +54,7 @@ class COMMAND {
 
     //? DELETE METHODS
     async deleteCommandFromDB(command) {
-        let deleted = await this.schema.deleteOne({ name: command.name, channel: this.channel });
+        let deleted = await this.schema.deleteOne({ cmd: command.name, channel: this.channel });
         if (deleted.deletedCount === 0) return false;
         return true;
     }
@@ -62,13 +62,13 @@ class COMMAND {
     //? DATABASE METHODS
 
     async getCommandFromDB(name) {
-        let command = await this.schema.findOne({ name: name, channel: this.channel });
+        let command = await this.schema.findOne({ cmd: name, channel: this.channel });
         if (command === null) return { error: 'Command does not exist', reason: 'command does not exist', command: null };
         return { error: false, command };
     }
 
     async getCommandFromDBasd(name) {
-        let command = await this.schema.findOne({ name: name, channel: this.channel });
+        let command = await this.schema.findOne({ cmd: name, channel: this.channel });
         if (command === null) return null;
         return { error: false, message: command.func, cd: command.cooldown, enabled: command.enabled, userLevel: command.userLevel };
     }
@@ -99,13 +99,13 @@ class COMMAND {
     }
 
     async updateCommandInDB(command) {
-        let updated = await this.schema.updateOne({ name: command.name, channel: this.channel }, command);
+        let updated = await this.schema.updateOne({ cmd: command.name, channel: this.channel }, command);
         if (updated.nModified === 0) return { error: 'Command could not be updated', reason: 'command could not be updated', updated: false };
         return { error: false, message: null, updated: true, command: command };
     }
 
     async updateCountableCommandInDB(command, count) {
-        let updated = await this.schema.updateOne({ name: command, channel: this.channel }, { count: count });
+        let updated = await this.schema.updateOne({ cmd: command, channel: this.channel }, { count: count });
         if (updated.nModified === 0) return { error: 'Command could not be updated', reason: 'command could not be updated', updated: false };
         return { error: false, message: null, updated: true, command: command };
     }

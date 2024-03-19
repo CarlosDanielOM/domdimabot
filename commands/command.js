@@ -149,12 +149,15 @@ async function command(action, channel, argument, type = null) {
             oldCommand = await COMMAND.getCommandFromDB(name);
         }
 
+        if (oldCommand.error) return { error: true, reason: oldCommand.reason };
+
         oldCommand = oldCommand.command;
 
         for (let i = 0; i < options.length; i++) {
             let opt = options[i];
             switch (opt.name) {
                 case 'cd':
+                    console.log({ opt }, 'opt.value')
                     if (opt.value >= 5 || (oldCommand.func == "speach")) {
                         oldCommand.cooldown = parseInt(opt.value);
                     } else {

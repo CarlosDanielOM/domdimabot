@@ -7,7 +7,7 @@ let modID = '698614112';
 let timeoutID = '886b8287-70fe-4e54-a071-aadd5a4922a8'
 
 async function redeem(client, eventData) {
-    console.log('redeem')
+    // console.log('redeem')
     const { sendTrigger } = require('../src/server');
     const { broadcaster_user_id, broadcaster_user_login, user_id, user_login, user_input } = eventData;
     const { reward } = eventData;

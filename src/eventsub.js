@@ -31,7 +31,7 @@ module.exports = {
             let hmac = HMAC_PREFIX + getHmac(secret, message);
 
             if (true === verifyMessage(hmac, req.headers[TWITCH_MESSAGE_SIGNATURE])) {
-                console.log('Message verified');
+                // console.log('Message verified');
 
                 //GET JSON object from body
                 let notification = JSON.parse(req.body);
