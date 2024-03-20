@@ -18,9 +18,14 @@ async function furrometro(channel, username, argument, userlevel) {
         return { error: true, reason: 'No tienes permisos para resetear el furrometro' };
     }
 
+    if(furrymeter.has(argument.toLowerCase())) {
+        let furryValue = furrymeter.get(argument.toLowerCase());
+        return { error: false, message: `El dia de hoy ${argument} es ${furryValue}% furro!` }
+    }
+
     if (furrymeter.has(username.toLowerCase())) {
         let furryValue = furrymeter.get(username.toLowerCase());
-        return { error: false, message: `El dia de hoy ${username} es ${furryValue}%` };
+        return { error: false, message: `El dia de hoy ${username} es ${furryValue}% furro!` };
     }
 
     let rand = Math.floor(Math.random() * 100) + 1;
