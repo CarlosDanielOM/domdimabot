@@ -47,15 +47,43 @@ permissionBtn.addEventListener('click', async (e) => {
 
 //! MODULES !//
 
+let moduleCost = 0;
+let moduleCooldown = 0;
+let moduleSkipQueue = true;
+let modulePriceIncrease = 0;
+let moduleReturnOriginalCost = false;
+
 const addVIPModule = document.getElementById('addVIPReward');
 const removeVIPModule = document.getElementById('removeVIPReward');
+const moduleForm = document.getElementById('formModule');
+
+let VIPRewardID = null;
+
+window.onload = async () => {
+    checkIfVIPRewardExists();
+};
+
+moduleForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    moduleCost = document.getElementById('moduleCost').value;
+    moduleCooldown = document.getElementById('moduleCooldown').value;
+    moduleSkipQueue = document.getElementById('moduleSkipQueue').checked;
+    modulePriceIncrease = document.getElementById('moduleIncrease').value;
+    moduleReturnOriginalCost = document.getElementById('moduleReturnOriginalCost').checked;
+
+});
+
 
 addVIPModule.addEventListener('click', async (e) => {
-
     let rewardData = {
         title: 'VIP',
-        cost: 1000,
-        skipQueue: false,
+        cost: moduleCost,
+        skipQueue: moduleSkipQueue,
+        cooldown: moduleCooldown,
+        priceIncrease: modulePriceIncrease,
+        rewardMessage: '',
+        returnToOriginalCost: moduleReturnOriginalCost
     }
 
     let res = await fetch(`${baseUrl}/${name}/create/reward`, {
@@ -72,9 +100,34 @@ addVIPModule.addEventListener('click', async (e) => {
 
     createAlert('Modulo Activado con exito', 'success');
 
-    console.log(data);
+    VIPRewardID = data.data.id;
 
+    checkIfVIPRewardExists();
+});
 
+removeVIPModule.addEventListener('click', async (e) => {
+    let rewardData = {
+        title: 'VIP',
+    }
+
+    let res = await fetch(`${baseUrl}/${name}/delete/reward/${VIPRewardID}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(rewardData)
+    });
+
+    let data = await res.json();
+
+    if (data.error) return createAlert(data.reason, 'danger');
+
+    createAlert('Modulo Desactivado con exito', 'success');
+
+    VIPRewardID = null;
+
+    removeVIPModule.attributes.setNamedItem(document.createAttribute('disabled'));
+    addVIPModule.attributes.removeNamedItem('disabled');
 });
 
 function createAlert(message, type) {
@@ -87,4 +140,19 @@ function createAlert(message, type) {
     setTimeout(() => {
         alert.remove();
     }, 5000);
+}
+
+async function checkIfVIPRewardExists() {
+    let res = await fetch(`${baseUrl}/points/${name}`);
+
+    let data = await res.json();
+    data = data.data;
+
+    data.forEach(reward => {
+        if (reward.title === 'VIP') {
+            VIPRewardID = reward.id;
+            removeVIPModule.attributes.removeNamedItem('disabled');
+            addVIPModule.attributes.setNamedItem(document.createAttribute('disabled'));
+        }
+    });
 }

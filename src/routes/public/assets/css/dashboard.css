@@ -247,3 +247,15 @@ body>.container .card .card-footer {
 .btn-danger:hover {
     background-color: #ff2d2d;
 }
+
+/*? CONFIGURE MODULES ?*/
+
+.configureModules {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50vw;
+    height: 75vh;
+    background-color: #4303b3;
+}

@@ -30,17 +30,50 @@
     <div id="systemAlerts" class="systemAlerts">
         <div class="container" id="alertContainer"></div>
     </div>
+
+    <div class="configureModules">
+        <h2 class="moduleTitle"></h2>
+        <form id="formModule">
+            <div class="form-group">
+                <label for="cost">Cost</label>
+                <input type="number" class="form-control" id="moduleCost" name="cost" required>
+            </div>
+            <div class="form-group">
+                <label for="cooldown">Cooldown</label>
+                <input type="number" class="form-control" id="moduleCooldown" name="cooldown" required>
+            </div>
+            <div class="form-group">
+                <label for="skipQueue">Skip Queue</label>
+                <input type="checkbox" id="moduleSkipQueue" checked>
+            </div>
+            <div class="form-group">
+                <label for="increase">Price Increase</label>
+                <input type="number" class="form-control" id="moduleIncrease" name="increase" required>
+                <p class="info">El numero que pongas es por la cantidad que va a aumentar el canje cada que se usa</p>
+            </div>
+            <div class="form-group">
+                <label for="keepChange">Return to Original Cost</label>
+                <input type="checkbox" id="moduleReturnOriginalCost">
+                <p class="info">Si esta activado el canje regresara a su precio original cada 12 horas</p>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Guardar</button>
+            </div>
+        </form>
+    </div>
+
     <div class="container">
         <div class="card vip-card">
             <div class="card-header">
                 <h3>VIP</h3>
             </div>
             <div class="card-body">
+                <button class="btn btn-warning" id="configureVIPReward">Configure</button>
             </div>
             <div class="card-footer">
                 <div class="actions">
                     <button class="btn btn-success" id="addVIPReward">Add Reward</button>
-                    <button class="btn btn-" id="removeVIPReward">Remove Reward</button>
+                    <button class="btn btn-danger" id="removeVIPReward" disabled>Remove Reward</button>
                 </div>
             </div>
         </div>

@@ -641,6 +641,9 @@ async function init() {
     const { title, cost, skipQueue } = req.body;
 
     const prompt = req.body.prompt || '';
+    const priceIncrease = req.body.priceIncrease || 0;
+    const rewardMessage = req.body.rewardMessage || '';
+    const returnToOriginalCost = req.body.returnToOriginalCost || false;
 
     if (title.length > 45) return res.status(400).json({ message: 'Title too long', error: true });
 
@@ -674,8 +677,12 @@ async function init() {
       rewardID: newReward.id,
       rewardTitle: newReward.title,
       rewardPrompt: newReward.prompt,
+      rewardOriginalCost: newReward.cost,
       rewardCost: newReward.cost,
       rewardIsEnabled: newReward.is_enabled,
+      rewardCostChange: priceIncrease,
+      rewardMessage,
+      returnToOriginalCost: returnToOriginalCost
     }
 
     await new redemptionRewardSchema(rewardData).save();

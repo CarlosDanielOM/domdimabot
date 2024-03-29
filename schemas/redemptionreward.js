@@ -10,6 +10,7 @@ const redemptionRewardSchema = new schema({
     rewardTitle: { type: String, required: true },
     rewardType: { type: String, default: 'custom' },
     rewardPrompt: { type: String, defualt: '' },
+    rewardOriginalCost: { type: Number, required: true },
     rewardCost: { type: Number, required: true },
     rewardIsEnabled: { type: Boolean, defualt: true },
     rewardMessage: { type: String, defualt: '' },

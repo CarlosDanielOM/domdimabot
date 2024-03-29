@@ -13,12 +13,8 @@ async function redeem(client, eventData) {
     const { broadcaster_user_id, broadcaster_user_login, user_id, user_login, user_input } = eventData;
     const { reward } = eventData;
 
-    console.log({ eventData, reward });
-
     if (reward.title === 'VIP') {
-        console.log({ quack: 'VIP', where: 'redeem' })
         let result = await vipRedemtionFun(eventData, reward);
-        console.log({ result, where: 'redeem' })
         if (result.error) return { error: true, reason: result.message };
         return { error: false, message: 'VIP set' };
     }

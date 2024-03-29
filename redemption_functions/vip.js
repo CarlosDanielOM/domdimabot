@@ -7,9 +7,7 @@ async function vipRedemtionFun(eventData, rewardData) {
     console.log({ headers, where: 'vipRedemtionFun' })
 
     if (rewardData.title === 'VIP') {
-        console.log('VIP');
         let result = await CHANNEL.setVIP(broadcaster_user_id, headers, user_id);
-        console.log({ result, where: 'vipRedemtionFun' })
         if (result.error) return { error: true, reason: result.message };
         if (result.status !== 204) return { error: true, reason: 'Error setting VIP' };
         return { error: false, message: 'VIP set' };
