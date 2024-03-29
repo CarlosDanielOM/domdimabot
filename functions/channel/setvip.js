@@ -4,7 +4,7 @@ const { getStreamerHeader } = require('../../util/headers')
 async function setVip(channelID, headers, userID) {
     const helixURL = getTwitchHelixURL();
 
-    let setVIP = await fetch(`${helixURL}channels/vips?broadcaster_id=${channelID}&user_id=${userID}`, { method: 'POST', headers: headers });
+    let setVIP = await fetch(`${helixURL}/channels/vips?broadcaster_id=${channelID}&user_id=${userID}`, { method: 'POST', headers: headers });
 
     if (setVIP.status == 204) return { error: false, status: 204 }
 

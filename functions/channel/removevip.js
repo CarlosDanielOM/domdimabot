@@ -3,7 +3,7 @@ const { getTwitchHelixURL } = require('../../util/links')
 async function removeVIP(channelID, headers, userID) {
     const helixURL = getTwitchHelixURL();
 
-    let removeVIP = await fetch(`${helixURL}channels/vips?broadcaster_id=${channelID}&user_id=${userID}`, { method: 'DELETE', headers: headers });
+    let removeVIP = await fetch(`${helixURL}/channels/vips?broadcaster_id=${channelID}&user_id=${userID}`, { method: 'DELETE', headers: headers });
 
     if (removeVIP.status === 204) return { error: false, status: 204 };
 
