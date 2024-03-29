@@ -5,51 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 5%;
-            background-color: #000;
-            color: #fff;
-        }
-
-        nav h1 {
-            font-size: 2rem;
-            font-weight: bold;
-        }
-
-        nav ul {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            list-style: none;
-        }
-
-        nav ul li {
-            margin: 0 10px;
-        }
-
-        nav ul li a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-        }
-
-        nav ul li a:hover {
-            color: #42a5fa;
-        }
-    </style>
+    <link rel="stylesheet" href="./assets/css/dashboard.css">
 </head>
 
 <body>
@@ -71,6 +27,24 @@
     <button id="leave">Leave Channel</button>
     <h2>Only if you haven't gaved permissions</h2>
     <button id="permissions">Give bot Permisions and Join Channel</button>
+    <div id="systemAlerts" class="systemAlerts">
+        <div class="container" id="alertContainer"></div>
+    </div>
+    <div class="container">
+        <div class="card vip-card">
+            <div class="card-header">
+                <h3>VIP</h3>
+            </div>
+            <div class="card-body">
+            </div>
+            <div class="card-footer">
+                <div class="actions">
+                    <button class="btn btn-success" id="addVIPReward">Add Reward</button>
+                    <button class="btn btn-" id="removeVIPReward">Remove Reward</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="./assets/js/dashboard.js"></script>
 </body>
 

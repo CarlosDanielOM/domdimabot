@@ -44,3 +44,47 @@ leaveBtn.addEventListener('click', async (e) => {
 permissionBtn.addEventListener('click', async (e) => {
     window.location.href = url;
 });
+
+//! MODULES !//
+
+const addVIPModule = document.getElementById('addVIPReward');
+const removeVIPModule = document.getElementById('removeVIPReward');
+
+addVIPModule.addEventListener('click', async (e) => {
+
+    let rewardData = {
+        title: 'VIP',
+        cost: 1000,
+        skipQueue: false,
+    }
+
+    let res = await fetch(`${baseUrl}/${name}/create/reward`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(rewardData)
+    });
+
+    let data = await res.json();
+
+    if (data.error) return createAlert(data.reason, 'danger');
+
+    createAlert('Modulo Activado con exito', 'success');
+
+    console.log(data);
+
+
+});
+
+function createAlert(message, type) {
+    const alert = document.createElement('div');
+    const paragraph = document.createElement('p');
+    alert.classList.add('alert', `alert-${type}`);
+    paragraph.innerText = message;
+    alert.appendChild(paragraph);
+    alertContainer.appendChild(alert);
+    setTimeout(() => {
+        alert.remove();
+    }, 5000);
+}

@@ -1,0 +1,249 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    background-color: #000;
+    color: #fff;
+}
+
+nav h1 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+nav ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+}
+
+nav ul li {
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #42a5fa;
+}
+
+body>.container {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 1fr;
+    width: 90%;
+    margin: 10px auto;
+}
+
+body>.container .card {
+    width: 150px;
+    height: 200px;
+    border: 1px solid #000;
+    border-radius: 5%;
+    padding: 10px;
+    overflow: hidden;
+}
+
+body>.container .card.vip-card {
+    background-color: #d60bb2;
+    color: #fff;
+}
+
+body>.container .card .card-header h3 {
+    font-size: 1.5rem;
+    text-align: center;
+    height: 25%;
+}
+
+body>.container .card .card-body {
+    height: 50%;
+}
+
+body>.container .card .card-body .actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+}
+
+body>.container .card .card-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25%;
+}
+
+/*? ALERT SYSTEM ?*/
+
+#systemAlerts {
+    position: fixed;
+    top: 1vh;
+    right: 1vw;
+    width: 40vw;
+    min-width: 40vw;
+    max-height: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+#systemAlerts .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+
+}
+
+#systemAlerts .alert {
+    padding: 10px;
+    color: #fff;
+    border-radius: 5px;
+    width: 100%;
+    margin: 5px;
+    text-align: left;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 99;
+    transition: all 1s ease;
+    animation: alertAnimation;
+}
+
+.alert-success {
+    background-color: #64fa42;
+    border: 2px solid #909090;
+}
+
+.alert-success:hover {
+    background-color: #2df700;
+    border: 2px solid #000;
+}
+
+.alert-error {
+    background-color: #ff6060;
+    border: 2px solid #909090;
+}
+
+.alert-error:hover {
+    background-color: #ff4949;
+    border: 2px solid #000;
+}
+
+.alert-info {
+    background-color: #42a5fa;
+    border: 2px solid #909090;
+}
+
+.alert-info:hover {
+    background-color: #2d7cf7;
+    border: 2px solid #000;
+}
+
+/*? BUTTONS ?*/
+
+.btn {
+    padding: 10px 20px;
+    background-color: #42a5fa;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #2d7cf7;
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+.btn:focus {
+    outline: none;
+}
+
+.btn:disabled {
+    background-color: #c2c2c2;
+    color: #000;
+    cursor: not-allowed;
+}
+
+.btn:disabled:hover {
+    background-color: #616161;
+    color: #000;
+    cursor: not-allowed;
+}
+
+.btn:disabled:active {
+    transform: scale(1);
+}
+
+.btn-success {
+    background-color: #64fa42;
+    color: #000;
+}
+
+.btn-success:hover {
+    background-color: #2df700;
+    color: #000;
+}
+
+.btn-error {
+    background-color: #ff6060;
+    color: #000;
+}
+
+.btn-error:hover {
+    background-color: #ff4949;
+    color: #000;
+}
+
+.btn-info {
+    background-color: #42a5fa;
+    color: #fff;
+}
+
+.btn-info:hover {
+    background-color: #2d7cf7;
+}
+
+.btn-warning {
+    background-color: #ff9f42;
+    color: #000;
+}
+
+.btn-warning:hover {
+    background-color: #ff7c2d;
+}
+
+.btn-danger {
+    background-color: #ff4242;
+    color: #000;
+}
+
+.btn-danger:hover {
+    background-color: #ff2d2d;
+}

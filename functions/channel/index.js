@@ -8,6 +8,8 @@ const getTitle = require('./gettitle');
 const setTitle = require('./settitle');
 const setModerator = require('./setmoderator');
 const deleteModerator = require('./deletemoderator');
+const setVIP = require('./setvip');
+const removeVIP = require('./removevip');
 
 class CHANNEL {
     constructor() {
@@ -31,6 +33,8 @@ class CHANNEL {
     setTitle = setTitle;
     setModerator = setModerator;
     deleteModerator = deleteModerator;
+    setVIP = setVIP;
+    removeVIP = removeVIP;
 
 }
 

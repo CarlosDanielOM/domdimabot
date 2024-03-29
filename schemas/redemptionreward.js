@@ -8,10 +8,13 @@ const redemptionRewardSchema = new schema({
     channel: { type: String, required: true },
     rewardID: { type: String, required: true },
     rewardTitle: { type: String, required: true },
+    rewardType: { type: String, default: 'custom' },
     rewardPrompt: { type: String, defualt: '' },
     rewardCost: { type: Number, required: true },
     rewardIsEnabled: { type: Boolean, defualt: true },
     rewardMessage: { type: String, defualt: '' },
+    rewardCostChange: { type: Number, defualt: 0 },
+    returnToOriginalCost: { type: Boolean, defualt: false },
 });
 
 module.exports = mongoose.model('redemptionreward', redemptionRewardSchema);
