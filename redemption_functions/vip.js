@@ -13,3 +13,5 @@ async function vipRedemtionFun(eventData, rewardData) {
     }
 
 }
+
+module.exports = vipRedemtionFun;
