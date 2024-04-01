@@ -282,6 +282,7 @@ async function message(client, channel, tags, message) {
                 client.say(channel, duelo.message);
                 break;
             case 'furrometro':
+                if (argument != 'reset') argument = tags['display-name'];
                 let furrometro = await commands.furrometro(channel, tags['display-name'], argument, userlevel);
                 if (furrometro.error) return client.say(channel, `${furrometro.reason}`);
                 client.say(channel, furrometro.message);
@@ -293,7 +294,7 @@ async function message(client, channel, tags, message) {
                 client.say(channel, mod.message);
                 break;
             case 'vip': //* TODO- ADD VIP COMMAND
-                
+
                 break;
             default:
                 let cmdHandler = await commandHandler(channel, tags, command, argument, userlevel);
