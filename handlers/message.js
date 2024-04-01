@@ -282,8 +282,8 @@ async function message(client, channel, tags, message) {
                 client.say(channel, duelo.message);
                 break;
             case 'furrometro':
-                if (argument != 'reset') argument = tags['display-name'];
-                let furrometro = await commands.furrometro(channel, tags['display-name'], argument, userlevel);
+                let newArgument = argument || tags['display-name'];
+                let furrometro = await commands.furrometro(channel, tags['display-name'], newArgument, userlevel);
                 if (furrometro.error) return client.say(channel, `${furrometro.reason}`);
                 client.say(channel, furrometro.message);
                 break;
