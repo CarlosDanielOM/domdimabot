@@ -258,4 +258,5 @@ body>.container .card .card-footer {
     width: 50vw;
     height: 75vh;
     background-color: #4303b3;
+    display: none;
 }

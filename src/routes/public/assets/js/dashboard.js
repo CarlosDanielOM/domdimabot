@@ -47,7 +47,7 @@ permissionBtn.addEventListener('click', async (e) => {
 
 //! MODULES !//
 
-let moduleCost = 0;
+let moduleCost = 10000;
 let moduleCooldown = 0;
 let moduleSkipQueue = true;
 let modulePriceIncrease = 0;
