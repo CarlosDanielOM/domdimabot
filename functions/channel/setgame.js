@@ -1,7 +1,13 @@
 const getUserID = require('../getuserid');
+const { getStreamerHeader } = require('../../util/headers');
+const { getTwitchHelixURL } = require('../../util/links');
 
 async function setGame(game, channel = null) {
-    let { streamerHeaders, helixURL } = this;
+
+    let helixURL = getTwitchHelixURL();
+    let streamerHeaders = getStreamerHeader();
+
+    if (channel === null) return { error: true, reason: `No se ha especificado el canal.` };
 
     let userID = await getUserID(channel);
 

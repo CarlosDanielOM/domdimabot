@@ -23,7 +23,6 @@ let channelInstances = new Map();
 async function message(client, channel, tags, message) {
     let commandCD = 10;
     let userlevel = giveUserLevel(channel, tags);
-    await CHAT.init(channel, modID);
     let chatBody = {
         channel: channel,
         message: message,
@@ -39,7 +38,7 @@ async function message(client, channel, tags, message) {
     let hasLink = message.match(linkRegex);
     if (hasLink && !tags.mod && !tags.username === channel && !tags.username === 'cdom201' && !tags.username === 'domdimabot') {
         if (channel == 'ariascarletvt' || channel == 'cdom201') {
-            let q = await CHAT.deleteMessage(tags.id);
+            let q = await CHAT.deleteMessage(tags.id, channel, modID);
         }
     }
 
@@ -261,7 +260,7 @@ async function message(client, channel, tags, message) {
                 break;
             case 'clearChat':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
-                CHAT.clearChat();
+                CHAT.clearChat(channel, modID);
                 client.say(channel, `Chat limpiado por ${tags['display-name']}`);
                 break;
             case 'enableCommand':

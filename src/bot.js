@@ -72,7 +72,7 @@ async function init() {
     client.on('message', async (channel, tags, message, self) => {
         if (self) return;
 
-        messages(client, channel.replace('#', ''), tags, message);
+        await messages(client, channel.replace('#', ''), tags, message);
 
         if (tags.username == 'elkenozvt') {
             if (channel == 'ariascarletvt' && !newChatter) {

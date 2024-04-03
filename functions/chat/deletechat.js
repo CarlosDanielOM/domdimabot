@@ -1,7 +1,18 @@
-async function clearChat() {
-    let response = await fetch(`${this.helixURL}/moderation/chat?broadcaster_id=${this.userID}&moderator_id=${this.modID}`, {
+const { getStreamerHeader } = require("../../util/headers");
+const { getTwitchHelixURL } = require("../../util/links");
+const getUserID = require("../getuserid");
+
+async function clearChat(channel, modID) {
+    let helixURL = getTwitchHelixURL();
+    let channelID = await getUserID(channel) || null;
+
+    if (!channelID) return { error: true, message: 'Invalid channel name' };
+
+    let streamHeaders = await getStreamerHeader(channel);
+
+    let response = await fetch(`${helixURL}/moderation/chat?broadcaster_id=${channelID}&moderator_id=${modID}`, {
         method: 'DELETE',
-        headers: this.streamerHeaders
+        headers: streamHeaders
     })
 
     if (response.status === 204) return { error: false, status: 204 };

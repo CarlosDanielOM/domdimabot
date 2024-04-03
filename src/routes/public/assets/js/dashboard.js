@@ -74,7 +74,6 @@ moduleForm.addEventListener('submit', async (e) => {
 
 });
 
-
 addVIPModule.addEventListener('click', async (e) => {
     let rewardData = {
         title: 'VIP',
