@@ -1,4 +1,4 @@
-if (!localStorage.getItem('token')) window.location.href = '/';
+if (!sessionStorage.getItem('token')) window.location.href = '/';
 
 const channel = window.location.pathname.split('/')[3];
 

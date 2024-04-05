@@ -287,7 +287,6 @@ async function message(client, channel, tags, message) {
                 client.say(channel, furrometro.message);
                 break;
             case 'mod':
-                if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
                 let mod = await commands.addModerator(channel, argument, userlevel);
                 if (mod.error) return client.say(channel, `${mod.reason}`);
                 client.say(channel, mod.message);

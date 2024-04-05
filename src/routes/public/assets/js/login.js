@@ -3,7 +3,7 @@ let baseURL = 'https://domdimabot.com/';
 async function login() {
     let token = null;
 
-    token = localStorage.getItem('token');
+    token = sessionStorage.getItem('token');
 
     if (token === null || token === undefined || token === '') {
         token = document.location.hash;
@@ -19,10 +19,10 @@ async function login() {
         let user = await validateToken(token);
 
         if (user.error) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('name');
-            localStorage.removeItem('id');
-            localStorage.removeItem('email');
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('name');
+            sessionStorage.removeItem('id');
+            sessionStorage.removeItem('email');
             window.location.href = baseURL;
         }
 
@@ -44,10 +44,10 @@ async function login() {
         response = await response.json();
 
         if (response.saved || response.exists) {
-            localStorage.setItem('token', token);
-            localStorage.setItem('name', user.login);
-            localStorage.setItem('id', user.id);
-            localStorage.setItem('email', user.email);
+            sessionStorage.setItem('token', token);
+            sessionStorage.setItem('name', user.login);
+            sessionStorage.setItem('id', user.id);
+            sessionStorage.setItem('email', user.email);
             window.location.href = baseURL + 'dashboard';
         } else {
             alert('There was a problem with your login, please try again.')
@@ -59,10 +59,10 @@ async function login() {
         let user = await validateToken(token);
 
         if (user.error) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('name');
-            localStorage.removeItem('id');
-            localStorage.removeItem('email');
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('name');
+            sessionStorage.removeItem('id');
+            sessionStorage.removeItem('email');
             window.location.href = baseURL;
         }
 
@@ -80,17 +80,17 @@ async function login() {
         exists = await exists.json();
 
         if (!exists.exists) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('name');
-            localStorage.removeItem('id');
-            localStorage.removeItem('email');
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('name');
+            sessionStorage.removeItem('id');
+            sessionStorage.removeItem('email');
             window.location.href = baseURL;
         }
 
-        localStorage.setItem('token', token);
-        localStorage.setItem('name', user.login);
-        localStorage.setItem('id', user.id);
-        localStorage.setItem('email', user.email);
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('name', user.login);
+        sessionStorage.setItem('id', user.id);
+        sessionStorage.setItem('email', user.email);
         window.location.href = baseURL + 'dashboard';
     }
 }
