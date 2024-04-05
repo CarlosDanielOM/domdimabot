@@ -301,6 +301,8 @@ async function init() {
       return false;
     }
 
+    console.log({ exists })
+
     if (exists.premium) {
       return res.status(200).json({ error: false, message: 'Channel is premium', premium: 'premium' });
     } else if (exists.premium_plus) {
