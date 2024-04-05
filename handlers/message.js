@@ -154,7 +154,7 @@ async function message(client, channel, tags, message) {
                 commandCD = endPoll.cooldown;
                 break;
             case 'game':
-                let game = await commands.game(channel, argument, isMod);
+                let game = await commands.game(channel, argument, userlevel);
                 if (game.error) return client.say(channel, `${game.reason}`);
                 client.say(channel, `${tags['display-name']} --> ${game.message}`);
                 commandCD = game.cooldown;
@@ -259,8 +259,8 @@ async function message(client, channel, tags, message) {
                 commandCD = chiste.cooldown;
                 break;
             case 'clearChat':
-                if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
-                CHAT.clearChat(channel, modID);
+                let clearChatRes = CHAT.clearChat(channel, modID, userlevel);
+                if (clearChatRes.error) return client.say(channel, `${clearChatRes.reason}`);
                 client.say(channel, `Chat limpiado por ${tags['display-name']}`);
                 break;
             case 'enableCommand':

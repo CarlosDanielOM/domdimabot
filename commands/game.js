@@ -12,10 +12,8 @@ const commandOptions = {
     description: `Cambia el juego actual | Ejemplo: !game <nombre del juego> | Ejemplo: !game Fortnite`,
 };
 
-async function game(channel, argument = null, isMod = false) {
-    await CHANNEL.init(channel);
-
-    if (!argument || !isMod) {
+async function game(channel, argument = null, userLevel = 0) {
+    if (!argument || userLevel < commandOptions.userLevel) {
         let game = await CHANNEL.getGame();
         if (game.error) return game;
         let message = `El juego actual es ${game}`;

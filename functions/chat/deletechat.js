@@ -2,7 +2,8 @@ const { getStreamerHeader } = require("../../util/headers");
 const { getTwitchHelixURL } = require("../../util/links");
 const getUserID = require("../getuserid");
 
-async function clearChat(channel, modID) {
+async function clearChat(channel, modID, userLevel) {
+    if (userLevel < 6) return { error: true, message: 'User does not have the required permissions' };
     let helixURL = getTwitchHelixURL();
     let channelID = await getUserID(channel) || null;
 

@@ -3,7 +3,6 @@ const { getStreamerHeader } = require('../../util/headers');
 const { getTwitchHelixURL } = require('../../util/links');
 
 async function setGame(game, channel = null) {
-
     let helixURL = getTwitchHelixURL();
     let streamerHeaders = getStreamerHeader();
 

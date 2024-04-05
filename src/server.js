@@ -235,7 +235,10 @@ async function init() {
 
           if (addedMod.error) {
             console.log({ error: addedMod.reason, where: 'auth.js', for: username });
-            return res.status(400).json({ error: true, message: `There was an error setting up your account and the bot in your channel` });
+            if (addedMod.reason == 'user is already a mod') { }
+            else {
+              return res.status(400).json({ error: true, message: `There was an error setting up your account and the bot in your channel` });
+            }
           }
 
           let eventData = SubscritpionsData;
@@ -252,13 +255,17 @@ async function init() {
           let commandsJSON = COMMANDSJSON.commands;
 
           for (let command in commandsJSON) {
+            let commandExists = await commandSchema.exists({ name: commandsJSON[command].name, channel: updatedChannel.name, channelID: updatedChannel.twitch_user_id });
+
+            if (commandExists) continue;
+
             let newCommand = new commandSchema({
               name: commandsJSON[command].name,
               cmd: commandsJSON[command].cmd,
               func: commandsJSON[command].func,
               type: commandsJSON[command].type,
-              channel: channel.name,
-              channelID: channel.twitch_user_id,
+              channel: updatedChannel.name,
+              channelID: updatedChannel.twitch_user_id,
               cooldown: commandsJSON[command].cooldown,
               enabled: commandsJSON[command].enabled,
               userLevel: commandsJSON[command].userLevel,
