@@ -48,6 +48,14 @@ async function login() {
             sessionStorage.setItem('name', user.login);
             sessionStorage.setItem('id', user.id);
             sessionStorage.setItem('email', user.email);
+
+            let premium = await validatePremium();
+            if (premium.error) {
+                console.log('Error on premium:', premium);
+            }
+
+            sessionStorage.setItem('premium', premium.premium);
+
             window.location.href = baseURL + 'dashboard';
         } else {
             alert('There was a problem with your login, please try again.')
@@ -91,6 +99,13 @@ async function login() {
         sessionStorage.setItem('name', user.login);
         sessionStorage.setItem('id', user.id);
         sessionStorage.setItem('email', user.email);
+        let premium = await validatePremium();
+        if (premium.error) {
+            console.log('Error on premium:', premium);
+        }
+
+        sessionStorage.setItem('premium', premium.premium);
+
         window.location.href = baseURL + 'dashboard';
     }
 }
@@ -115,4 +130,22 @@ async function validateToken(token) {
     }
 
     return response.data[0];
+}
+
+async function validatePremium() {
+    let response = await fetch(baseURL + 'premium', {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            channel: sessionStorage.getItem('name'),
+            channelID: sessionStorage.getItem('id')
+        })
+    });
+
+    response = await response.json();
+
+    return response;
+
 }
