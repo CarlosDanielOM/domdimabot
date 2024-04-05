@@ -7,7 +7,7 @@ async function getCurrentGame(channel) {
     let helixURL = getTwitchHelixURL();
     let channelID = await getUserID(channel) || null;
 
-    if (!channelID) return { error: true, message: 'Invalid channel name' };
+    if (!channelID) return { error: true, reason: 'Invalid channel name' };
 
     let streamerHeaders = await getStreamerHeader(channel);
 

@@ -14,7 +14,8 @@ const commandOptions = {
 
 async function game(channel, argument = null, userLevel = 0) {
     if (!argument || userLevel < commandOptions.userLevel) {
-        let game = await CHANNEL.getGame();
+        console.log('runs', { where: 'game' })
+        let game = await CHANNEL.getGame(channel);
         if (game.error) return game;
         let message = `El juego actual es ${game}`;
 
