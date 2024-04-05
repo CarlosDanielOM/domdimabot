@@ -257,7 +257,10 @@ async function init() {
           for (let command in commandsJSON) {
             let commandExists = await commandSchema.exists({ name: commandsJSON[command].name, channel: updatedChannel.name, channelID: updatedChannel.twitch_user_id });
 
-            if (commandExists) continue;
+            if (commandExists) {
+              console.log(`Command ${commandsJSON[command].name} already exists for ${updatedChannel.name}`)
+              continue;
+            };
 
             let newCommand = new commandSchema({
               name: commandsJSON[command].name,
