@@ -6,7 +6,7 @@ async function setGame(game, channel = null) {
     let helixURL = getTwitchHelixURL();
     if (channel === null) return { error: true, reason: `No se ha especificado el canal.` };
 
-    let streamerHeaders = await getStreamerHeader();
+    let streamerHeaders = await getStreamerHeader(channel);
 
     let userID = await getUserID(channel);
 
