@@ -294,14 +294,12 @@ async function init() {
   app.post('/premium', async (req, res) => {
     let { channel, channelID } = req.body;
 
-    let exists = await channelSchema.find({ name: channel, twitch_user_id: channelID }, 'premium premium_plus');
+    let exists = await channelSchema.findOne({ name: channel, twitch_user_id: channelID }, 'premium premium_plus');
 
     if (!exists) {
       res.status(400).json({ error: true, reason: 'Channel not found' });
       return false;
     }
-
-    console.log({ exists })
 
     if (exists.premium) {
       return res.status(200).json({ error: false, message: 'Channel is premium', premium: 'premium' });
