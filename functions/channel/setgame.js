@@ -4,9 +4,9 @@ const { getTwitchHelixURL } = require('../../util/links');
 
 async function setGame(game, channel = null) {
     let helixURL = getTwitchHelixURL();
-    let streamerHeaders = getStreamerHeader();
-
     if (channel === null) return { error: true, reason: `No se ha especificado el canal.` };
+
+    let streamerHeaders = await getStreamerHeader();
 
     let userID = await getUserID(channel);
 
@@ -17,6 +17,8 @@ async function setGame(game, channel = null) {
 
     let data = await response.json();
     let gameData = data.data[0] || undefined;
+
+    console.log({ gameData, where: 'setGame' })
 
     if (gameData === undefined) {
         response = await fetch(`${helixURL}/search/categories?query=${game}`, {
