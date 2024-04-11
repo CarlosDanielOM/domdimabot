@@ -467,7 +467,7 @@ async function init() {
           fileName: req.file.filename,
           fileSize: req.file.size,
           fileType: req.file.mimetype,
-          fileUrl: `https://domdimabot.com/media/${channel}/${fileNameUrlEncoded}`,
+          fileUrl: `https://api.domdimabot.com/media/${channel}/${fileNameUrlEncoded}`,
           channel: channel,
           channelID: streamer.user_id,
         }

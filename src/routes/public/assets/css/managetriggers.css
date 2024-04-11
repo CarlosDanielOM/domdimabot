@@ -660,7 +660,7 @@ nav ul li a:hover {
     right: 1vw;
     width: 40vw;
     min-width: 40vw;
-    max-height: 400;
+    max-height: 400px;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -6,10 +6,10 @@ function isProduction() {
 
 function getUrl() {
     if (production === true) {
-        return "https://domdimabot.com";
+        return "https://api.domdimabot.com";
     } else {
         return "http://localhost:3000";
-        return "https://domdimabot.com";
+        return "https://api.domdimabot.com";
     }
 }
 
