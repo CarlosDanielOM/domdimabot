@@ -50,7 +50,7 @@ async function ruletarusa(channel, user, modID, isMod) {
     }
 
     modRes = await CHANNEL.deleteModerator(channel, userID);
-    if (modRes.error) return modRes;
+    if (modRes.error) return { error: true, status: modRes.status, reason: modRes.message };
 
     let timeout = await timeoutUser(broadcasterID, userID, modID, 150, 'Ruleta rusa');
 

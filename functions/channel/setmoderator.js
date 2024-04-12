@@ -3,7 +3,7 @@ const { getStreamerHeader } = require('../../util/headers');
 const { getTwitchHelixURL } = require('../../util/links');
 
 async function setModerator(channel, user = 698614112) {
-    const streamer = streamers.getStreamer(channel);
+    const streamer = await streamers.getStreamer(channel);
     const headers = await getStreamerHeader(channel);
     let response = await fetch(`${getTwitchHelixURL()}/moderation/moderators?broadcaster_id=${streamer.user_id}&user_id=${user}`, {
         method: 'POST',

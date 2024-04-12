@@ -3,7 +3,7 @@ const { getStreamerHeader } = require('../../util/headers');
 const { getTwitchHelixURL } = require('../../util/links');
 
 async function deleteModerator(channel, userID) {
-    const streamer = streamers.getStreamer(channel);
+    const streamer = await streamers.getStreamer(channel);
     const headers = await getStreamerHeader(channel);
 
     let response = await fetch(`${getTwitchHelixURL()}/moderation/moderators?broadcaster_id=${streamer.user_id}&user_id=${userID}`, {
@@ -14,6 +14,8 @@ async function deleteModerator(channel, userID) {
     if (response.status === 204) return { error: false, status: 204 };
 
     let json = await response.json();
+
+    console.log({ json })
 
     if (json.error) return json;
 
