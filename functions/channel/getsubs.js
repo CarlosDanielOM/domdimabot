@@ -13,7 +13,7 @@ async function getTotalSubs(streamer) {
     const data = await response.json();
 
     if (data.error) {
-        console.log({ error: true, reason: data.reason, for: streamer, where: 'getsubs.js' });
+        console.log({ error: true, reason: data.message, for: streamer, where: 'getsubs.js' });
         return { error: true, reason: data.reason };
     }
 
