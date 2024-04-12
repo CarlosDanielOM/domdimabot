@@ -13,8 +13,6 @@ const commandOptions = {
 };
 
 async function title(channel, argument = null, isMod = false) {
-    await CHANNEL.init(channel);
-
     if (!argument || !isMod) {
         let title = await CHANNEL.getTitle();
         if (title.error) return title;
@@ -27,7 +25,7 @@ async function title(channel, argument = null, isMod = false) {
         return data;
     }
 
-    let title = await CHANNEL.setTitle(argument);
+    let title = await CHANNEL.setTitle(channel, argument);
     if (title.error) return title;
     let message = `A cambiado el titulo a: ${title}`;
 

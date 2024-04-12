@@ -230,7 +230,6 @@ async function init() {
         } else {
           await STREAMERS.updateStreamers();
 
-          await CHANNEL.init(username);
           let addedMod = await CHANNEL.setModerator(username);
 
           if (addedMod.error) {

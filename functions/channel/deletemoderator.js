@@ -1,11 +1,12 @@
-const { getStreamerHeader } = require('../../util/headers')
-const getUserID = require('../getuserid')
+const streamers = require('../../class/streamers');
+const { getStreamerHeader } = require('../../util/headers');
+const { getTwitchHelixURL } = require('../../util/links');
 
 async function deleteModerator(channel, userID) {
+    const streamer = streamers.getStreamer(channel);
     const headers = await getStreamerHeader(channel);
-    const channelID = await getUserID(channel);
 
-    let response = await fetch(`${this.helixURL}/moderation/moderators?broadcaster_id=${channelID}&user_id=${userID}`, {
+    let response = await fetch(`${getTwitchHelixURL}/moderation/moderators?broadcaster_id=${streamer.user_id}&user_id=${userID}`, {
         method: 'DELETE',
         headers: headers
     })

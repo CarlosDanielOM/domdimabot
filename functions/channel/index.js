@@ -20,13 +20,6 @@ class CHANNEL {
         this.userID = null;
     }
 
-    async init(channel) {
-        this.channel = channel;
-        this.helixURL = await getTwitchHelixURL();
-        this.streamerHeaders = await getStreamerHeader(channel);
-        this.userID = await getUserID(channel);
-    }
-
     getGame = getGame;
     setGame = setGame;
     getTitle = getTitle;

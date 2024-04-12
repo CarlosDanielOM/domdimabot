@@ -243,7 +243,6 @@ async function message(client, channel, tags, message) {
                 client.say(channel, saveClip.message);
                 break;
             case 'testy':
-                await CHANNEL.init(channel);
                 console.log(await CHANNEL.setModerator(channel, 533538623));
                 break;
             case 'commands':

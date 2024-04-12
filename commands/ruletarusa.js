@@ -28,7 +28,6 @@ async function ruletarusa(channel, user, modID, isMod) {
     let timeoutRes = null;
     let modRes = null;
 
-    await CHANNEL.init(channel);
     let probability = Math.floor(Math.random() * 120) + 1;
     let dead = false;
     if (probability % 3 === 0) dead = true;
