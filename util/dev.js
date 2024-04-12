@@ -1,4 +1,4 @@
-let production = false;
+let production = true;
 
 function isProduction() {
     return production;
