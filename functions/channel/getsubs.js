@@ -1,7 +1,6 @@
 const { getTwitchHelixURL } = require('../../util/links')
 const STREAMERS = require('../../class/streamers');
 const { getStreamerHeader } = require('../../util/headers');
-const { where } = require('../../schemas/channel.schema');
 
 async function getTotalSubs(streamer) {
     let channel = await STREAMERS.getStreamer(streamer);
@@ -21,3 +20,5 @@ async function getTotalSubs(streamer) {
     return { error: false, total: data.total };
 
 }
+
+module.exports = getTotalSubs;

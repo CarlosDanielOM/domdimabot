@@ -19,6 +19,7 @@ const disableCommand = require('./disablecommand');
 const duelo = require('./duelo');
 const furrometro = require('./furrometro');
 const addModerator = require('./addmoderator');
+const getTotalSubs = require('./gettotalsubs');
 
 module.exports = {
     shoutout,
@@ -42,5 +43,6 @@ module.exports = {
     disableCommand,
     duelo,
     furrometro,
-    addModerator
+    addModerator,
+    getTotalSubs
 }
