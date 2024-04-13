@@ -312,9 +312,6 @@ async function init() {
   });
 
   //? LOGIN ROUTES ?//
-  app.get('/login', (req, res) => {
-    res.status(200).sendFile(`${htmlPath}login.html`);
-  });
 
   app.post('/login', async (req, res) => {
     const { name, id, email, action } = req.body;
@@ -350,6 +347,20 @@ async function init() {
     }
 
   });
+
+  app.get('/active/:channel', async (req, res) => {
+    const { channel } = req.params;
+    let exists = await channelSchema.findOne({ name: channel });
+
+    if (!exists) return res.status(404).json({ message: 'Channel not found', error: true });
+
+    if (exists.actived) {
+      res.status(200).json({ message: 'Channel is active', active: true, error: false });
+    } else {
+      res.status(200).json({ message: 'Channel is not active', active: false, error: false });
+    }
+
+  })
 
   //? DASHBOARD ROUTES ?//
 
