@@ -381,18 +381,18 @@ async function init() {
         CLIENT.connectChannel(exists.name);
         exists.actived = true;
         await exists.save();
-        res.status(200).json({ message: 'Joined channel' });
+        res.status(200).json({ message: 'Joined channel', error: false});
       } else if (action === 'leave') {
         CLIENT.disconnectChannel(exists.name);
         exists.actived = false;
         await exists.save();
-        res.status(200).json({ message: 'Left channel' });
+        res.status(200).json({ message: 'Left channel', error: false});
       } else {
-        res.status(400).json({ message: 'Action not found' });
+        res.status(400).json({ message: 'Action not found', error: true });
       }
       await STREAMERS.updateStreamers();
     } else {
-      res.status(400).json({ message: 'User not found' });
+      res.status(400).json({ message: 'User not found', error: true });
       return false;
     }
 
