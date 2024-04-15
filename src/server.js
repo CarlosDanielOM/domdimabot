@@ -824,7 +824,6 @@ async function init() {
 }
 
 function sendTrigger(channel, triggerData) {
-  console.log({ triggerData, where: "server" });
   io.of(`/overlays/triggers/${channel}`).emit('trigger', triggerData);
 }
 
