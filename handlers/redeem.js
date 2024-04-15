@@ -13,9 +13,12 @@ async function redeem(client, eventData) {
     const { broadcaster_user_id, broadcaster_user_login, user_id, user_login, user_input } = eventData;
     const { reward } = eventData;
 
-    if (reward.title === 'VIP') {
+    let vipMatch = reward.title.match(/VIP/);
+
+    if (vipMatch) {
         let result = await vipRedemtionFun(eventData, reward);
         if (result.error) return { error: true, reason: result.message };
+        client.say(broadcaster_user_login, `@${user_login} ${result.rewardMessage}`);
         return { error: false, message: 'VIP set' };
     }
 
