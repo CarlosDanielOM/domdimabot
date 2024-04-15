@@ -497,7 +497,7 @@ async function init() {
 
     const streamer = await STREAMERS.getStreamer(channel);
 
-    console.log({ body: req.body });
+    console.log({ body: req.body, channel: channel, where: 'server.js', for: 'trigger create' });
 
     let exists = await triggerFileSchema.exists({ name: file, fileType: mediaType });
 
