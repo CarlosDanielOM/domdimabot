@@ -790,6 +790,14 @@ async function init() {
 
   });
 
+  app.get('/rewards/:type/:channel', async (req, res) => {
+    const { type, channel } = req.params;
+
+    let rewards = await redemptionRewardSchema.find({ channel: channel, rewardType: type }, '_id rewardID rewardTitle rewardPrompt rewardCost rewardCostChange rewardMessage returnToOriginalCost');
+
+    res.status(200).json({ rewards });
+  });
+
   app.get('/logout', async (req, res) => {
     res.status(200).sendFile(`${htmlPath}logout.html`);
   });
