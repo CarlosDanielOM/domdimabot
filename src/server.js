@@ -420,6 +420,7 @@ async function init() {
       if (!fs.existsSync(`${__dirname}/routes/public/uploads/triggers/${channel}`)) {
         fs.mkdirSync(`${__dirname}/routes/public/uploads/triggers/${channel}`, { recursive: true });
       }
+      console.log({ body: req.body, file: req.file, where: 'server.js', for: 'trigger upload before multer' })
       const storage = multer.diskStorage({
         destination: function (req, file, cb) {
           cb(null, `${__dirname}/routes/public/uploads/triggers/${channel}`)
