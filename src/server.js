@@ -431,6 +431,7 @@ async function init() {
       multer({
         storage: storage, fileFilter: async (req, file, cb) => {
           if (acceptableMimeTypes.includes(file.mimetype)) {
+            console.log({ name: req.body.triggerName, fileType: file.mimetype, body: req.body, file: file, where: 'server.js', for: 'trigger upload multer' })
             if (await triggerFileSchema.exists({ name: req.body.triggerName, fileType: file.mimetype })) {
               cb(null, false);
             } else {
@@ -446,6 +447,8 @@ async function init() {
           res.status(400).json({ message: 'Error uploading file', error: true });
           return false;
         }
+
+        console.log({ file: req.file, body: req.body, where: 'server.js', for: 'trigger upload' })
 
         if (!req.file) return res.status(400).json({ message: 'File type not supported or file with same name already exists', error: true });
 
