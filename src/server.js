@@ -425,8 +425,7 @@ async function init() {
           cb(null, `${__dirname}/routes/public/uploads/triggers/${channel}`)
         },
         filename: function (req, file, cb) {
-          console.log({ body: req.body, file: req.file, where: 'server.js', cb, for: 'trigger upload before multer' })
-          cb(null, `${req.body.triggerName}.${file.mimetype.split('/')[1]}`);
+          cb(null, `${req.body.originalname}.${file.mimetype.split('/')[1]}`);
         }
       });
       multer({
