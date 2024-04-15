@@ -13,14 +13,17 @@ async function vipRedemtionFun(eventData, rewardData) {
 
     if (vipReward.rewardCostChange > 0) {
         let newCost = vipReward.rewardCost + vipReward.rewardCostChange;
+        let data = {
+            title: vipReward.rewardTitle,
+            prompt: vipReward.rewardPrompt,
+            cost: newCost,
+        }
         let response = await fetch(`${getUrl()}/rewards/${broadcaster_user_login}/${rewardData.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                rewardCost: newCost
-            })
+            body: JSON.stringify({ data })
         });
     }
 
