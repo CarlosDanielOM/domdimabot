@@ -497,6 +497,8 @@ async function init() {
 
     const streamer = await STREAMERS.getStreamer(channel);
 
+    console.log({ body: req.body });
+
     let exists = await triggerFileSchema.exists({ name: file, fileType: mediaType });
 
     if (!exists) return res.status(400).json({ message: 'File not found', error: true });
