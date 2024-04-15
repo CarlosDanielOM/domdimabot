@@ -18,6 +18,7 @@ async function vipRedemtionFun(eventData, rewardData) {
             prompt: vipReward.rewardPrompt,
             cost: newCost,
         }
+        console.log({ data, where: "vipRedemtionFun" })
         let response = await fetch(`${getUrl()}/rewards/${broadcaster_user_login}/${rewardData.id}`, {
             method: 'PATCH',
             headers: {
