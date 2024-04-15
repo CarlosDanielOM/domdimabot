@@ -756,8 +756,6 @@ async function init() {
     const { channel, id } = req.params;
     const body = req.body;
 
-    console.log({ body, where: 'server.js', for: 'patch' })
-
     if (body.title.length > 45) return res.status(400).json({ message: 'Title too long', error: true });
 
     if (!body.prompt) {
