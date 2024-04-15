@@ -4,7 +4,6 @@ const fetch = require('node-fetch');
 const express = require('express');
 const socketio = require('socket.io');
 const fs = require('fs');
-const https = require('https');
 const http = require('http');
 const axios = require('axios');
 const multer = require('multer');
@@ -20,20 +19,14 @@ const commandSchema = require('../schemas/command');
 const redemptionRewardSchema = require('../schemas/redemptionreward');
 const triggerSchema = require('../schemas/trigger');
 const triggerFileSchema = require('../schemas/triggerfile');
-const appConfigSchema = require('../schemas/app_config');
-const eventsubSchema = require('../schemas/eventsub');
 const { getTwitchHelixURL } = require('../util/links.js');
 const { getUrl } = require('../util/dev.js');
-const { getNewAppToken, getAppToken } = require('../util/token.js');
-const { getStreamerHeader } = require('../util/headers.js');
 
 const CHANNEL = require('../functions/channel');
 
-const eventsubHandler = require('../handlers/eventsub.js');
-const { subscribeTwitchEventFollow, getEventsubs, SubscritpionsData, unsubscribeTwitchEvent, subscribeTwitchEvent } = require('../util/eventsub.js');
+const { getEventsubs, SubscritpionsData, unsubscribeTwitchEvent, subscribeTwitchEvent } = require('../util/eventsub.js');
 
 const downloadPath = `${__dirname}/routes/public/downloads/`;
-const triggerUploadErrorPath = `${__dirname}/routes/public/uploads/triggers/error/`;
 const htmlPath = `${__dirname}/routes/public/`;
 
 const aceptableFileExtensions = ['mp4', 'mov', 'avi', 'flv', 'wmv', 'webm', 'mkv', 'gif', 'jpg', 'jpeg', 'png', 'bmp', 'tiff', 'svg', 'webp', 'mp3', 'flac', 'wav', 'ogg', 'aac', 'wma', 'm4a'];
@@ -300,12 +293,10 @@ async function init() {
       return false;
     }
 
-    console.log({ exists })
-
-    if (exists.premium) {
-      return res.status(200).json({ error: false, message: 'Channel is premium', premium: 'premium' });
-    } else if (exists.premium_plus) {
+    if (exists.premium_plus) {
       return res.status(200).json({ error: false, message: 'Channel is premium plus', premium: 'premium_plus' });
+    } else if (exists.premium) {
+      return res.status(200).json({ error: false, message: 'Channel is premium', premium: 'premium' });
     } else {
       return res.status(200).json({ error: false, message: 'Channel is not premium', premium: 'none' });
     }

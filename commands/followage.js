@@ -9,20 +9,15 @@ async function followage(channel, user) {
     const userID = await getUserID(user);
     const channelID = await getUserID(channel);
 
-    console.log({ userID, channelID, where: 'followage' })
-
     let response = await fetch(`${getTwitchHelixURL()}/channels/followers?broadcaster_id=${channelID}&user_id=${userID}`, {
         method: 'GET',
         headers
     });
 
-    console.log({ response, where: 'followage' })
-
     let data = await response.json();
 
-    console.log({ data, where: 'followage after fetch' });
-
     if (data.error) {
+        console.log({ error: true, data, where: "followage" })
         return { error: true, reason: data.message, status: data.status };
     }
 
