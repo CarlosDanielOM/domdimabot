@@ -425,7 +425,7 @@ async function init() {
           cb(null, `${__dirname}/routes/public/uploads/triggers/${channel}`)
         },
         filename: function (req, file, cb) {
-          cb(null, `${req.body.originalname}.${file.mimetype.split('/')[1]}`);
+          cb(null, `${req.body.triggerName}.${file.mimetype.split('/')[1]}`);
         }
       });
       multer({
