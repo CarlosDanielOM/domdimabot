@@ -381,12 +381,12 @@ async function init() {
         CLIENT.connectChannel(exists.name);
         exists.actived = true;
         await exists.save();
-        res.status(200).json({ message: 'Joined channel', error: false});
+        res.status(200).json({ message: 'Joined channel', error: false });
       } else if (action === 'leave') {
         CLIENT.disconnectChannel(exists.name);
         exists.actived = false;
         await exists.save();
-        res.status(200).json({ message: 'Left channel', error: false});
+        res.status(200).json({ message: 'Left channel', error: false });
       } else {
         res.status(400).json({ message: 'Action not found', error: true });
       }
@@ -725,6 +725,8 @@ async function init() {
       rewardMessage,
       returnToOriginalCost: returnToOriginalCost
     }
+
+    if (body.rewardType) rewardData.rewardType = body.rewardType;
 
     await new redemptionRewardSchema(rewardData).save();
 
