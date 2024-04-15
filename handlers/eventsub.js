@@ -2,6 +2,7 @@ const CLIENT = require('../util/client');
 const functions = require('../functions');
 const commands = require('../commands');
 const redeemHandler = require('./redeem');
+const redemtionRedeem = require('../redemption_functions/resetredemptioncosts');
 
 let client;
 
@@ -19,6 +20,7 @@ async function eventsubHandler(subscriptionData, eventData) {
             break;
         case 'stream.offline':
             client.say(eventData.broadcaster_user_login, `Hey! ${eventData.broadcaster_user_name} ha terminado su stream! Esperamos verte en el proximo directo!`);
+            redemtionRedeem(client, eventData.broadcaster_user_id);
             break;
         case 'channel.channel_points_custom_reward_redemption.add':
             redeemHandler(client, eventData);
