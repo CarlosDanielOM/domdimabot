@@ -6,7 +6,7 @@
             "func": "ruletarusa",
             "type": "command",
             "reserved": true,
-            "description": "Tiraras del gatillo y si tenia bala te mueres",
+            "description": "Tiraras del gatillo y si tenia bala te da timeout por 150 segundos | Ejemplo: !ruletarusa | No necesita argumentos",
             "enabled": true,
             "cooldown": 10,
             "canTimeout": false,
@@ -23,7 +23,7 @@
             "cooldown": 10,
             "userLevelName": "mod",
             "userLevel": 6,
-            "description": "Anuncia algo en el canal"
+            "description": "Anuncia algo en el canal | Ejemplo: !anuncio <mensaje> | Ejemplo: !anuncio Hola como estas | El mensaje no puede ser mayor a 300 caracteres | El mensaje solo se podra ver en navegadores WEB y no en Movil"
         },
         {
             "name": "promo",
@@ -109,7 +109,7 @@
             "userLevelName": "mod",
             "enabled": true,
             "userLevel": 6,
-            "description": "Crea una encuesta con la siguiente sintaxis: !poll <titulo>;<opcion1>/<opcion2>;<tiempo en segundos> | Ejemplo: !poll ¿Ganara el streamer?;Si/No;60 | El tiempo maximo es de 5 minutos y minimo de 30 segundos | El titulo no puede ser mayor a 100 caracteres | Las opciones no pueden ser mayor a 100 caracteres | Minimo 2 opciones y maximo 5 opciones y deben ser separadas por /"
+            "description": "Crea una encuesta con la siguiente sintaxis: !poll <titulo>;<opcion1>/<opcion2>;<tiempo en segundos> | Ejemplo: !poll ¿Ganara el streamer?;Si/No;60 | El tiempo maximo es de 5 minutos y minimo de 30 segundos | El titulo no puede ser mayor a 25 caracteres | Las opciones no pueden ser mayor a 25 caracteres | Minimo 2 opciones y maximo 5 opciones y deben ser separadas por /"
         },
         {
             "name": "End Poll",
