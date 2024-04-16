@@ -6,7 +6,7 @@ async function setTitle(channel, title) {
     const streamer = await streamers.getStreamer(channel);
     const headers = await getStreamerHeader(channel);
 
-    let response = await fetch(`${getTwitchHelixURL}/channels?broadcaster_id=${streamer.user_id}`, {
+    let response = await fetch(`${getTwitchHelixURL()}/channels?broadcaster_id=${streamer.user_id}`, {
         method: 'PATCH',
         headers: headers,
         body: JSON.stringify({
