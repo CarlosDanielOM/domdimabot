@@ -14,7 +14,7 @@
         const type = window.location.pathname.split('/')[2];
         const channel = window.location.pathname.split('/')[3];
 
-        const socket = io.connect('https://domdimabot.com/', { reconnection: true, transports: ['websocket'] });
+        const socket = io.connect('https://api.domdimabot.com/', { reconnection: true, transports: ['websocket'] });
         const supremoSocket = io(`/sumimetro/${type}/${channel}`, { reconnection: true, transports: ['websocket'] });
 
         supremoSocket.on('sumimetro', (data) => {

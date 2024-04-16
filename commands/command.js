@@ -42,7 +42,7 @@ async function command(action, channel, argument, type = null) {
         name: null,
         cmd: null,
         type: null,
-        cooldown: 20,
+        cooldown: 10,
         channel: channel,
         channelID: streamer.user_id,
         userLevel: 0,
@@ -59,7 +59,8 @@ async function command(action, channel, argument, type = null) {
             let opt = options[i];
             switch (opt.name) {
                 case 'cd':
-                    if (opt.value > 5) {
+                    console.log({ opt })
+                    if (Number(opt.value) >= 5) {
                         cmdOptions.cooldown = parseInt(opt.value);
                     } else {
                         cmdOptions.cooldown = 20;
@@ -157,7 +158,6 @@ async function command(action, channel, argument, type = null) {
             let opt = options[i];
             switch (opt.name) {
                 case 'cd':
-                    console.log({ opt }, 'opt.value')
                     if (opt.value >= 5 || (oldCommand.func == "speach")) {
                         oldCommand.cooldown = parseInt(opt.value);
                     } else {

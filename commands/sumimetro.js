@@ -114,7 +114,7 @@ async function sumimetro(channel, user, toUser) {
 
                     //* SENDS HTTP REQUEST TO THE API
 
-                    let sumimetroRes = await fetch(`https://domdimabot.com/sumimetro/dominante/${channel}`, {
+                    let sumimetroRes = await fetch(`https://api.domdimabot.com/sumimetro/dominante/${channel}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -149,7 +149,7 @@ async function sumimetro(channel, user, toUser) {
                         await sumiSupremoData.save();
 
                         //* SENDS HTTP REQUEST TO THE API
-                        let sumimetroRes = await fetch(`https://domdimabot.com/sumimetro/dominante/${channel}`, {
+                        let sumimetroRes = await fetch(`https://api.domdimabot.com/sumimetro/dominante/${channel}`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -186,7 +186,7 @@ async function sumimetro(channel, user, toUser) {
 
                     //* SENDS HTTP REQUEST TO THE API
 
-                    let sumimetroRes = await fetch(`https://domdimabot.com/sumimetro/sumiso/${channel}`, {
+                    let sumimetroRes = await fetch(`https://api.domdimabot.com/sumimetro/sumiso/${channel}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -220,7 +220,7 @@ async function sumimetro(channel, user, toUser) {
                         await sumiSupremoData.save();
 
                         //* SENDS HTTP REQUEST TO THE API
-                        let sumimetroRes = await fetch(`https://domdimabot.com/sumimetro/sumiso/${channel}`, {
+                        let sumimetroRes = await fetch(`https://api.domdimabot.com/sumimetro/sumiso/${channel}`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'

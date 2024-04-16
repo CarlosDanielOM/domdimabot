@@ -16,7 +16,7 @@
         let channel = window.location.pathname.split('/')[2];
         let lastMsgID = '';
 
-        const socket = io.connect('https://domdimabot.com/', {
+        const socket = io.connect('https://api.domdimabot.com/', {
             reconnection: true,
             transports: ['websocket']
         });
