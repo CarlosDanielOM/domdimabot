@@ -85,6 +85,10 @@ async function init() {
 
   //? DEV ROUTES ?//
 
+  app.get('/commands/reserved', async (req, res) => {
+    res.status(200).json(COMMANDSJSON);
+  });
+
   //! Routes !//
   app.get('/eventsubs', async (req, res) => {
     let data = await getEventsubs();
