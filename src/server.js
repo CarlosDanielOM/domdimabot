@@ -748,7 +748,10 @@ async function init() {
 
     if (response.error) return res.status(response.status).json(response);
 
-    if (response.status !== 204) return res.status(response.status).json({ message: 'Error deleting reward', error: true });
+    if (response.status !== 204) {
+      console.log({ response, where: 'server.js', for: 'delete reward' })
+      return res.status(response.status).json({ message: 'Error deleting reward', error: true })
+    };
 
     await unsubscribeTwitchEvent(reward.eventsubID);
 
