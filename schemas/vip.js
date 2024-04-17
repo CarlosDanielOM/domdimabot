@@ -13,26 +13,10 @@ const vipSchema = new Schema({
         year: { type: Number, default: () => new Date().getFullYear() }
     },
     createdAt: { type: Date, default: Date.now },
-    expiresAt: { type: Date, default: () => new Date().setDate(new Date().getDate() + this.duration) },
     expireDate: {
-        day: {
-            type: Number, default: () => {
-                let date = new Date(this.expiresAt)
-                return date.getDate()
-            }
-        },
-        month: {
-            type: Number, default: () => {
-                let date = new Date(this.expiresAt)
-                return date.getMonth()
-            }
-        },
-        year: {
-            type: Number, default: () => {
-                let date = new Date(this.expiresAt)
-                return date.getFullYear()
-            }
-        }
+        day: { type: Number, required: true },
+        month: { type: Number, required: true },
+        year: { type: Number, required: true }
     }
 })
 

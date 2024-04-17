@@ -34,12 +34,30 @@ async function vipRedemtionFun(eventData, rewardData) {
     }
 
     if (vipReward.rewardDuration > 0) {
+        let expireDate = {
+            day: () => {
+                let date = new Date();
+                date.setDate(date.getDate() + vipReward.rewardDuration);
+                return date.getDate();
+            },
+            month: () => {
+                let date = new Date();
+                date.setDate(date.getDate() + vipReward.rewardDuration);
+                return date.getMonth();
+            },
+            year: () => {
+                let date = new Date();
+                date.setDate(date.getDate() + vipReward.rewardDuration);
+                return date.getFullYear();
+            }
+        }
         let vipData = {
             username: eventData.user_login,
             channel: broadcaster_user_login,
             channelID: broadcaster_user_id,
             vip: true,
             duration: vipReward.rewardDuration,
+            expireDate: expireDate
         }
 
         await new vipSchema(vipData).save();
