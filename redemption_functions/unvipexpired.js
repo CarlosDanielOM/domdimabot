@@ -22,7 +22,7 @@ async function unVIPExpiredUser(client, eventData) {
                 return client.say(broadcaster_user_login, `${json.message}`);
             };
             if (json.status === 204) {
-                await vipSchema.findOneAndUpdate({ channelID: broadcaster_user_id, username: item.username }, { vip: false });
+                await vipSchema.findOneAndUpdate({ _id: item._id, username: item.username }, { vip: false });
                 return client.say(broadcaster_user_login, `@${item.username} tu VIP ha expirado!`);
             }
         }
