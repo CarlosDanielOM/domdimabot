@@ -68,6 +68,13 @@ async function specialCommands(tags, argument, cmdFunc, count = 0, channel) {
                         let title = await CHANNEL.getTitle(channel);
                         cmdFunc = cmdFunc.replace(special[0], title);
                         break;
+                    case 'channel':
+                        cmdFunc = cmdFunc.replace(special[0], channel);
+                        break;
+                    case 'game':
+                        let game = await CHANNEL.getGame(channel);
+                        cmdFunc = cmdFunc.replace(special[0], game);
+                        break;
                 }
                 break
             default:
