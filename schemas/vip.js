@@ -1,0 +1,39 @@
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+
+const vipSchema = new Schema({
+    username: { type: String, required: true },
+    channel: { type: String, required: true },
+    channelID: { type: String, required: true },
+    vip: { type: Boolean, required: true },
+    duration: { type: Number, required: true },
+    date: {
+        day: { type: Number, default: () => new Date().getDate() },
+        month: { type: Number, default: () => new Date().getMonth() },
+        year: { type: Number, default: () => new Date().getFullYear() }
+    },
+    createdAt: { type: Date, default: Date.now },
+    expiresAt: { type: Date, default: () => new Date().setDate(new Date().getDate() + this.duration) },
+    expireDate: {
+        day: {
+            type: Number, default: () => {
+                let date = new Date(this.expiresAt)
+                return date.getDate()
+            }
+        },
+        month: {
+            type: Number, default: () => {
+                let date = new Date(this.expiresAt)
+                return date.getMonth()
+            }
+        },
+        year: {
+            type: Number, default: () => {
+                let date = new Date(this.expiresAt)
+                return date.getFullYear()
+            }
+        }
+    }
+})
+
+module.exports = mongoose.model('vip', vipSchema)

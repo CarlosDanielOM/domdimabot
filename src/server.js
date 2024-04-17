@@ -501,8 +501,6 @@ async function init() {
 
     const streamer = await STREAMERS.getStreamer(channel);
 
-    console.log({ body: req.body, channel: channel, where: 'server.js', for: 'trigger create' });
-
     let exists = await triggerFileSchema.exists({ name: file, fileType: mediaType });
 
     if (!exists) return res.status(400).json({ message: 'File not found', error: true });
@@ -727,6 +725,7 @@ async function init() {
     }
 
     if (body.rewardType) rewardData.rewardType = body.rewardType;
+    if (body.rewardDuration) rewardData.rewardDuration = body.rewardDuration;
 
     await new redemptionRewardSchema(rewardData).save();
 

@@ -1,6 +1,7 @@
 const CHANNEL = require('../functions/channel');
 const { getStreamerHeader } = require('../util/headers');
 const rewardSchema = require('../schemas/redemptionreward');
+const vipSchema = require('../schemas/vip');
 const { getUrl } = require('../util/dev');
 
 async function vipRedemtionFun(eventData, rewardData) {
@@ -25,14 +26,29 @@ async function vipRedemtionFun(eventData, rewardData) {
             },
             body: JSON.stringify(data)
         });
+
+        if (response.status !== 204) {
+            console.log({ response, where: 'vipRedemtionFun', for: 'vipReward.rewardCostChange > 0' })
+            return { error: true, reason: 'Error updating reward cost' }
+        };
     }
 
-    if (rewardData.title === 'VIP') {
-        let result = await CHANNEL.setVIP(broadcaster_user_id, headers, user_id);
-        if (result.error) return { error: true, reason: result.message };
-        if (result.status !== 204) return { error: true, reason: 'Error setting VIP' };
-        return { error: false, message: 'VIP set', rewardMessage: vipReward.message };
+    if (vipReward.rewardDuration > 0) {
+        let vipData = {
+            username: eventData.user_login,
+            channel: broadcaster_user_login,
+            channelID: broadcaster_user_id,
+            vip: true,
+            duration: vipReward.rewardDuration,
+        }
+
+        await new vipSchema(vipData).save();
     }
+
+    let result = await CHANNEL.setVIP(broadcaster_user_id, headers, user_id);
+    if (result.error) return { error: true, reason: result.message };
+    if (result.status !== 204) return { error: true, reason: 'Error setting VIP' };
+    return { error: false, message: 'VIP set', rewardMessage: vipReward.message };
 
 }
 
