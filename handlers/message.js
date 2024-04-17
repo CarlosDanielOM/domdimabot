@@ -291,6 +291,8 @@ async function message(client, channel, tags, message) {
                 client.say(channel, mod.message);
                 break;
             case 'vip': //* TODO- ADD VIP COMMAND
+                break;
+            case 'unvip':
 
                 break;
             case 'subs':
