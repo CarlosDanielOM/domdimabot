@@ -1,7 +1,13 @@
-async function getTitle() {
-    let response = await fetch(`${this.helixURL}/channels?broadcaster_id=${this.userID}`, {
+const STREAMERS = require('../../class/streamers');
+const { getStreamerHeader } = require('../../util/headers');
+const { getTwitchHelixURL } = require('../../util/links');
+
+async function getTitle(channel) {
+    let streamer = await STREAMERS.getStreamer(channel);
+    let headers = await getStreamerHeader(channel);
+    let response = await fetch(`${getTwitchHelixURL()}/channels?broadcaster_id=${streamer.user_id}`, {
         method: 'GET',
-        headers: this.streamerHeaders
+        headers: headers
     });
 
     let data = await response.json();

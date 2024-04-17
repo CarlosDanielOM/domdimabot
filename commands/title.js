@@ -14,7 +14,7 @@ const commandOptions = {
 
 async function title(channel, argument = null, isMod = false) {
     if (!argument || !isMod) {
-        let title = await CHANNEL.getTitle();
+        let title = await CHANNEL.getTitle(channel);
         if (title.error) return title;
         let message = `El titulo actual es ${title}`;
 

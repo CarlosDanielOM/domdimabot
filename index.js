@@ -9,15 +9,19 @@ const { refreshAllTokens, getNewAppToken } = require('./util/token');
 const dev = require('./util/dev');
 
 async function initialize() {
-    await CLIENT.clientConnect();
+    try {
+        await CLIENT.clientConnect();
 
-    await db.init();
-    await STREAMERS.init();
+        await db.init();
+        await STREAMERS.init();
 
-    await httpServer.init();
-    eventsub.init();
-    await bot.init();
-    await dev.refreshAllTokens(refreshAllTokens);
+        await httpServer.init();
+        eventsub.init();
+        await bot.init();
+        await dev.refreshAllTokens(refreshAllTokens);
+    } catch (error) {
+        console.log(error);
+    }
 
     // await getNewAppToken();
 

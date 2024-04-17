@@ -1,7 +1,3 @@
-const getUserID = require('../getuserid');
-const { getTwitchHelixURL } = require('../../util/links');
-const { getStreamerHeader } = require('../../util/headers');
-
 const getGame = require('./getgame');
 const setGame = require('./setgame');
 const getTitle = require('./gettitle');
@@ -10,15 +6,9 @@ const setModerator = require('./setmoderator');
 const deleteModerator = require('./deletemoderator');
 const setVIP = require('./setvip');
 const removeVIP = require('./removevip');
+const getTotalSubs = require('./getsubs');
 
 class CHANNEL {
-    constructor() {
-        this.channel = null;
-        this.game = null;
-        this.streamerHeaders = null;
-        this.helixURL = null;
-        this.userID = null;
-    }
 
     getGame = getGame;
     setGame = setGame;
@@ -28,6 +18,8 @@ class CHANNEL {
     deleteModerator = deleteModerator;
     setVIP = setVIP;
     removeVIP = removeVIP;
+    getTotalSubs = getTotalSubs;
+
 
 }
 
