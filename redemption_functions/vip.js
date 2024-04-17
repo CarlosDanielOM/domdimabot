@@ -34,22 +34,11 @@ async function vipRedemtionFun(eventData, rewardData) {
     }
 
     if (vipReward.rewardDuration > 0) {
+        let newExpireData = new Date().setDate(new Date() + vipReward.rewardDuration);
         let expireDate = {
-            day: () => {
-                let date = new Date();
-                date.setDate(date.getDate() + vipReward.rewardDuration);
-                return date.getDate();
-            },
-            month: () => {
-                let date = new Date();
-                date.setDate(date.getDate() + vipReward.rewardDuration);
-                return date.getMonth();
-            },
-            year: () => {
-                let date = new Date();
-                date.setDate(date.getDate() + vipReward.rewardDuration);
-                return date.getFullYear();
-            }
+            day: newExpireData.getDate(),
+            month: newExpireData.getMonth(),
+            year: newExpireData.getFullYear()
         }
         let vipData = {
             username: eventData.user_login,
