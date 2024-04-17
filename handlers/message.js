@@ -295,11 +295,6 @@ async function message(client, channel, tags, message) {
             case 'unvip':
 
                 break;
-            case 'subs':
-                let subs = await commands.getTotalSubs(channel);
-                if (subs.error) return client.say(channel, `${subs.reason}`);
-                client.say(channel, subs.message);
-                break;
             default:
                 let cmdHandler = await commandHandler(channel, tags, command, argument, userlevel);
                 if (!cmdHandler.exists) return;
