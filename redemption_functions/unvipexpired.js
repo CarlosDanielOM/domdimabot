@@ -1,4 +1,4 @@
-const vipSchema = require('../schemas/vipSchema');
+const vipSchema = require('../schemas/vip');
 const CHANNEL = require('../functions/channel/index');
 
 const { getStreamerHeader } = require('../util/headers');
