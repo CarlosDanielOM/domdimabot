@@ -31,7 +31,6 @@ async function specialCommands(tags, argument, cmdFunc, count = 0, channel) {
     for (let i = 0; i < specials.length; i++) {
         specialCommandsFunc.lastIndex = 0;
         let special = specialCommandsFunc.exec(cmdFunc);
-        console.log({ special })
         switch (special[1]) {
             case 'user':
                 cmdFunc = cmdFunc.replace(special[0], tags['display-name']);
@@ -65,8 +64,10 @@ async function specialCommands(tags, argument, cmdFunc, count = 0, channel) {
                         let totalSubs = await CHANNEL.getTotalSubs(channel);
                         cmdFunc = cmdFunc.replace(special[0], totalSubs.total);
                         break;
-                    case 'title': 
-                        let title = await CHANNEL.getTitle()
+                    case 'title':
+                        let title = await CHANNEL.getTitle(channel);
+                        cmdFunc = cmdFunc.replace(special[0], title);
+                        break;
                 }
                 break
             default:
