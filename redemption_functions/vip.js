@@ -27,7 +27,7 @@ async function vipRedemtionFun(eventData, rewardData) {
             body: JSON.stringify(data)
         });
 
-        if (response.status !== 204) {
+        if (response.error) {
             console.log({ response, where: 'vipRedemtionFun', for: 'vipReward.rewardCostChange > 0' })
             return { error: true, reason: 'Error updating reward cost' }
         };
