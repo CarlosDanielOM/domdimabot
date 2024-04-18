@@ -293,7 +293,6 @@ async function message(client, channel, tags, message) {
             case 'vip': //* TODO- ADD VIP COMMAND
                 break;
             case 'unvip':
-
                 break;
             default:
                 let cmdHandler = await commandHandler(channel, tags, command, argument, userlevel);

@@ -1,7 +1,7 @@
 const COMMAND = require('../class/command');
 const CHANNEL = require('../functions/channel')
 
-let specialCommandsFunc = (/\$\(([a-z]+)\s?([a-z0-9]+)?\)/g);
+let specialCommandsFunc = (/\$\(([a-z]+)\s?([a-z0-9]+)?\s?([a-zA-Z0-9\s]+)?\)/g);
 
 async function commandHandler(channel, tags, command, argument, userLevel) {
     COMMAND.init(channel, argument);
@@ -43,7 +43,8 @@ async function specialCommands(tags, argument, cmdFunc, count = 0, channel) {
                 }
                 break;
             case 'random':
-                let random = Math.floor(Math.random() * 100) + 1;
+                let maxNumber = special[2] || 100;
+                let random = Math.floor(Math.random() * maxNumber) + 1;
                 cmdFunc = cmdFunc.replace(special[0], random);
                 break;
             case 'count':
@@ -75,8 +76,31 @@ async function specialCommands(tags, argument, cmdFunc, count = 0, channel) {
                         let game = await CHANNEL.getGame(channel);
                         cmdFunc = cmdFunc.replace(special[0], game);
                         break;
+                    default:
+                        break;
                 }
                 break
+            case 'set':
+                if (!special[2]) break;
+                switch (special[2]) {
+                    case 'game':
+                        let game = special[3] || argument;
+                        let updated = await CHANNEL.setGame(game, channel);
+                        if (updated.error) cmdFunc = cmdFunc.replace(special[0], updated.reason);
+                        else cmdFunc = cmdFunc.replace(special[0], game);
+                        if (!argument) break;
+                        break;
+                    case 'title':
+                        let title = special[3] || argument;
+                        let updatedTitle = await CHANNEL.setTitle(channel, title);
+                        if (updatedTitle.error) cmdFunc = cmdFunc.replace(special[0], updatedTitle.reason);
+                        else cmdFunc = cmdFunc.replace(special[0], title);
+                        if (!argument) break;
+                        break;
+                    default:
+                        break;
+                }
+                break;
             default:
                 break;
         }
