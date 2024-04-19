@@ -290,6 +290,11 @@ async function message(client, channel, tags, message) {
                 if (mod.error) return client.say(channel, `${mod.reason}`);
                 client.say(channel, mod.message);
                 break;
+            case 'vip':
+                let addVIP = await commands.addVIP(channel, argument, tags, userlevel);
+                if (addVIP.error) return client.say(channel, `${addVIP.message}`);
+                client.say(channel, addVIP.message);
+                break;
             case 'cct':
                 break;
             case 'ect':

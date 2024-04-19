@@ -20,6 +20,7 @@ const duelo = require('./duelo');
 const furrometro = require('./furrometro');
 const addModerator = require('./addmoderator');
 const getTotalSubs = require('./gettotalsubs');
+const addVIPCommand = require('./addvip');
 
 module.exports = {
     shoutout,
@@ -44,5 +45,6 @@ module.exports = {
     duelo,
     furrometro,
     addModerator,
-    getTotalSubs
+    getTotalSubs,
+    addVIP: addVIPCommand
 }

@@ -6,8 +6,8 @@ const vipSchema = new Schema({
     userID: { type: String, required: true },
     channel: { type: String, required: true },
     channelID: { type: String, required: true },
-    vip: { type: Boolean, required: true },
     duration: { type: Number, required: true },
+    vip: { type: Boolean, default: true },
     date: {
         day: { type: Number, default: () => new Date().getDate() },
         month: { type: Number, default: () => new Date().getMonth() },
