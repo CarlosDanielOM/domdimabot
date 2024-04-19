@@ -3,6 +3,7 @@ const Schema = mongoose.Schema
 
 const vipSchema = new Schema({
     username: { type: String, required: true },
+    userID: { type: String, required: true },
     channel: { type: String, required: true },
     channelID: { type: String, required: true },
     vip: { type: Boolean, required: true },

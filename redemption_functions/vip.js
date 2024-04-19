@@ -44,6 +44,7 @@ async function vipRedemtionFun(eventData, rewardData) {
 
         let vipData = {
             username: eventData.user_login,
+            userID: eventData.user_id,
             channel: broadcaster_user_login,
             channelID: broadcaster_user_id,
             vip: true,

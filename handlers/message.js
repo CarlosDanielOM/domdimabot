@@ -290,9 +290,11 @@ async function message(client, channel, tags, message) {
                 if (mod.error) return client.say(channel, `${mod.reason}`);
                 client.say(channel, mod.message);
                 break;
-            case 'vip': //* TODO- ADD VIP COMMAND
+            case 'cct':
                 break;
-            case 'unvip':
+            case 'ect':
+                break;
+            case 'dct':
                 break;
             default:
                 let cmdHandler = await commandHandler(channel, tags, command, argument, userlevel);

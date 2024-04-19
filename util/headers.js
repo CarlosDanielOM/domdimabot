@@ -25,10 +25,17 @@ async function getBotHeader() {
     return botHeaders;
 }
 
+async function getStreamerHeaderById(streamerId) {
+    let streamerToken = await STREAMER.getStreamerTokenById(streamerId);
+    header.Authorization = `Bearer ${streamerToken}`;
+    return header;
+}
+
 async function getModHeader() { }
 
 module.exports = {
     getStreamerHeader,
     getBotHeader,
-    getModHeader
+    getModHeader,
+    getStreamerHeaderById
 }

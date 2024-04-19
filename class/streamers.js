@@ -43,6 +43,16 @@ class STREAMERS {
         return await this.streamerData.get(name);
     }
 
+    async getStreamerById(id) {
+        let streamer = null;
+        this.streamerData.forEach((data) => {
+            if (data.user_id === id) {
+                streamer = data;
+            }
+        });
+        return streamer;
+    }
+
     async setStreamer(name, data) {
         this.streamerData.set(name, data);
     }
@@ -58,6 +68,11 @@ class STREAMERS {
 
     async getStreamerToken(name) {
         let data = await this.getStreamer(name);
+        return decrypt({ content: data.token.content, iv: data.token.iv }).toString();
+    }
+
+    async getStreamerTokenById(id) {
+        let data = await this.getStreamerById(id);
         return decrypt({ content: data.token.content, iv: data.token.iv }).toString();
     }
 
