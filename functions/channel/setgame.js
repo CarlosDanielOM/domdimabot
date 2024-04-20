@@ -1,14 +1,12 @@
 const getUserID = require('../getuserid');
-const { getStreamerHeader } = require('../../util/headers');
+const { getStreamerHeaderById } = require('../../util/headers');
 const { getTwitchHelixURL } = require('../../util/links');
 
-async function setGame(game, channel = null) {
+async function setGame(game, channelID = null) {
     let helixURL = getTwitchHelixURL();
-    if (channel === null) return { error: true, reason: `No se ha especificado el canal.` };
+    if (channelID === null) return { error: true, reason: `No se ha especificado el canal.` };
 
-    let streamerHeaders = await getStreamerHeader(channel);
-
-    let userID = await getUserID(channel);
+    let streamerHeaders = await getStreamerHeaderById(channelID);
 
     let response = await fetch(`${helixURL}/games?name=${game}`, {
         method: 'get',
@@ -32,7 +30,7 @@ async function setGame(game, channel = null) {
     let id = gameData.id;
     let name = gameData.name;
 
-    response = await fetch(`${helixURL}/channels?broadcaster_id=${userID}`, {
+    response = await fetch(`${helixURL}/channels?broadcaster_id=${channelID}`, {
         method: 'PATCH',
         headers: streamerHeaders,
         body: JSON.stringify({

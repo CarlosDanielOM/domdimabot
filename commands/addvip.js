@@ -28,10 +28,11 @@ async function addVIPCommand(channel, argument, tags, userLevel = 0) {
         if (duration > 30) return { error: true, message: 'La duración máxima es de 30 días.', status: 400 };
         let date = new Date();
         date.setDate(date.getDate() + duration);
+        let newExpireDate = new Date(date);
         let expireDate = {
-            day: date.getDate(),
-            month: date.getMonth(),
-            year: date.getFullYear()
+            day: newExpireDate.getDate(),
+            month: newExpireDate.getMonth(),
+            year: newExpireDate.getFullYear()
         }
         let vipData = new vipSchema({
             username: username,

@@ -1,15 +1,14 @@
-const { getStreamerHeader } = require("../../util/headers");
+const { getStreamerHeader, getStreamerHeaderById } = require("../../util/headers");
 const { getTwitchHelixURL } = require("../../util/links");
 const getUserID = require("../getuserid");
 
 
-async function getCurrentGame(channel) {
+async function getCurrentGame(channelID = null) {
     let helixURL = getTwitchHelixURL();
-    let channelID = await getUserID(channel) || null;
 
     if (!channelID) return { error: true, reason: 'Invalid channel name' };
 
-    let streamerHeaders = await getStreamerHeader(channel);
+    let streamerHeaders = await getStreamerHeaderById(channelID);
 
     let response = await fetch(`${helixURL}/channels?broadcaster_id=${channelID}`, {
         method: 'GET',

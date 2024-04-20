@@ -1,4 +1,5 @@
 const CHANNEL = require('../functions/channel');
+const STREAMERS = require('../class/streamers');
 
 const commandOptions = {
     name: 'Change Game',
@@ -13,8 +14,9 @@ const commandOptions = {
 };
 
 async function game(channel, argument = null, userLevel = 0) {
+    let streamer = await STREAMERS.getStreamer(channel);
     if (!argument || userLevel < commandOptions.userLevel) {
-        let game = await CHANNEL.getGame(channel);
+        let game = await CHANNEL.getGame(streamer.user_id);
         if (game.error) return game;
         let message = `El juego actual es ${game}`;
 
@@ -25,7 +27,8 @@ async function game(channel, argument = null, userLevel = 0) {
         return data;
     }
 
-    let game = await CHANNEL.setGame(argument, channel);
+
+    let game = await CHANNEL.setGame(argument, streamer.user_id);
     if (game.error) return game;
 
     game.cooldown = commandOptions.cooldown;
