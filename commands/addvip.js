@@ -24,6 +24,11 @@ async function addVIPCommand(channel, argument, tags, userLevel = 0) {
     let streamer = await STREAMERS.getStreamer(channel);
     let headers = await getStreamerHeader(channel);
 
+    let vipAdded = await CHANNEL.setVIP(streamer.user_id, headers, userID);
+
+    if (!vipAdded) return { error: true, message: 'No se pudo agregar VIP.', status: 500 };
+    if (vipAdded.error) return { error: true, message: vipAdded.message, status: vipAdded.status };
+
     if (duration) {
         if (isNaN(duration)) return { error: true, message: 'La duración debe ser un número.', status: 400 };
         if (duration < 1) return { error: true, message: 'La duración debe ser mayor a 0.', status: 400 };
@@ -49,11 +54,6 @@ async function addVIPCommand(channel, argument, tags, userLevel = 0) {
 
         if (!vipSaved) return { error: true, message: 'No se pudo guardar VIP.', status: 500 };
     }
-
-    let vipAdded = await CHANNEL.setVIP(streamer.user_id, headers, userID);
-
-    if (!vipAdded) return { error: true, message: 'No se pudo agregar VIP.', status: 500 };
-    if (vipAdded.error) return { error: true, message: vipAdded.message, status: vipAdded.status };
 
     return { error: false, message: `${username} ha sido agregado como VIP`, status: 200 };
 

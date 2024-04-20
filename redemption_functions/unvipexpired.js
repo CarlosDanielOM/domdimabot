@@ -14,11 +14,10 @@ async function unVIPExpiredUser(client, eventData) {
     let streamerHeader = await getStreamerHeaderById(broadcaster_user_id);
 
     vipData.map(async (item) => {
-        let expireDate = new Date(item.expireDate.year, item.expireDate.month, item.expireDate.day);
-        let currentDate = new Date();
+        let expireDate = new Date(item.expireDate.year, item.expireDate.month, item.expireDate.day).getTime();
+        let currentDate = Date.now();
 
         if (currentDate > expireDate) {
-            console.log('UnVIP user:', item);
             let json = await CHANNEL.removeVIP(broadcaster_user_id, streamerHeader, item.userID);
             if (json.error) {
                 console.log({ json, where: 'unVIPExpiredUser', for: 'removeVIP', for: item.channel, user: item.username });

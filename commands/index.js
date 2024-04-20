@@ -21,6 +21,7 @@ const furrometro = require('./furrometro');
 const addModerator = require('./addmoderator');
 const getTotalSubs = require('./gettotalsubs');
 const addVIPCommand = require('./addvip');
+const removeVIPCommand = require('./removevip');
 
 module.exports = {
     shoutout,
@@ -46,5 +47,6 @@ module.exports = {
     furrometro,
     addModerator,
     getTotalSubs,
-    addVIP: addVIPCommand
+    addVIP: addVIPCommand,
+    unVIP: removeVIPCommand
 }
