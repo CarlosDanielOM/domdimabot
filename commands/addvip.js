@@ -4,6 +4,8 @@ const functions = require('../functions');
 const { getStreamerHeader } = require('../util/headers')
 const vipSchema = require('../schemas/vip')
 
+const days = 24 * 60 * 60 * 1000;
+
 async function addVIPCommand(channel, argument, tags, userLevel = 0) {
     if (userLevel < 6) return { error: true, message: 'No tienes permisos suficientes para ejecutar este comando.', status: 403 };
     if (tags['vip']) return { error: true, message: 'Este usuario ya es VIP.', status: 400 };
@@ -26,14 +28,14 @@ async function addVIPCommand(channel, argument, tags, userLevel = 0) {
         if (isNaN(duration)) return { error: true, message: 'La duración debe ser un número.', status: 400 };
         if (duration < 1) return { error: true, message: 'La duración debe ser mayor a 0.', status: 400 };
         if (duration > 30) return { error: true, message: 'La duración máxima es de 30 días.', status: 400 };
-        let date = new Date();
-        date.setDate(date.getDate() + duration);
-        let newExpireDate = new Date(date);
+        let now = Date.now();
+        let expireTime = now + (duration * days);
+        let dateToExpire = new Date(expireTime);
         let expireDate = {
-            day: newExpireDate.getDate(),
-            month: newExpireDate.getMonth(),
-            year: newExpireDate.getFullYear()
-        }
+            day: dateToExpire.getDate(),
+            month: dateToExpire.getMonth(),
+            year: dateToExpire.getFullYear()
+        };
         let vipData = new vipSchema({
             username: username,
             userID: userID,
