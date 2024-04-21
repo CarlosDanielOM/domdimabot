@@ -20,6 +20,11 @@ async function showClip(channel, clipData, streamerData, streamerChannelData) {
 
     let game = await getGameByID(clip.game_id);
 
+    if(!game) {
+        console.log({ error: 'Error getting game', reason: 'No game data was provided', where: 'showClip', channel: channel });
+        return null;
+    }
+
     let clipResponse = await fetch(`${getUrl()}/clip/${channel}`, {
         method: 'POST',
         headers: {
