@@ -350,5 +350,3 @@ function giveUserLevel(channel, tags) {
 
     return userlevel;
 }
-
-//? !vip <user> | !vip <user> <time -D > 
