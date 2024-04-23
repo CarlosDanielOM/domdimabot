@@ -88,11 +88,9 @@ async function message(client, channel, tags, message) {
                 let broadcasterID = await func.getUserID(channel);
 
                 let res = await func.makeAnnouncement(broadcasterID, modID, msg, color);
-
                 if (res.status === 401) {
                     client.say(channel, `${channel}, No tengo permisos para hacer anuncios!`);
                 }
-
                 break;
             case 'promo':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
@@ -105,7 +103,7 @@ async function message(client, channel, tags, message) {
             case 'shoutout':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
                 const shoutoutRes = await commands.shoutout(channel, argument, modID);
-                if (!shoutoutRes.clip) return client.say(channel, `No se ha podido reproducir el clip.`);
+                if (!shoutoutRes.soClip) return client.say(channel, `No se ha podido reproducir el clip.`);
                 break;
             case 'predi':
                 if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);

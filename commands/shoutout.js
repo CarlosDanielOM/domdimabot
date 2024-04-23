@@ -25,6 +25,8 @@ async function shoutout(channel, streamer, modID) {
     let clips = await getClips(streamerID);
     let clip = await showClip(channel, clips, streamerChannel, streamerUserData);
 
+    console.log({ clip })
+
     streamerChannel = {
         name: streamerChannel.broadcaster_name,
         login: streamerChannel.broadcaster_login,
