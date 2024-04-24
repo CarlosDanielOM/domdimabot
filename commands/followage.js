@@ -35,7 +35,7 @@ async function followage(channel, user) {
     const hour = (1000 * 3600);
     const day = 24;
     const month = 30.5;
-    const year = 365;
+    const year = 12;
 
     let days = 0;
     let months = 0;

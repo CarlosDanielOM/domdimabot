@@ -298,11 +298,14 @@ async function message(client, channel, tags, message) {
                 if (unVIP.error) return client.say(channel, `${unVIP.message}`);
                 client.say(channel, unVIP.message);
                 break;
-            case 'cct':
+            case 'createCommandTimer':
+                let cct = await commands.createTimerCommand(channel, argument, userlevel);
+                if (cct.error) return client.say(channel, `${cct.message}`);
+                client.say(channel, cct.message);
                 break;
-            case 'ect':
+            case 'editCommandTimer':
                 break;
-            case 'dct':
+            case 'deleteCommandTimer':
                 break;
             default:
                 let cmdHandler = await commandHandler(channel, tags, command, argument, userlevel);

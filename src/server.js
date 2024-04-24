@@ -85,6 +85,41 @@ async function init() {
 
   //? DEV ROUTES ?//
 
+  app.post('/dev/create/command/:channel', async (req, res) => {
+    const { channel } = req.params;
+    let streamer = await STREAMERS.getStreamer(channel);
+
+    let commandsJSON = COMMANDSJSON.commands;
+
+    for (let command in commandsJSON) {
+      let commandExists = await commandSchema.exists({ name: commandsJSON[command].name, channel: streamer.name, channelID: streamer.user_id });
+
+      if (commandExists) {
+        console.log(`Command ${commandsJSON[command].name} already exists for ${streamer.name}`)
+        continue;
+      };
+
+      let newCommand = new commandSchema({
+        name: commandsJSON[command].name,
+        cmd: commandsJSON[command].cmd,
+        func: commandsJSON[command].func,
+        type: commandsJSON[command].type,
+        channel: streamer.name,
+        channelID: streamer.user_id,
+        cooldown: commandsJSON[command].cooldown,
+        enabled: commandsJSON[command].enabled,
+        userLevel: commandsJSON[command].userLevel,
+        userLevelName: commandsJSON[command].userLevelName,
+        reserved: commandsJSON[command].reserved,
+      });
+
+      await newCommand.save();
+    }
+    
+    res.status(200).json({ message: 'Commands created', error: false });
+    
+  });
+  
   app.get('/commands/reserved', async (req, res) => {
     res.status(200).json(COMMANDSJSON);
   });

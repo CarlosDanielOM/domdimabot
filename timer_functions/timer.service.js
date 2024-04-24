@@ -3,29 +3,37 @@ class TimerService {
         this.timers = new Map();
     }
 
-    setTimer(cmd, time, callback) {
-        this.timers.set(cmd, setInterval(callback, (time * (1000 * 60))));
+    addTimer(timerName, timerArray) {
+        this.timers.set(timerName, timerArray);
     }
 
-    clearTimer(cmd) {
-        clearInterval(this.timers.get(cmd));
+    getTimer(timerName) {
+        return this.timers.get(timerName);
     }
 
     getTimers() {
         return this.timers;
     }
 
-    getTimer(cmd) {
-        return this.timers.get(cmd);
+    clearTimer(timerName, cmd) {
+        let timers = this.getTimer(timerName);
+        console.log('Clearing timer: ', cmd, ' from ', timerName, ' timers: ', timers.timer)
+        if (!timers) return;
+        timers.forEach(timer => {
+            if (timer.cmd === cmd) {
+                clearInterval(timer.timer);
+                timers.splice(timers.indexOf(timer), 1);
+            }
+        });
     }
 
     clearAllTimers() {
-        this.timers.forEach((timer) => {
-            clearInterval(timer);
+        this.timers.forEach(timer => {
+            clearInterval(timer.timer);
         });
         this.timers.clear();
     }
 
 }
 
-module.exports = TimerService;
+module.exports = new TimerService();
