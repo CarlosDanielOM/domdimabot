@@ -8,16 +8,11 @@ async function stopTimerCommands(client, evenData) {
 
     if (!timers) return;
 
-    console.log(timers);
-
-    for(let i = 0; i < timers.length; i++) {
-        console.log('Clearing timer: ', timers[i].cmd, ' index: ', i, ' of ', timers.length);
+    for(let i = timers.length - 1; i >= 0; i--) {
         timerService.clearTimer(streamer.name, timers[i].cmd);
     }
 
-    console.log('Timers stopped.');
-
-    console.log(timerService.getTimers(streamer.name));
+    console.log({message:'Timers stopped.', where: 'stopTimerCommands', streamer: streamer.name});
 
     return;
 

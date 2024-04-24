@@ -1,5 +1,6 @@
 const CHANNEL = require('../functions/channel');
 const STREAMERS = require('../class/streamers');
+const commandsSchema = require('../schemas/command');
 
 const commandOptions = {
     name: 'Change Game',
@@ -13,9 +14,10 @@ const commandOptions = {
     description: `Cambia el juego actual | Ejemplo: !game <nombre del juego> | Ejemplo: !game Fortnite`,
 };
 
-async function game(channel, argument = null, userLevel = 0) {
+async function game(channel, argument = null, userLevel = 0, cmd = 'game') {
     let streamer = await STREAMERS.getStreamer(channel);
-    if (!argument || userLevel < commandOptions.userLevel) {
+    let commandInfo = await commandsSchema.findOne({ channelID: streamer.user_id, cmd: cmd });
+    if (!argument || userLevel < commandInfo.userLevel) {
         let game = await CHANNEL.getGame(streamer.user_id);
         if (game.error) return game;
         let message = `El juego actual es ${game}`;

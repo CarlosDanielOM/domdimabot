@@ -99,7 +99,7 @@ class COMMAND {
     }
 
     async updateCommandInDB(command) {
-        let updated = await this.schema.updateOne({ cmd: command.name, channel: this.channel }, command);
+        let updated = await this.schema.updateOne({ cmd: command.cmd, channel: this.channel }, command);
         if (updated.nModified === 0) return { error: 'Command could not be updated', reason: 'command could not be updated', updated: false };
         return { error: false, message: null, updated: true, command: command };
     }
