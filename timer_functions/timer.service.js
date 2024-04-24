@@ -17,7 +17,6 @@ class TimerService {
 
     clearTimer(timerName, cmd) {
         let timers = this.getTimer(timerName);
-        console.log('Clearing timer: ', cmd, ' from ', timerName, ' timers: ', timers.timer)
         if (!timers) return;
         timers.forEach(timer => {
             if (timer.cmd === cmd) {
