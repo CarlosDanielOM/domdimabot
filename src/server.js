@@ -85,6 +85,19 @@ async function init() {
 
   //? DEV ROUTES ?//
 
+  app.post('/dev/create/commands', async (req, res) => {
+    let streamers = await STREAMERS.getStreamers();
+
+    streamers.forEach(async (streamer) => {
+      let res = await fetch(`${getUrl()}/dev/create/command/${streamer.name}`, {
+        method: 'POST'
+      });
+    })
+    
+    res.status(200).json({ message: 'Commands created', error: false });
+  });
+  
+
   app.post('/dev/create/command/:channel', async (req, res) => {
     const { channel } = req.params;
     let streamer = await STREAMERS.getStreamer(channel);

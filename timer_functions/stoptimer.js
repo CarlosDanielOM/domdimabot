@@ -12,8 +12,6 @@ async function stopTimerCommands(client, evenData) {
         timerService.clearTimer(streamer.name, timers[i].cmd);
     }
 
-    console.log({message:'Timers stopped.', where: 'stopTimerCommands', streamer: streamer.name});
-
     return;
 
 }

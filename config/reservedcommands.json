@@ -288,6 +288,16 @@
             "description": "Crea un clip del streamer con una duracion de 30 segundos despues de usar el comando | Ejemplo: !clip | Ejemplo de respuesta: Guardando clip... | Si la funcion es exitosa la respuesta dira Clip guardado con exito | No necesita argumentos"
         },
         {
+            "name": "VIP",
+            "cmd": "vip",
+            "func": "vip",
+            "type": "command",
+            "reserved": true,
+            "enabled": true,
+            "cooldown": 10,
+            "description": "Le da VIP sea permanente o temporal al usuario | Ejemplo: !vip <nombre de usuario> | Ejemplo: !vip (user) | Ejemplo de respuesta: (user) ahora es VIP | Si se le pasa un tiempo en dias como argumento le dara VIP temporal al usuario | Ejemplo: !vip <nombre de usuario> <tiempo en dias> | Ejemplo: !vip (user) 30 | Ejemplo de respuesta: (user) ahora es VIP por 30 dias"
+        },
+        {
             "name": "Commands List",
             "cmd": "commands",
             "func": "commands",

@@ -55,7 +55,7 @@ async function addVIPCommand(channel, argument, tags, userLevel = 0) {
         if (!vipSaved) return { error: true, message: 'No se pudo guardar VIP.', status: 500 };
     }
 
-    return { error: false, message: `${username} ha sido agregado como VIP`, status: 200 };
+    return { error: false, message: `${username} ha sido agregado como VIP ${duration > 0 ? 'por ' + duration + ' dia' : ''}${duration > 1 ? 's' : ''}`, status: 200 };
 
 }
 

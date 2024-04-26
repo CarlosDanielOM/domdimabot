@@ -13,13 +13,13 @@ async function startTimerCommands(client, evenData) {
     if (!streamer) return;
     if (!timers) return;
     
-    await creatingTimers(timers, broadcaster_user_id, streamer);
+    await creatingTimers(timers, broadcaster_user_id, streamer, client);
     
 }
 
 module.exports = startTimerCommands;
 
-async function creatingTimers(timers, broadcaster_user_id, streamer) {
+async function creatingTimers(timers, broadcaster_user_id, streamer, client) {
     let timerArray = [];
     await timers.forEach(async (timer) => {
         let command = await commandSchema.findOne({ channelID: broadcaster_user_id, cmd: timer.command });
@@ -28,8 +28,8 @@ async function creatingTimers(timers, broadcaster_user_id, streamer) {
             return;
         };
 
-        let newTimer = setInterval(async () => {
-            await client.say(streamer.name, command.func);
+        let newTimer = setInterval(() => {
+            client.say(streamer.name, command.message);
         }, timer.timer * (1000 * 60));
 
         timerArray.push({ cmd: timer.command, timer: newTimer });
