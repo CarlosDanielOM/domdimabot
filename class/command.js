@@ -61,8 +61,8 @@ class COMMAND {
 
     //? DATABASE METHODS
 
-    async getCommandFromDB(name) {
-        let command = await this.schema.findOne({ cmd: name, channel: this.channel });
+    async getCommandFromDB(name, channelID) {
+        let command = await this.schema.findOne({ cmd: name, channelID: channelID });
         if (command === null) return { error: 'Command does not exist', reason: 'command does not exist', command: null };
         return { error: false, command };
     }
@@ -85,8 +85,8 @@ class COMMAND {
         return true;
     }
 
-    async commandExistsInDB(name) {
-        let command = await this.schema.findOne({ cmd: name, channel: this.channel });
+    async commandExistsInDB(name, channelID) {
+        let command = await this.schema.findOne({ cmd: name, channelID: channelID });
         if (command === null) return false;
         return true;
     }
@@ -104,14 +104,14 @@ class COMMAND {
         return { error: false, message: null, updated: true, command: command };
     }
 
-    async updateCountableCommandInDB(command, count) {
-        let updated = await this.schema.updateOne({ cmd: command, channel: this.channel }, { count: count });
+    async updateCountableCommandInDB(command, count, channelID) {
+        let updated = await this.schema.updateOne({ cmd: command, channelID: channelID }, { count: count });
         if (updated.nModified === 0) return { error: 'Command could not be updated', reason: 'command could not be updated', updated: false };
         return { error: false, message: null, updated: true, command: command };
     }
 
-    async updateCommandIfActive(command, enabled) {
-        let updated = await this.schema.updateOne({ cmd: command, channel: this.channel }, { enabled: enabled });
+    async updateCommandIfActive(command, enabled, channelID) {
+        let updated = await this.schema.updateOne({ cmd: command, channelID: channelID }, { enabled: enabled });
         if (updated.nModified === 0) return { error: 'Command could not be updated', reason: 'command could not be updated', updated: false };
         return { error: false, message: null, updated: true, command: command };
     }

@@ -5,6 +5,7 @@ const CHAT = require('../functions/chat/index.js');
 const CHANNEL = require('../functions/channel/index.js');
 const ChatLog = require('../schemas/chat_log.schema.js');
 const commandSchema = require('../schemas/command.js');
+const STREAMER = require('../class/streamers.js');
 
 const COOLDOWNS = require('../class/cooldown.js');
 
@@ -21,6 +22,7 @@ let user;
 let channelInstances = new Map();
 
 async function message(client, channel, tags, message) {
+    let streamer = await STREAMER.getStreamer(channel);
     let commandCD = 10;
     let userlevel = giveUserLevel(channel, tags);
     let chatBody = {
@@ -59,7 +61,7 @@ async function message(client, channel, tags, message) {
 
     if (!command) return;
 
-    let commandData = await commandSchema.findOne({ channel: channel, cmd: command, enabled: true }, 'name type cooldown userLevel func');
+    let commandData = await commandSchema.findOne({ channelID: streamer.user_id, cmd: command, enabled: true }, 'name type cooldown userLevel func');
 
     if (!commandData) return;
     if (commandData.enabled === false) return;

@@ -1,13 +1,14 @@
 const COMMAND = require('../class/command');
 const CHANNEL = require('../functions/channel')
+const STREAMERS = require('../class/streamers')
 
 let specialCommandsFunc = (/\$\(([a-z]+)\s?([a-z0-9]+)?\s?([a-zA-Z0-9\s]+)?\)/g);
 
 async function commandHandler(channel, tags, command, argument, userLevel) {
-    COMMAND.init(channel, argument);
-    let exists = await COMMAND.commandExistsInDB(command);
+    let streamer = await STREAMERS.getStreamer(channel);
+    let exists = await COMMAND.commandExistsInDB(command, streamer.user_id);
     if (!exists) return { error: true, reason: 'command does not exist', exists: false };
-    let cmd = await COMMAND.getCommandFromDB(command);
+    let cmd = await COMMAND.getCommandFromDB(command, streamer.user_id);
     if (cmd.error) return { error: true, reason: cmd.reason, exists: false };
     cmd = cmd.command;
     if (cmd.userLevel > userLevel) return { error: true, reason: 'Lo siento, no tienes los permisos suficientes para usar este comando!', exists: true, enabled: true };
@@ -15,7 +16,7 @@ async function commandHandler(channel, tags, command, argument, userLevel) {
     let specialRes = await specialCommands(tags, argument, cmd.message, cmd.count, channel);
     if (cmd.type === 'countable') {
         cmd.message = specialRes.cmdFunc;
-        await COMMAND.updateCountableCommandInDB(cmd.name, specialRes.count);
+        await COMMAND.updateCountableCommandInDB(cmd.name, specialRes.count, streamer.user_id);
     } else {
         cmd.message = specialRes.cmdFunc;
     }
