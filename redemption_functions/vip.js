@@ -55,8 +55,6 @@ async function vipRedemtionFun(eventData, rewardData) {
         await new vipSchema(vipData).save();
     }
 
-    console.log({ vipReward })
-
     let result = await CHANNEL.setVIP(broadcaster_user_id, headers, user_id);
     if (result.error) return { error: true, reason: result.message };
     if (result.status !== 204) return { error: true, reason: 'Error setting VIP' };

@@ -8,7 +8,6 @@ let modID = '698614112';
 let timeoutID = '886b8287-70fe-4e54-a071-aadd5a4922a8'
 
 async function redeem(client, eventData) {
-    // console.log('redeem')
     const { sendTrigger } = require('../src/server');
     const { broadcaster_user_id, broadcaster_user_login, user_id, user_login, user_input } = eventData;
     const { reward } = eventData;
@@ -18,7 +17,8 @@ async function redeem(client, eventData) {
     if (vipMatch) {
         let result = await vipRedemtionFun(eventData, reward);
         if (result.error) return { error: true, reason: result.message };
-        client.say(broadcaster_user_login, `@${user_login} ${result.rewardMessage}`);
+        console.log({ result })
+        client.say(broadcaster_user_login, `${result.rewardMessage}`);
         return { error: false, message: 'VIP set' };
     }
 
