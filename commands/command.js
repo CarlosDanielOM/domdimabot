@@ -96,7 +96,7 @@ async function command(action, channel, argument, type = null) {
         }
         let func = opts[1];
 
-        if (func.length < 1) return { error: true, reason: 'command cannot be empty' };
+        if (!func.length) return { error: true, reason: 'command cannot be empty' };
         if (func.length > maxFuncLength) return { error: true, reason: `command cannot be longer than ${maxFuncLength} characters` };
 
         cmdOptions.name = name;
