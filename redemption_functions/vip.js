@@ -10,7 +10,7 @@ async function vipRedemtionFun(eventData, rewardData) {
 
     let vipReward = await rewardSchema.findOne({ channelID: broadcaster_user_id, rewardID: rewardData.id, rewardType: 'vip' });
 
-    if (!vipReward) return { error: true, reason: 'VIP reward not found' };
+    if (!vipReward) return { error: true, message: 'VIP reward not found' };
 
     if (vipReward.rewardCostChange > 0) {
         let newCost = vipReward.rewardCost + vipReward.rewardCostChange;
@@ -29,7 +29,7 @@ async function vipRedemtionFun(eventData, rewardData) {
 
         if (response.error) {
             console.log({ response, where: 'vipRedemtionFun', for: 'vipReward.rewardCostChange > 0' })
-            return { error: true, reason: 'Error updating reward cost' }
+            return { error: true, message: 'Error updating reward cost' }
         };
     }
 
@@ -56,8 +56,8 @@ async function vipRedemtionFun(eventData, rewardData) {
     }
 
     let result = await CHANNEL.setVIP(broadcaster_user_id, headers, user_id);
-    if (result.error) return { error: true, reason: result.message };
-    if (result.status !== 204) return { error: true, reason: 'Error setting VIP' };
+    if (result.error) return { error: true, message: result.message };
+    if (result.status !== 204) return { error: true, message: 'Error setting VIP' };
     return { error: false, message: 'VIP set', rewardMessage: vipReward.message };
 
 }
