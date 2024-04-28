@@ -34,8 +34,6 @@ const specialCommandsFunc = (/\$\((.*?)\)/g);
 let maxFuncLength = 300;
 
 async function command(action, channel, argument, type = null) {
-    await COMMAND.init(channel, argument);
-
     let streamer = await STREAMERS.getStreamer(channel);
 
     let cmdOptions = {
@@ -111,7 +109,7 @@ async function command(action, channel, argument, type = null) {
             cmdOptions.type = 'countable';
         }
 
-        let cmd = await COMMAND.createCommand(cmdOptions);
+        let cmd = await COMMAND.createCommand(cmdOptions, streamer.user_id);
 
         if (cmd.created) {
             return { error: false, message: `Command !${cmd.command.name} created!`, command: cmd.command };
@@ -121,12 +119,12 @@ async function command(action, channel, argument, type = null) {
     }
 
     if (action === 'DELETE') {
-        let exists = await COMMAND.commandExistsInDB(argument);
+        let exists = await COMMAND.commandExistsInDB(argument, streamer.user_id);
         if (!exists) return { error: true, reason: 'command does not exist' };
-        let cmd = await COMMAND.getCommandFromDB(argument);
+        let cmd = await COMMAND.getCommandFromDB(argument, streamer.user_id);
         cmd = cmd.command;
         if (cmd.reserved) return { error: true, reason: 'You cannot delete a reserved command' };
-        let deleted = await COMMAND.deleteCommandFromDB(cmd);
+        let deleted = await COMMAND.deleteCommandFromDB(cmd, streamer.user_id);
         if (!deleted) return { error: true, reason: 'command could not be deleted' };
         return { error: false, message: `Command !${cmd.name} deleted!` };
     }
@@ -138,16 +136,16 @@ async function command(action, channel, argument, type = null) {
 
         let oldCommand = '';
 
-        let exist = await COMMAND.commandExistsInDB(name);
+        let exist = await COMMAND.commandExistsInDB(name, streamer.user_id);
         if (!exist) {
-            let reservedExist = await COMMAND.reservedCommandExistsInDB(name);
+            let reservedExist = await COMMAND.reservedCommandExistsInDB(name, streamer.user_id);
             if (reservedExist) {
-                oldCommand = await COMMAND.getReservedCommandFromDB(name);
+                oldCommand = await COMMAND.getReservedCommandFromDB(name, streamer.user_id);
             } else {
                 return { error: true, reason: 'command does not exist' };
             }
         } else {
-            oldCommand = await COMMAND.getCommandFromDB(name);
+            oldCommand = await COMMAND.getCommandFromDB(name, streamer.user_id);
         }
 
         if (oldCommand.error) return { error: true, reason: oldCommand.reason };
@@ -203,7 +201,7 @@ async function command(action, channel, argument, type = null) {
             }
         }
 
-        let updated = await COMMAND.updateCommandInDB(oldCommand);
+        let updated = await COMMAND.updateCommandInDB(oldCommand, streamer.user_id);
 
         if (updated.error) return { error: true, reason: updated.reason };
 

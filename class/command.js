@@ -44,8 +44,8 @@ class COMMAND {
     }
 
     //? CREATE METHODS
-    async createCommand(data) {
-        let exists = await this.commandExistsInDB(data.name);
+    async createCommand(data, channelID) {
+        let exists = await this.commandExistsInDB(data.name, channelID);
         if (exists) return { error: 'Command already exists', reason: 'command already exists', created: false };
         let cmd = await this.saveCommandToDB(data);
         if (!cmd) return { error: 'Command could not be created', reason: 'command could not be created', created: false };
@@ -53,8 +53,8 @@ class COMMAND {
     }
 
     //? DELETE METHODS
-    async deleteCommandFromDB(command) {
-        let deleted = await this.schema.deleteOne({ cmd: command.name, channel: this.channel });
+    async deleteCommandFromDB(command, channelID) {
+        let deleted = await this.schema.deleteOne({ cmd: command.name, channelID: channelID });
         if (deleted.deletedCount === 0) return false;
         return true;
     }
@@ -73,14 +73,14 @@ class COMMAND {
         return { error: false, message: command.func, cd: command.cooldown, enabled: command.enabled, userLevel: command.userLevel };
     }
 
-    async getReservedCommandFromDB(cmd) {
-        let command = await this.schema.findOne({ cmd: cmd, channel: this.channel });
+    async getReservedCommandFromDB(cmd, channelID) {
+        let command = await this.schema.findOne({ cmd: cmd, channelID: channelID });
         if (command === null) return { error: 'Command does not exist', reason: 'command does not exist', command: null };
         return { error: false, command };
     }
 
-    async reservedCommandExistsInDB(cmd) {
-        let command = await this.schema.findOne({ cmd: cmd, channel: this.channel });
+    async reservedCommandExistsInDB(cmd, channelID) {
+        let command = await this.schema.findOne({ cmd: cmd, channelID: channelID });
         if (command === null) return false;
         return true;
     }
@@ -98,8 +98,8 @@ class COMMAND {
         return cmd;
     }
 
-    async updateCommandInDB(command) {
-        let updated = await this.schema.updateOne({ cmd: command.cmd, channel: this.channel }, command);
+    async updateCommandInDB(command, channelID) {
+        let updated = await this.schema.updateOne({ cmd: command.cmd, channelID: channelID }, command);
         if (updated.nModified === 0) return { error: 'Command could not be updated', reason: 'command could not be updated', updated: false };
         return { error: false, message: null, updated: true, command: command };
     }
