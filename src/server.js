@@ -772,7 +772,7 @@ async function init() {
     if (body.rewardType) rewardData.rewardType = body.rewardType;
     if (body.rewardDuration) rewardData.rewardDuration = body.rewardDuration;
 
-    if (body.rewardDuration > 30) return res.status(400).json({ message: 'Duration should not exceed 30 days', error: true });
+    if (body.rewardDuration > 90) return res.status(400).json({ message: 'Duration should not exceed 30 days', error: true });
 
     await new redemptionRewardSchema(rewardData).save();
 

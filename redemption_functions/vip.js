@@ -57,7 +57,7 @@ async function vipRedemtionFun(eventData, rewardData) {
     let result = await CHANNEL.setVIP(broadcaster_user_id, headers, user_id);
     if (result.error) return { error: true, message: result.message };
     if (result.status !== 204) return { error: true, message: 'Error setting VIP' };
-    return { error: false, message: 'VIP set', rewardMessage: vipReward.message };
+    return { error: false, message: 'VIP set', rewardMessage: vipReward.rewardMessage };
 
 }
 

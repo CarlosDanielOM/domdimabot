@@ -2,6 +2,7 @@ const func = require('../functions');
 const triggerSchema = require('../schemas/trigger');
 const triggerFileSchema = require('../schemas/triggerfile');
 const vipRedemtionFun = require('../redemption_functions/vip');
+const customRedemptionReward = require('../redemption_functions/custom');
 
 let modID = '698614112';
 
@@ -19,6 +20,11 @@ async function redeem(client, eventData) {
         if (result.error) return client.say(broadcaster_user_login, `${result.message}`);
         client.say(broadcaster_user_login, `${result.rewardMessage}`);
         return { error: false, message: 'VIP set' };
+    } else {
+        let result = await customRedemptionReward(eventData, reward);
+        if (result.error) return client.say(broadcaster_user_login, `${result.message}`);
+        client.say(broadcaster_user_login, `${result.rewardMessage}`);
+        return { error: false, message: 'Reward Redeemed' };
     }
 
     let trigger = await triggerSchema.findOne({ channelID: broadcaster_user_id, name: reward.title, type: 'redemption' }, 'file mediaType volume');
