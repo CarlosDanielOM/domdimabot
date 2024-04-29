@@ -20,7 +20,8 @@ async function redeem(client, eventData) {
     if (vipMatch) {
         let result = await vipRedemtionFun(eventData, reward);
         if (result.error) return client.say(broadcaster_user_login, `${result.message}`);
-        client.say(broadcaster_user_login, `${result.rewardMessage}`);
+        let message = await textConvertor(broadcaster_user_id, eventData, reward, result.rewardMessage)
+        client.say(broadcaster_user_login, `${message.message}`);
         return { error: false, message: 'VIP set' };
     } else {
         let result = await customRedemptionReward(eventData, reward);

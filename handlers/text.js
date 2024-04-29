@@ -23,15 +23,15 @@ async function textConvertor(channelID, eventData, rewardData, message) {
                 if (!special[2]) break;
                 switch (special[2]) {
                     case 'subs':
-                        let totalSubs = await CHANNEL.getTotalSubs(channel);
+                        let totalSubs = await CHANNEL.getTotalSubs(streamer.name);
                         message = message.replace(special[0], totalSubs.total);
                         break;
                     case 'title':
-                        let title = await CHANNEL.getTitle(channel);
+                        let title = await CHANNEL.getTitle(streamer.name);
                         message = message.replace(special[0], title);
                         break;
                     case 'channel':
-                        message = message.replace(special[0], channel);
+                        message = message.replace(special[0], streamer.name);
                         break;
                     case 'game':
                         let game = await CHANNEL.getGame(streamer.user_id);
@@ -49,14 +49,12 @@ async function textConvertor(channelID, eventData, rewardData, message) {
                         let updated = await CHANNEL.setGame(game, streamer.user_id);
                         if (updated.error) message = message.replace(special[0], updated.reason);
                         else message = message.replace(special[0], game);
-                        if (!argument) break;
                         break;
                     case 'title':
                         let title = special[3] || argument;
                         let updatedTitle = await CHANNEL.setTitle(streamer.name, title);
                         if (updatedTitle.error) message = message.replace(special[0], updatedTitle.reason);
                         else message = message.replace(special[0], title);
-                        if (!argument) break;
                         break;
                     default:
                         break;
