@@ -4,6 +4,8 @@ const triggerFileSchema = require('../schemas/triggerfile');
 const vipRedemtionFun = require('../redemption_functions/vip');
 const customRedemptionReward = require('../redemption_functions/custom');
 
+const textConvertor = require('./text');
+
 let modID = '698614112';
 
 let timeoutID = '886b8287-70fe-4e54-a071-aadd5a4922a8'
@@ -23,7 +25,8 @@ async function redeem(client, eventData) {
     } else {
         let result = await customRedemptionReward(eventData, reward);
         if (result.error) return client.say(broadcaster_user_login, `${result.message}`);
-        client.say(broadcaster_user_login, `${result.rewardMessage}`);
+        let message = await textConvertor(broadcaster_user_id, eventData, reward, result.rewardMessage)
+        client.say(broadcaster_user_login, `${message}`);
         return { error: false, message: 'Reward Redeemed' };
     }
 
