@@ -28,6 +28,7 @@ async function commandHandler(channel, tags, command, argument, userLevel) {
 module.exports = commandHandler;
 
 async function specialCommands(tags, argument, cmdFunc, count = 0, channel) {
+    let streamer = await STREAMERS.getStreamer(channel);
     let specials = cmdFunc.match(specialCommandsFunc) || [];
     for (let i = 0; i < specials.length; i++) {
         specialCommandsFunc.lastIndex = 0;
@@ -74,7 +75,7 @@ async function specialCommands(tags, argument, cmdFunc, count = 0, channel) {
                         cmdFunc = cmdFunc.replace(special[0], channel);
                         break;
                     case 'game':
-                        let game = await CHANNEL.getGame(channel);
+                        let game = await CHANNEL.getGame(streamer.user_id);
                         cmdFunc = cmdFunc.replace(special[0], game);
                         break;
                     default:
@@ -86,7 +87,7 @@ async function specialCommands(tags, argument, cmdFunc, count = 0, channel) {
                 switch (special[2]) {
                     case 'game':
                         let game = special[3] || argument;
-                        let updated = await CHANNEL.setGame(game, channel);
+                        let updated = await CHANNEL.setGame(game, streamer.user_id);
                         if (updated.error) cmdFunc = cmdFunc.replace(special[0], updated.reason);
                         else cmdFunc = cmdFunc.replace(special[0], game);
                         if (!argument) break;
@@ -108,3 +109,7 @@ async function specialCommands(tags, argument, cmdFunc, count = 0, channel) {
     }
     return { cmdFunc, count };
 }
+
+
+//!  !cc for $(set game fortnite)
+//!  !for

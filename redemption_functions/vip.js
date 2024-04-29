@@ -51,7 +51,6 @@ async function vipRedemtionFun(eventData, rewardData) {
             duration: vipReward.rewardDuration,
             expireDate: expireDate
         }
-
         await new vipSchema(vipData).save();
     }
 
