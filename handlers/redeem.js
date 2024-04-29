@@ -23,17 +23,17 @@ async function redeem(client, eventData) {
         let message = await textConvertor(broadcaster_user_id, eventData, reward, result.rewardMessage)
         client.say(broadcaster_user_login, `${message.message}`);
         return { error: false, message: 'VIP set' };
-    } else {
+    }
+
+    let trigger = await triggerSchema.findOne({ channelID: broadcaster_user_id, name: reward.title, type: 'redemption' }, 'file mediaType volume');
+
+    if (!trigger) {
         let result = await customRedemptionReward(eventData, reward);
         if (result.error) return client.say(broadcaster_user_login, `${result.message}`);
         let message = await textConvertor(broadcaster_user_id, eventData, reward, result.rewardMessage)
         client.say(broadcaster_user_login, `${message.message}`);
         return { error: false, message: 'Reward Redeemed' };
-    }
-
-    let trigger = await triggerSchema.findOne({ channelID: broadcaster_user_id, name: reward.title, type: 'redemption' }, 'file mediaType volume');
-
-    if (!trigger) return;
+    };
 
     let file = await triggerFileSchema.findOne({ name: trigger.file, fileType: trigger.mediaType }, 'fileUrl fileType');
 

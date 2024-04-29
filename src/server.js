@@ -851,7 +851,7 @@ async function init() {
   app.get('/rewards/:type/:channel', async (req, res) => {
     const { type, channel } = req.params;
 
-    let rewards = await redemptionRewardSchema.find({ channel: channel, rewardType: type }, '_id rewardID rewardTitle rewardPrompt rewardCost rewardCostChange rewardMessage returnToOriginalCost rewardIsEnabled');
+    let rewards = await redemptionRewardSchema.find({ channel: channel, rewardType: type }, '_id rewardID rewardTitle rewardPrompt rewardCost rewardCostChange rewardMessage returnToOriginalCost rewardIsEnabled skipQueue rewardType');
 
     res.status(200).json({ rewards });
   });
