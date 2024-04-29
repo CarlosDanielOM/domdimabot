@@ -26,7 +26,7 @@ async function redeem(client, eventData) {
         let result = await customRedemptionReward(eventData, reward);
         if (result.error) return client.say(broadcaster_user_login, `${result.message}`);
         let message = await textConvertor(broadcaster_user_id, eventData, reward, result.rewardMessage)
-        client.say(broadcaster_user_login, `${message}`);
+        client.say(broadcaster_user_login, `${message.message}`);
         return { error: false, message: 'Reward Redeemed' };
     }
 
