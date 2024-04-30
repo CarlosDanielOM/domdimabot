@@ -822,8 +822,6 @@ async function init() {
 
     let reward = await redemptionRewardSchema.findOne({ channel: channel, rewardID: id });
 
-    console.log({reward, where: 'server.js', for: 'update reward', rewardID: reward._id})
-
     if (!reward) return res.status(404).json({ message: 'Reward not found', error: true });
 
     const streamer = await STREAMERS.getStreamer(channel);
@@ -849,7 +847,7 @@ async function init() {
     delete body.prompt;
     delete body.cost;
 
-    let updateResult = await redemptionRewardSchema.findByIdAndUpdate(reward._id, body);
+    let updateResult = await redemptionRewardSchema.findOneAndUpdate({_id : reward._id}, body, { new: true });
 
     if (!updateResult) return res.status(400).json({ message: 'Error updating reward', error: true });
 
