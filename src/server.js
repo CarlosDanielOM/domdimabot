@@ -810,7 +810,7 @@ async function init() {
     res.status(200).json({ message: 'Reward deleted', error: false });
   });
 
-  app.patch('/rewards/:channel/:id', async (req, res) => {
+  app.patch('/rewards/edit/:channel/:id', async (req, res) => {
     const { channel, id } = req.params;
     const body = req.body;
 
