@@ -622,7 +622,7 @@ async function init() {
 
     if (prompt == null) delete requestBody.prompt;
 
-    let rewardResponse = await fetch(`${getUrl()}/rewards/${channel}/${trigger.rewardID}`, {
+    let rewardResponse = await fetch(`${getUrl()}/rewards/edit/${channel}/${trigger.rewardID}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
