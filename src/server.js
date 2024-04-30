@@ -822,6 +822,8 @@ async function init() {
 
     let reward = await redemptionRewardSchema.findOne({ channel: channel, rewardID: id });
 
+    console.log({reward, where: 'server.js', for: 'update reward'})
+
     if (!reward) return res.status(404).json({ message: 'Reward not found', error: true });
 
     const streamer = await STREAMERS.getStreamer(channel);
