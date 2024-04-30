@@ -822,7 +822,7 @@ async function init() {
 
     let reward = await redemptionRewardSchema.findOne({ channel: channel, rewardID: id });
 
-    console.log({reward, where: 'server.js', for: 'update reward'})
+    console.log({reward, where: 'server.js', for: 'update reward', rewardID: reward._id})
 
     if (!reward) return res.status(404).json({ message: 'Reward not found', error: true });
 
