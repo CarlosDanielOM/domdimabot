@@ -36,6 +36,7 @@ const COMMANDSJSON = require('../config/reservedcommands.json');
 const eventsub = require('../schemas/eventsub');
 
 const COOLDOWN = require('../class/cooldown.js');
+const { default: mongoose } = require('mongoose');
 const cooldown = new COOLDOWN();
 
 let io;
@@ -854,6 +855,48 @@ async function init() {
     res.status(200).json({ data, error: false });
 
   });
+
+  app.patch('/rewards/:channel/:id', async (req, res) => {
+    const { channel, id } = req.params;
+    let body = req.body;
+    let rewardIDtoUpdate = '';
+
+    const streamer = await STREAMERS.getStreamer(channel);
+
+    let rewardDB = await redemptionRewardSchema.findOne({rewardID: id});
+    if (!rewardDB) return res.status(404).json({ message: 'Reward not found', error: true });
+    rewardIDtoUpdate = await new mongoose.Types.ObjectId(rewardDB._id);
+
+    let twitchBody = body;
+    if (body.skipQueue) twitchBody.should_redemptions_skip_request_queue = body.skipQueue;
+
+    let resUpdate = await fetch(`${getTwitchHelixURL()}/channel_points/custom_rewards?broadcaster_id=${streamer.user_id}&id=${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Client-ID': process.env.CLIENT_ID,
+        'Authorization': `Bearer ${decrypt(streamer.token)}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+
+    if(resUpdate.status !== 200) return res.status(resUpdate.status).json({ message: 'Error updating reward', error: true });
+
+    if(body.title) body.rewardTitle = body.title;
+    if(body.prompt) body.rewardPrompt = body.prompt;
+    if(body.cost) body.rewardCost = body.cost;
+    delete body.title;
+    delete body.prompt;
+    delete body.cost;
+    delete body._id;
+
+    // console.log({rewardDB, rewardIDtoUpdate, body})
+
+    let updateResult = await redemptionRewardSchema.findByIdAndUpdate(rewardIDtoUpdate, body, {new: true});
+    
+    res.status(200).json({ message: 'Reward updated', data: updateResult, error: false });
+
+  })
 
   app.get('/rewards/:type/:channel', async (req, res) => {
     const { type, channel } = req.params;
