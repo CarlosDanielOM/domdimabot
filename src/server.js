@@ -840,7 +840,14 @@ async function init() {
 
     if (data.error) return res.status(data.status).json(data);
 
-    let updateResult = await redemptionRewardSchema.findByIdAndUpdate(reward._id, { rewardTitle: body.title, rewardPrompt: body.prompt, rewardCost: body.cost });
+    if(body.title) body.rewardTitle = body.title;
+    if(body.prompt) body.rewardPrompt = body.prompt;
+    if(body.cost) body.rewardCost = body.cost;
+    delete body.title;
+    delete body.prompt;
+    delete body.cost;
+
+    let updateResult = await redemptionRewardSchema.findByIdAndUpdate(reward._id, body);
 
     if (!updateResult) return res.status(400).json({ message: 'Error updating reward', error: true });
 
