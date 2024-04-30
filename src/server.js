@@ -820,7 +820,7 @@ async function init() {
       body.prompt = '';
     }
 
-    let reward = await redemptionRewardSchema.findOne({ channel: channel, rewardID: id });
+    let reward = await redemptionRewardSchema.findOne({ channel: channel, rewardID: body._id });
 
     if (!reward) return res.status(404).json({ message: 'Reward not found', error: true });
 
@@ -847,7 +847,7 @@ async function init() {
     delete body.prompt;
     delete body.cost;
 
-    let updateResult = await redemptionRewardSchema.findOneAndUpdate({eventsubID : reward.eventsubID}, body, { new: true });
+    let updateResult = await redemptionRewardSchema.findOneAndUpdate({_id : reward._id}, body, { new: true });
 
     if (!updateResult) return res.status(400).json({ message: 'Error updating reward', error: true });
 
