@@ -847,7 +847,7 @@ async function init() {
     delete body.prompt;
     delete body.cost;
 
-    let updateResult = await redemptionRewardSchema.findOneAndUpdate({_id : reward._id}, body, { new: true });
+    let updateResult = await redemptionRewardSchema.findOneAndUpdate({eventsubID : reward.eventsubID}, body, { new: true });
 
     if (!updateResult) return res.status(400).json({ message: 'Error updating reward', error: true });
 
