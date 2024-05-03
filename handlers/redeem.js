@@ -26,7 +26,7 @@ async function redeem(client, eventData) {
         return { error: false, message: 'VIP set' };
     }
 
-    let trigger = await triggerSchema.findOne({ channelID: broadcaster_user_id, name: reward.title, type: 'redemption' }, 'file mediaType volume');
+    let trigger = await triggerSchema.findOne({ channelID: broadcaster_user_id, name: reward.title, type: 'redemption' }, 'file mediaType volume rewardID');
 
     if (!trigger) {
         let result = await customRedemptionReward(eventData, reward);
