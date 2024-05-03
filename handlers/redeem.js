@@ -4,6 +4,7 @@ const triggerFileSchema = require('../schemas/triggerfile');
 const rewardSchema = require('../schemas/redemptionreward');
 const vipRedemtionFun = require('../redemption_functions/vip');
 const customRedemptionReward = require('../redemption_functions/custom');
+const { getUrl } = require('../util/dev');
 
 const textConvertor = require('./text');
 
@@ -66,7 +67,7 @@ async function redeem(client, eventData) {
         });
 
         if (response.error) {
-            console.log({ response, where: 'customRewardRedemtpion', for: 'customReward.rewardCostChange > 0' })
+            console.log({ response, where: 'TriggerPriceUpdate', for: 'customReward.rewardCostChange > 0' })
             return { error: true, message: 'Error updating reward cost' }
         };
     }
