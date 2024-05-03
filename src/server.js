@@ -850,6 +850,8 @@ async function init() {
     delete body.cost;
 
     if(body.is_global_cooldown_enabled) body.cooldown = body.global_cooldown_seconds;
+    delete body.is_global_cooldown_enabled;
+    delete body.global_cooldown_seconds;
 
     let updateResult = await redemptionRewardSchema.findByIdAndUpdate(reward._id, body, { new: true });
 
