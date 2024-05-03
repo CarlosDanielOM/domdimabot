@@ -849,6 +849,8 @@ async function init() {
     delete body.prompt;
     delete body.cost;
 
+    if(body.is_global_cooldown_enabled) body.cooldown = body.global_cooldown_seconds;
+
     let updateResult = await redemptionRewardSchema.findByIdAndUpdate(reward._id, body, { new: true });
 
     if (!updateResult) return res.status(400).json({ message: 'Error updating reward', error: true });
