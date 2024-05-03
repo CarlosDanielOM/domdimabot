@@ -544,6 +544,7 @@ async function init() {
   app.post('/trigger/create/:channel', async (req, res) => {
     const { channel } = req.params;
     const { name, file, type, mediaType, cost, prompt, fileID, cooldown, volume } = req.body;
+    let body = req.body;
 
     const streamer = await STREAMERS.getStreamer(channel);
 
@@ -564,6 +565,10 @@ async function init() {
     }
 
     if (prompt == null) delete requestBody.prompt;
+
+    if(body.priceIncrease) requestBody.priceIncrease = body.priceIncrease;
+    if(body.returnToOriginalCost) requestBody.returnToOriginalCost = body.returnToOriginalCost;
+    if(body.rewardType) requestBody.rewardType = body.rewardType;
 
 
     let rewardResponse = await fetch(`${getUrl()}/${channel}/create/reward`, {
