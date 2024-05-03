@@ -1,6 +1,7 @@
 const func = require('../functions');
 const triggerSchema = require('../schemas/trigger');
 const triggerFileSchema = require('../schemas/triggerfile');
+const rewardSchema = require('../schemas/redemptionreward');
 const vipRedemtionFun = require('../redemption_functions/vip');
 const customRedemptionReward = require('../redemption_functions/custom');
 
