@@ -37,6 +37,8 @@ async function redeem(client, eventData) {
 
     let file = await triggerFileSchema.findOne({ name: trigger.file, fileType: trigger.mediaType }, 'fileUrl fileType');
 
+    let customReward = await rewardSchema.findOne({ channelID: broadcaster_user_id, rewardID: trigger.rewardID});
+
     if (!file) return;
 
     let url = file.fileUrl;
@@ -45,6 +47,27 @@ async function redeem(client, eventData) {
         url: url,
         mediaType: file.fileType,
         volume: trigger.volume
+    }
+
+    if (customReward.rewardCostChange > 0) {
+        let newCost = customReward.rewardCost + customReward.rewardCostChange;
+        let data = {
+            title: customReward.rewardTitle,
+            prompt: customReward.rewardPrompt,
+            cost: newCost,
+        }
+        let response = await fetch(`${getUrl()}/rewards/${broadcaster_user_login}/${rewardData.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.error) {
+            console.log({ response, where: 'customRewardRedemtpion', for: 'customReward.rewardCostChange > 0' })
+            return { error: true, message: 'Error updating reward cost' }
+        };
     }
 
     sendTrigger(broadcaster_user_login, triggerData);
