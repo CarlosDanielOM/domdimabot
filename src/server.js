@@ -772,6 +772,7 @@ async function init() {
 
     if (body.rewardType) rewardData.rewardType = body.rewardType;
     if (body.rewardDuration) rewardData.rewardDuration = body.rewardDuration;
+    if(body.is_global_cooldown_enabled) rewardData.cooldown = body.global_cooldown_seconds;
 
     if (body.rewardDuration > 90) return res.status(400).json({ message: 'Duration should not exceed 30 days', error: true });
 
@@ -885,9 +886,11 @@ async function init() {
     if(body.title) body.rewardTitle = body.title;
     if(body.prompt) body.rewardPrompt = body.prompt;
     if(body.cost) body.rewardCost = body.cost;
+    if(body.priceIncrease) body.rewardCostChange = body.priceIncrease;
     delete body.title;
     delete body.prompt;
     delete body.cost;
+    delete body.priceIncrease;
     delete body._id;
 
     // console.log({rewardDB, rewardIDtoUpdate, body})

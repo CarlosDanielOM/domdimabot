@@ -17,6 +17,7 @@ const redemptionRewardSchema = new schema({
     rewardCostChange: { type: Number, defualt: 0 },
     returnToOriginalCost: { type: Boolean, defualt: false },
     rewardDuration: { type: Number, defualt: 0 },
+    cooldown: { type: Number, defualt: 0 },
 });
 
 module.exports = mongoose.model('redemptionreward', redemptionRewardSchema);
