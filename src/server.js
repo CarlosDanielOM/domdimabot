@@ -849,7 +849,6 @@ async function init() {
     delete body.prompt;
     delete body.cost;
 
-    if(body.is_global_cooldown_enabled) body.cooldown = body.global_cooldown_seconds;
     delete body.is_global_cooldown_enabled;
     delete body.global_cooldown_seconds;
 
@@ -896,6 +895,9 @@ async function init() {
     delete body.cost;
     delete body.priceIncrease;
     delete body._id;
+
+    delete body.is_global_cooldown_enabled;
+    delete body.global_cooldown_seconds;
 
     // console.log({rewardDB, rewardIDtoUpdate, body})
 
