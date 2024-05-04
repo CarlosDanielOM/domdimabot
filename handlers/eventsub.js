@@ -1,30 +1,53 @@
 const CLIENT = require('../util/client');
 const functions = require('../functions');
 const commands = require('../commands');
+
+const eventsubSchema = require('../schemas/eventsub');
+
 const redeemHandler = require('./redeem');
 const resetRedemptionPrice = require('../redemption_functions/resetredemptioncosts');
 const unVIPExpiredUser = require('../redemption_functions/unvipexpired');
 const startTimerCommands = require('../timer_functions/starttimers');
 const stopTimerCommands = require('../timer_functions/stoptimer');
+const defaultMessages = require('../util/defaultmessage');
 
 let client;
 
 async function eventsubHandler(subscriptionData, eventData) {
     client = await CLIENT.getClient();
-    let { type, version, status, cost } = subscriptionData;
+    let { type, version, status, cost, id } = subscriptionData;
+    let eventsubData = await eventsubSchema.findOne({ type, channelID: eventData.broadcaster_user_id});
+    if(!eventsubData) {
+        eventsubData = {
+            enabled: true,
+        };
+        eventsubData.message = '';
+        console.log({ error: 'No data found', type, channelID: eventData.broadcaster_user_id });
+    }
+    if(!eventsubData.enabled) return;
 
     switch (type) {
         case 'channel.follow':
-            client.say(eventData.broadcaster_user_login, `${eventData.user_name} muchas gracias por el follow! Espero te la pases bien.`);
+            if(eventsubData.message == '' || eventsubData.message == null) {
+                eventsubData.message = '$(user) has followed the channel! Welcome!';
+            };
+            defaultMessages(client, eventData, eventsubData.message);
             break;
         case 'stream.online':
-            let channelData = await functions.getChannel(eventData.broadcaster_user_id);
-            client.say(eventData.broadcaster_user_login, `Hey! ${eventData.broadcaster_user_name} está en vivo! ${channelData.title} jugando ${channelData.game_name}!`);
+            if(eventsubData.message == '' || eventsubData.message == null) {
+                eventsubData.message = `Hey! $(twitch channel) is live! $(twitch title) playing $(twitch game)!`;
+            };
+            defaultMessages(client, eventData, eventsubData.message);
+            //! SEPARATOR FOR FUNCTIONS
             unVIPExpiredUser(client, eventData);
             await startTimerCommands(client, eventData);
             break;
         case 'stream.offline':
-            client.say(eventData.broadcaster_user_login, `Hey! ${eventData.broadcaster_user_name} ha terminado su stream! Esperamos verte en el proximo directo!`);
+            if(eventsubData.message == '' || eventsubData.message == null) {
+                eventsubData.message = `Hey! $(twitch channel) has gone offline!`;
+            };
+            defaultMessages(client, eventData, eventsubData.message);
+            //! SEPARATOR FOR FUNCTIONS
             resetRedemptionPrice(client, eventData.broadcaster_user_id);
             stopTimerCommands(client, eventData);
             break;
@@ -32,10 +55,20 @@ async function eventsubHandler(subscriptionData, eventData) {
             redeemHandler(client, eventData);
             break;
         case 'channel.ad_break.begin':
-            client.say(eventData.broadcaster_user_login, `Hey! a iniciado un anuncio de ${eventData.duration_seconds} segundos!`);
+            if(eventsubData.message == '' || eventsubData.message == null) {
+                eventsubData.message = `Hey! $(twitch channel) is having a $(ad time) seconds ad-break!`;
+            };
+            defaultMessages(client, eventData, eventsubData.message);
+            if(!eventsubData.endEnabled) return;
             setTimeout(() => {
-                client.say(eventData.broadcaster_user_login, `Hey! el anuncio ha terminado!`);
+                if(eventsubData.endMessage == '' || eventsubData.endMessage == null) {
+                    eventsubData.endMessage = `Hey! the ad-break has ended!`;
+                };
+                defaultMessages(client, eventData, eventsubData.endMessage);
             }, eventData.duration_seconds * 1000);
+            break;
+        case 'channel.raid':
+            console.log({ raid: eventData });
             break;
         default:
             break;

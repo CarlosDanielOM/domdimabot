@@ -14,6 +14,8 @@ const eventsubSchema = new Schema({
     channelID: { type: String, required: true },
     enabled: { type: Boolean, default: true },
     message: { type: String, default: '' },
+    endMessage: { type: String, default: '' },
+    endEnabled: { type: Boolean, default: true },
 });
 
 module.exports = mongoose.model('eventsub', eventsubSchema);

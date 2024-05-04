@@ -4,7 +4,7 @@ const CHANNEL = require('../functions/channel')
 
 let specialCommandsFunc = (/\$\(([a-z]+)\s?([a-z0-9]+)?\s?([a-zA-Z0-9\s]+)?\)/g);
 
-async function textConvertor(channelID, eventData, rewardData, message) {
+async function textConvertor(channelID, eventData, message, rewardData = {}) {
     let streamer = await STREAMERS.getStreamerById(channelID);
     let specials = message.match(specialCommandsFunc) || [];
     for (let i = 0; i < specials.length; i++) {
@@ -61,6 +61,7 @@ async function textConvertor(channelID, eventData, rewardData, message) {
                 }
                 break;
             case 'reward':
+                if (!rewardData) break;
                 if (!special[2]) break;
                 switch (special[2]) {
                     case 'cost':
@@ -80,6 +81,30 @@ async function textConvertor(channelID, eventData, rewardData, message) {
                         message = message.replace(special[0], rewardMessage);
                         break;
                     default:
+                        break;
+                }
+                break;
+            case 'ad':
+                if (!special[2]) break;
+                switch (special[2]) {
+                    case 'time':
+                        let time = eventData.duration_seconds;
+                        message = message.replace(special[0], time);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 'raid':
+                if (!special[2]) break;
+                switch (special[2]) {
+                    case 'channel':
+                        let raidChannel = eventData.from_broadcaster_user_login;
+                        message = message.replace(special[0], raidChannel);
+                        break;
+                    case 'viewers':
+                        let viewers = eventData.viewers;
+                        message = message.replace(special[0], viewers);
                         break;
                 }
                 break;
