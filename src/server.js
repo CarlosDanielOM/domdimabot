@@ -19,6 +19,7 @@ const commandSchema = require('../schemas/command');
 const redemptionRewardSchema = require('../schemas/redemptionreward');
 const triggerSchema = require('../schemas/trigger');
 const triggerFileSchema = require('../schemas/triggerfile');
+const eventsubSchema = require('../schemas/eventsub');
 const { getTwitchHelixURL } = require('../util/links.js');
 const { getUrl } = require('../util/dev.js');
 
@@ -936,6 +937,36 @@ async function init() {
 
     io.of(`/overlays/${channel}/furry`).emit('furry', { username, value });
     res.status(204).send();
+  });
+
+  //? EVENTSUB ROUTES ?//
+  app.get('/eventsubs/:channelID', async (req, res) => {
+    const { channelID } = req.params;
+
+    let data = await eventsubSchema.find({ channelID: channelID });
+
+    res.status(200).json(data);
+  });
+
+  app.get('/eventsubs/:channelID/:id', async (req, res) => {
+    const { channelID, id } = req.params;
+
+    let data = await eventsubSchema.findOne({ channelID: channelID, _id: id });
+
+    if(!data) return res.status(404).json({ message: 'Eventsub not found', error: true });
+
+    res.status(200).json({data, error: false});
+  });
+
+  app.post('/eventsubs/:channelID', async (req, res) => {
+    const { channelID } = req.params;
+    const { type, version, condition } = req.body;
+
+    let streamer = await STREAMERS.getStreamer(channelID);
+
+    let response = await subscribeTwitchEvent(streamer.name, type, version, condition);
+
+    res.status(200).json(response);
   });
 
   //? Server ?//
