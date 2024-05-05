@@ -16,6 +16,7 @@ const eventsubSchema = new Schema({
     message: { type: String, default: '' },
     endMessage: { type: String, default: '' },
     endEnabled: { type: Boolean, default: true },
+    minViewers: { type: Number, default: 2 },
 });
 
 module.exports = mongoose.model('eventsub', eventsubSchema);

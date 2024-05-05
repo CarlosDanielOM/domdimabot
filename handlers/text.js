@@ -99,7 +99,7 @@ async function textConvertor(channelID, eventData, message, rewardData = {}) {
                 if (!special[2]) break;
                 switch (special[2]) {
                     case 'channel':
-                        let raidChannel = eventData.from_broadcaster_user_login;
+                        let raidChannel = eventData.from_broadcaster_user_name;
                         message = message.replace(special[0], raidChannel);
                         break;
                     case 'viewers':

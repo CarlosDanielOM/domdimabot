@@ -5,6 +5,8 @@ const commands = require('../commands');
 const eventsubSchema = require('../schemas/eventsub');
 
 const redeemHandler = require('./redeem');
+const raidHandler = require('./raided');
+
 const resetRedemptionPrice = require('../redemption_functions/resetredemptioncosts');
 const unVIPExpiredUser = require('../redemption_functions/unvipexpired');
 const startTimerCommands = require('../timer_functions/starttimers');
@@ -18,11 +20,14 @@ async function eventsubHandler(subscriptionData, eventData) {
     let { type, version, status, cost, id } = subscriptionData;
     let eventsubData = await eventsubSchema.findOne({ type, channelID: eventData.broadcaster_user_id});
     if(!eventsubData) {
-        eventsubData = {
-            enabled: true,
-        };
-        eventsubData.message = '';
-        console.log({ error: 'No data found', type, channelID: eventData.broadcaster_user_id });
+        eventsubData = await eventsubSchema.findOne({ type, channelID: eventData.tobroadcaster_user_id });
+        if(!eventsubData) { 
+            eventsubData = {
+                enabled: true,
+            };
+            eventsubData.message = '';
+            console.log({ error: 'No data found', type, channelID: eventData.broadcaster_user_id });
+        }
     }
     if(!eventsubData.enabled) return;
 
@@ -68,7 +73,10 @@ async function eventsubHandler(subscriptionData, eventData) {
             }, eventData.duration_seconds * 1000);
             break;
         case 'channel.raid':
-            console.log({ raid: eventData });
+            if(!eventsubData.message || eventsubData.message == '' || eventsubData.message == null) {
+                eventsubData.message = `Hey! $(twitch channel) is being raided by $(raid channel) with $(raid viewers) viewers!`
+            }
+            raidHandler(client, eventData, eventsubData)
             break;
         default:
             break;

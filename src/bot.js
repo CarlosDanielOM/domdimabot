@@ -18,10 +18,6 @@ async function init() {
 
     await connectChannels(CLIENT.connectChannels, client);
 
-    client.on('raided', (channel, username, viewers, tags) => {
-        raid(client, channel.replace('#', ''), username, viewers, tags);
-    });
-
     client.on('resub', (channel, username, months, message, userstate, methods) => {
         let tier = userstate['msg-param-sub-plan'];
         switch (tier) {
