@@ -943,7 +943,7 @@ async function init() {
   app.get('/eventsubs/:channelID', async (req, res) => {
     const { channelID } = req.params;
 
-    let data = await eventsubSchema.find({ channelID: channelID });
+    let data = await eventsubSchema.find({ channelID: channelID }, '_id type version condition channelID enabled message endEnabled endMessage');
 
     res.status(200).json(data);
   });
@@ -951,7 +951,7 @@ async function init() {
   app.get('/eventsubs/:id', async (req, res) => {
     const { id } = req.params;
 
-    let data = await eventsubSchema.findById(id);
+    let data = await eventsubSchema.findById(id, '_id type version condition channelID enabled message endEnabled endMessage');
 
     if(!data) return res.status(404).json({ message: 'Eventsub not found', error: true });
 
@@ -961,7 +961,7 @@ async function init() {
   app.get('/eventsubs/:channelID/:type', async (req, res) => {
     const { channelID, type } = req.params;
 
-    let data = await eventsubSchema.findOne({ channelID: channelID, type: type });
+    let data = await eventsubSchema.findOne({ channelID: channelID, type: type }, '_id type version condition channelID enabled message endEnabled endMessage');
 
     if(!data) return res.status(404).json({ message: 'Eventsub not found', error: true });
 
