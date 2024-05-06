@@ -951,6 +951,9 @@ async function init() {
   app.get('/eventsub/:id', async (req, res) => {
     const { id } = req.params;
 
+    if(!id) return res.status(400).json({ message: 'No id provided', error: true });
+    if(!mongoose.isValidObjectId(id)) return res.status(400).json({ message: 'Invalid id', error: true });
+
     let data = await eventsubSchema.findById(id, '_id type version condition channelID enabled message endEnabled endMessage');
 
     if(!data) return res.status(404).json({ message: 'Eventsub not found', error: true });
