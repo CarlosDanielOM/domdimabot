@@ -948,7 +948,7 @@ async function init() {
     res.status(200).json(data);
   });
 
-  app.get('/eventsubs/:id', async (req, res) => {
+  app.get('/eventsub/:id', async (req, res) => {
     const { id } = req.params;
 
     let data = await eventsubSchema.findById(id, '_id type version condition channelID enabled message endEnabled endMessage');
