@@ -3,6 +3,7 @@ const functions = require('../functions');
 const commands = require('../commands');
 
 const eventsubSchema = require('../schemas/eventsub');
+const channelSchema = require('../schemas/channel.schema');
 
 const redeemHandler = require('./redeem');
 const raidHandler = require('./raided');
@@ -18,6 +19,9 @@ let client;
 async function eventsubHandler(subscriptionData, eventData) {
     client = await CLIENT.getClient();
     let { type, version, status, cost, id } = subscriptionData;
+    let channelData = await channelSchema.findOne({ channelID: eventData.broadcaster_user_id }, 'actived');
+    if(!channelData) return;
+    if(!channelData.actived) return;
     let eventsubData = await eventsubSchema.findOne({ type, channelID: eventData.broadcaster_user_id});
     if(!eventsubData) {
         eventsubData = await eventsubSchema.findOne({ type, channelID: eventData.to_broadcaster_user_id });
