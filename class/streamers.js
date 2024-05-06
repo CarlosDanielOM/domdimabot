@@ -17,14 +17,15 @@ class STREAMERS {
 
     async getStreamersFromDB() {
         try {
-            const result = await channelSchema.find({ actived: true }, 'name twitch_user_id twitch_user_token twitch_user_refresh_token');
+            const result = await channelSchema.find({ actived: true }, 'name twitch_user_id twitch_user_token twitch_user_refresh_token actived');
 
             result.map((item) => {
                 let data = {
                     name: item.name,
                     user_id: item.twitch_user_id,
                     token: item.twitch_user_token,
-                    refresh_token: item.twitch_user_refresh_token
+                    refresh_token: item.twitch_user_refresh_token,
+                    active: item.actived,
                 }
                 this.streamerData.set(data.name, data);
             });

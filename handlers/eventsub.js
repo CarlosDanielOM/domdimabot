@@ -1,6 +1,7 @@
 const CLIENT = require('../util/client');
 const functions = require('../functions');
 const commands = require('../commands');
+const streamers = require('../class/streamers');
 
 const eventsubSchema = require('../schemas/eventsub');
 const channelSchema = require('../schemas/channel.schema');
@@ -17,14 +18,12 @@ const defaultMessages = require('../util/defaultmessage');
 let client;
 
 async function eventsubHandler(subscriptionData, eventData) {
+    let streamer = await streamers.getStreamerById(eventData.broadcaster_user_id);
+    if(!streamer) return;
     client = await CLIENT.getClient();
     let { type, version, status, cost, id } = subscriptionData;
-    let channelData = await channelSchema.findOne({ channelID: eventData.broadcaster_user_id }, 'actived');
-    if(!channelData) return;
-    if(!channelData.actived) return;
     let eventsubData = await eventsubSchema.findOne({ type, channelID: eventData.broadcaster_user_id});
     if(!eventsubData) {
-        eventsubData = await eventsubSchema.findOne({ type, channelID: eventData.to_broadcaster_user_id });
         if(!eventsubData) { 
             eventsubData = {
                 enabled: true,
