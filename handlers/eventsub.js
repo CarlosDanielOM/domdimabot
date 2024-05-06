@@ -20,7 +20,7 @@ async function eventsubHandler(subscriptionData, eventData) {
     let { type, version, status, cost, id } = subscriptionData;
     let eventsubData = await eventsubSchema.findOne({ type, channelID: eventData.broadcaster_user_id});
     if(!eventsubData) {
-        eventsubData = await eventsubSchema.findOne({ type, channelID: eventData.tobroadcaster_user_id });
+        eventsubData = await eventsubSchema.findOne({ type, channelID: eventData.to_broadcaster_user_id });
         if(!eventsubData) { 
             eventsubData = {
                 enabled: true,
