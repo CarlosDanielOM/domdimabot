@@ -981,7 +981,9 @@ async function init() {
 
     let response = await subscribeTwitchEvent(streamer.name, type, version, condition);
 
-    res.status(200).json(response);
+    let newEventsubData = await eventsubSchema.findOne({ channelID: channelID, type: type });
+
+    res.status(200).json({error: false, message: 'Eventsub created', eventsub: newEventsubData, response});
   });
 
   app.delete('/eventsubs/:channelID/:id', async (req, res) => {
