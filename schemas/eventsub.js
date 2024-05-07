@@ -15,7 +15,7 @@ const eventsubSchema = new Schema({
     enabled: { type: Boolean, default: true },
     message: { type: String, default: '' },
     endMessage: { type: String, default: '' },
-    endEnabled: { type: Boolean, default: true },
+    endEnabled: { type: Boolean, default: false },
     minViewers: { type: Number, default: 2 },
 });
 
