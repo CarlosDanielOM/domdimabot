@@ -943,7 +943,7 @@ async function init() {
   app.get('/eventsubs/:channelID', async (req, res) => {
     const { channelID } = req.params;
 
-    let data = await eventsubSchema.find({ channelID: channelID }, '_id type version condition channelID enabled message endEnabled endMessage');
+    let data = await eventsubSchema.find({ channelID: channelID }, '_id type version condition channelID enabled message endEnabled endMessage minViewers');
 
     res.status(200).json(data);
   });
@@ -954,7 +954,7 @@ async function init() {
     if(!id) return res.status(400).json({ message: 'No id provided', error: true });
     if(!mongoose.isValidObjectId(id)) return res.status(400).json({ message: 'Invalid id', error: true });
 
-    let data = await eventsubSchema.findById(id, '_id type version condition channelID enabled message endEnabled endMessage');
+    let data = await eventsubSchema.findById(id, '_id type version condition channelID enabled message endEnabled endMessage minViewers');
 
     if(!data) return res.status(404).json({ message: 'Eventsub not found', error: true });
 
@@ -964,7 +964,7 @@ async function init() {
   app.get('/eventsubs/:channelID/:type', async (req, res) => {
     const { channelID, type } = req.params;
 
-    let data = await eventsubSchema.findOne({ channelID: channelID, type: type }, '_id type version condition channelID enabled message endEnabled endMessage');
+    let data = await eventsubSchema.findOne({ channelID: channelID, type: type }, '_id type version condition channelID enabled message endEnabled endMessage minViewers');
 
     if(!data) return res.status(404).json({ message: 'Eventsub not found', error: true });
 
