@@ -86,7 +86,7 @@ async function eventsubHandler(subscriptionData, eventData) {
             if(!eventData.is_permanent) {
                 console.log('temporal ban')
                 if(eventsubData.temporalBanMessage == '' || eventsubData.temporalBanMessage == null) {
-                    eventsubData.temporalBanMessage = `$(user) has been banned for $(ban time) seconds from the channel!`
+                    eventsubData.temporalBanMessage = `$(user) has been banned for $(ban time) seconds from the channel! by $(moderator) for $(ban reason)`
                 }
                 defaultMessages(client, eventData, eventsubData.temporalBanMessage)
             } else {

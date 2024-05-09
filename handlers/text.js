@@ -115,7 +115,9 @@ async function textConvertor(channelID, eventData, message, rewardData = {}) {
                         if(eventData.is_permanent) break;
                         let start = eventData.banned_at;
                         let end = eventData.ends_at;
-                        let time = (end - start) / 1000;
+                        let startDate = new Date(start);
+                        let endDate = new Date(end);
+                        let time = Math.floor((endDate - startDate) / 1000);
                         message = message.replace(special[0], time);
                         break;
                     case 'reason':
