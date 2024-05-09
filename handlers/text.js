@@ -108,6 +108,28 @@ async function textConvertor(channelID, eventData, message, rewardData = {}) {
                         break;
                 }
                 break;
+            case 'ban':
+                if (!special[2]) break;
+                switch (special[2]) {
+                    case 'time':
+                        if(eventData.is_permanent) break;
+                        let start = eventData.banned_at;
+                        let end = eventData.ends_at;
+                        let time = (end - start) / 1000;
+                        message = message.replace(special[0], time);
+                        break;
+                    case 'reason':
+                        let reason = eventData.reason;
+                        message = message.replace(special[0], reason);
+                        break;
+                    case 'mod':
+                        let mod = eventData.moderator_user_name;
+                        message = message.replace(special[0], mod);
+                        break;
+                    default:
+                        break;
+                }
+                break;
             default:
                 break;
         }

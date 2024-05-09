@@ -17,6 +17,7 @@ const eventsubSchema = new Schema({
     endMessage: { type: String, default: '' },
     endEnabled: { type: Boolean, default: false },
     minViewers: { type: Number, default: 2 },
+    temporalBanMessage: { type: String, default: '' },
 });
 
 module.exports = mongoose.model('eventsub', eventsubSchema);
