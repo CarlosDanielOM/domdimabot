@@ -82,6 +82,7 @@ async function eventsubHandler(subscriptionData, eventData) {
             raidHandler(client, eventData, eventsubData)
             break;
         case 'channel.ban':
+            console.log({ eventData })
             if(!eventData.is_permanent) {
                 if(eventsubData.temporalBanMessage == '' || eventsubData.temporalBanMessage == null) {
                     eventsubData.temporalBanMessage = `$(user) has been banned for $(ban time) seconds from the channel! by $(ban mod) for $(ban reason)`
