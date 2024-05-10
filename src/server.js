@@ -547,11 +547,18 @@ async function init() {
     const { name, file, type, mediaType, cost, prompt, fileID, cooldown, volume } = req.body;
     let body = req.body;
 
+    console.log({body, where: 'server.js', for: 'trigger create'})
+
     const streamer = await STREAMERS.getStreamer(channel);
+
+    console.log({streamer, where: 'server.js', for: 'trigger create'})
 
     let exists = await triggerFileSchema.exists({ name: file, fileType: mediaType });
 
-    if (!exists) return res.status(400).json({ message: 'File not found', error: true });
+    if (!exists) {
+      console.log({ error: true, message: 'File not found', where: 'server.js', for: 'trigger create', channel: streamer.name })
+      return res.status(400).json({ message: 'File not found', error: true })
+    };
 
     let requestBody = {
       title: name,
@@ -571,6 +578,7 @@ async function init() {
     if(body.returnToOriginalCost) requestBody.returnToOriginalCost = body.returnToOriginalCost;
     if(body.rewardType) requestBody.rewardType = body.rewardType;
 
+    console.log({requestBody, where: 'server.js', for: 'trigger create'})
 
     let rewardResponse = await fetch(`${getUrl()}/${channel}/create/reward`, {
       method: 'POST',
@@ -581,6 +589,8 @@ async function init() {
     });
 
     let rewardData = await rewardResponse.json();
+
+    console.log({rewardData, where: 'server.js', for: 'trigger create'})
 
     if (rewardData.error) return res.status(rewardData.status).json(rewardData);
 
