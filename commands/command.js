@@ -1,6 +1,7 @@
 const COMMAND = require('../class/command');
 const TIME = require('../class/time');
 const STREAMERS = require('../class/streamers');
+const commandTimerSchema = require('../schemas/command_timer')
 
 commandPermissionLevels = {
     0: 'everyone',
@@ -124,6 +125,8 @@ async function command(action, channel, argument, type = null) {
         let cmd = await COMMAND.getCommandFromDB(argument, streamer.user_id);
         cmd = cmd.command;
         if (cmd.reserved) return { error: true, reason: 'You cannot delete a reserved command' };
+        let commandTimerExists = await commandTimerSchema.findOne({ command: cmd.cmd, channelID: streamer.user_id });
+        if (commandTimerExists) return { error: true, reason: 'You cannot delete a command that is part of a Timer' };
         let deleted = await COMMAND.deleteCommandFromDB(cmd, streamer.user_id);
         if (!deleted) return { error: true, reason: 'command could not be deleted' };
         return { error: false, message: `Command !${cmd.name} deleted!` };
