@@ -22,6 +22,10 @@ async function createTimerCommand(channel, argument, userLevel) {
     let commandExists = await commandsSchema.findOne({ channelID: streamer.user_id, cmd: command });
 
     if (!commandExists) return {error: true, message: `Command ${command} does not exist.`};
+
+    let timerExists = await commandTimerSchema.findOne({ channelID: streamer.user_id, command: command });
+
+    if (timerExists) return {error: true, message: `Timer command ${command} already exists.`};
     
     let timerData = {
         command: command,

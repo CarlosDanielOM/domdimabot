@@ -368,7 +368,7 @@
             "description": "Haces que un comando ya hecho se pueda llamar a si solo cada cierta cantidad de minutos | Ejemplo: !cct <nombre del comando> <tiempo en minutos> | Ejemplo: !cct discord 5 | Ejemplo de respuesta: El comando !discord se activara cada 5 minutos | El tiempo en minutos no puede ser mayor a 60 minutos | El tiempo en minutos no puede ser menor a 1 minuto | Se le tiene que pasar un nombre de comando ya hecho como argumento | Se le tiene que pasar un tiempo en minutos como argumento | Si el temporizador ya existe se le dira que ya existe | Si el comando no existe se le dira que no existe"
         },
         {
-            "name": "Edit Command Time",
+            "name": "Edit Command Timer",
             "cmd": "ect",
             "func": "editCommandTimer",
             "type": "command",
@@ -380,7 +380,7 @@
             "description": "Edita el tiempo de ejecucion de un temporadizador ya hecho | Ejemplo: !ect <nombre del comando> <tiempo en minutos> | Ejemplo: !ect discord 10 | Ejemplo de respuesta: El comando !discord ahora se activara cada 10 minutos | El tiempo en minutos no puede ser mayor a 60 minutos | El tiempo en minutos no puede ser menor a 1 minuto | Se le tiene que pasar un nombre de comando ya hecho como argumento | Se le tiene que pasar un tiempo en minutos como argumento | Si el temporizador no existe se le dira que no existe"
         },
         {
-            "name": "Delete Command Time",
+            "name": "Delete Command Timer",
             "cmd": "dct",
             "func": "deleteCommandTimer",
             "type": "command",

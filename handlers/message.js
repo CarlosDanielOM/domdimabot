@@ -306,8 +306,14 @@ async function message(client, channel, tags, message) {
                 client.say(channel, cct.message);
                 break;
             case 'editCommandTimer':
+                let ect = await commands.editTimerCommand(channel, argument, userlevel);
+                if (ect.error) return client.say(channel, `${ect.message}`);
+                client.say(channel, ect.message);
                 break;
             case 'deleteCommandTimer':
+                let dct = await commands.deleteTimerCommand(channel, argument, userlevel);
+                if (dct.error) return client.say(channel, `${dct.message}`);
+                client.say(channel, dct.message);
                 break;
             default:
                 let cmdHandler = await commandHandler(channel, tags, command, argument, userlevel);

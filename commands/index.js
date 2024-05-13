@@ -23,6 +23,8 @@ const getTotalSubs = require('./gettotalsubs');
 const addVIPCommand = require('./addvip');
 const removeVIPCommand = require('./removevip');
 const createTimerCommand = require('./createtimercomand');
+const deleteTimerCommand = require('./deletetimercommand');
+const editTimerCommand = require('./edittimercommand');
 
 module.exports = {
     shoutout,
@@ -50,5 +52,7 @@ module.exports = {
     getTotalSubs,
     addVIP: addVIPCommand,
     unVIP: removeVIPCommand,
-    createTimerCommand
+    createTimerCommand,
+    deleteTimerCommand,
+    editTimerCommand
 }
