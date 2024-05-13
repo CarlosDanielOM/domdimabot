@@ -252,6 +252,7 @@ async function message(client, channel, tags, message) {
                 commandCD = commandList.cooldown
                 break;
             case 'chiste':
+                return;
                 let chiste = await commands.chiste(argument);
                 if (chiste.error) return client.say(channel, `${chiste.reason}`);
                 client.say(channel, chiste.message);
