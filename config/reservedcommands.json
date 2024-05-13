@@ -284,7 +284,7 @@
             "type": "command",
             "reserved": true,
             "cooldown": 10,
-            "enabled": false,
+            "enabled": true,
             "description": "Crea un clip del streamer con una duracion de 30 segundos despues de usar el comando | Ejemplo: !clip | Ejemplo de respuesta: Guardando clip... | Si la funcion es exitosa la respuesta dira Clip guardado con exito | No necesita argumentos"
         },
         {
