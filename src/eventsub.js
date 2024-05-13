@@ -2,6 +2,7 @@ require('dotenv').config();
 const crypto = require('crypto');
 const express = require('express');
 const eventsubHandler = require('../handlers/eventsub');
+const eventsubRevocationHandler = require('../handlers/eventsubrevocation');
 
 module.exports = {
     init: () => {
@@ -45,10 +46,8 @@ module.exports = {
                 } else if (MESSAGE_TYPE_REVOCATION === req.headers[MESSAGE_TYPE]) {
                     res.sendStatus(204);
 
-                    console.log(`Revocation for ${notification.subscription.type} ${notification.subscription.id}`);
-                    console.log(`reason ${notification.subscription.status}`);
-
                     console.log(`condition: ${JSON.stringify(notification, null, 4)}`);
+                    eventsubRevocationHandler(notification.subscription);
 
                 } else {
                     res.sendStatus(204);
