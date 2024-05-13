@@ -295,6 +295,8 @@
             "reserved": true,
             "enabled": true,
             "cooldown": 10,
+            "userLevelName": "broadcaster",
+            "userLevel": 8,
             "description": "Le da VIP sea permanente o temporal al usuario | Ejemplo: !vip <nombre de usuario> | Ejemplo: !vip (user) | Ejemplo de respuesta: (user) ahora es VIP | Si se le pasa un tiempo en dias como argumento le dara VIP temporal al usuario | Ejemplo: !vip <nombre de usuario> <tiempo en dias> | Ejemplo: !vip (user) 30 | Ejemplo de respuesta: (user) ahora es VIP por 30 dias"
         },
         {
