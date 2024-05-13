@@ -1,5 +1,6 @@
 const STREAMERS = require('../class/streamers');
 const commandTimerSchema = require('../schemas/command_timer');
+const commandsSchema = require('../schemas/command');
 
 async function deleteTimerCommand(channel, argument, userLevel) {
     let streamer = await STREAMERS.getStreamer(channel);
