@@ -6,7 +6,6 @@ const socketio = require('socket.io');
 const fs = require('fs');
 const http = require('http');
 const axios = require('axios');
-const multer = require('multer');
 const cors = require('cors');
 
 const STREAMERS = require('../class/streamers.js');
@@ -16,29 +15,23 @@ const { encrypt, decrypt } = require('../util/crypto');
 
 const channelSchema = require('../schemas/channel.schema');
 const commandSchema = require('../schemas/command');
-const redemptionRewardSchema = require('../schemas/redemptionreward');
 const triggerSchema = require('../schemas/trigger');
 const triggerFileSchema = require('../schemas/triggerfile');
-const eventsubSchema = require('../schemas/eventsub');
-const { getTwitchHelixURL } = require('../util/links.js');
 const { getUrl } = require('../util/dev.js');
+
+//* ROUTES
+const eventsubRoute = require('./routes/eventsub.routes.js');
+const triggerRoutes = require('./routes/trigger.routes.js');
+const rewardsRoutes = require('./routes/rewards.routes.js');
 
 const CHANNEL = require('../functions/channel');
 
-const { getEventsubs, SubscritpionsData, unsubscribeTwitchEvent, subscribeTwitchEvent } = require('../util/eventsub.js');
+const { SubscritpionsData, subscribeTwitchEvent } = require('../util/eventsub.js');
 
 const downloadPath = `${__dirname}/routes/public/downloads/`;
 const htmlPath = `${__dirname}/routes/public/`;
 
-const aceptableFileExtensions = ['mp4', 'mov', 'avi', 'flv', 'wmv', 'webm', 'mkv', 'gif', 'jpg', 'jpeg', 'png', 'bmp', 'tiff', 'svg', 'webp', 'mp3', 'flac', 'wav', 'ogg', 'aac', 'wma', 'm4a'];
-const acceptableMimeTypes = ['video/mp4', 'video/mov', 'video/avi', 'video/flv', 'video/wmv', 'video/webm', 'video/mkv', 'image/gif', 'image/jpg', 'image/jpeg', 'image/png', 'image/bmp', 'image/tiff', 'image/svg', 'image/webp', 'audio/mp3', 'audio/flac', 'audio/wav', 'audio/ogg', 'audio/aac', 'audio/wma', 'audio/m4a'];
-
 const COMMANDSJSON = require('../config/reservedcommands.json');
-const eventsub = require('../schemas/eventsub');
-
-const COOLDOWN = require('../class/cooldown.js');
-const { default: mongoose } = require('mongoose');
-const cooldown = new COOLDOWN();
 
 let io;
 
@@ -76,8 +69,6 @@ async function init() {
   });
 
   //* Routes *//
-  const clipRoute = require('./routes/clip.route.js');
-
   let soSent = [];
 
   app.use(bodyParser.json());
@@ -137,12 +128,6 @@ async function init() {
   
   app.get('/commands/reserved', async (req, res) => {
     res.status(200).json(COMMANDSJSON);
-  });
-
-  //! Routes !//
-  app.get('/eventsubs', async (req, res) => {
-    let data = await getEventsubs();
-    res.status(200).json(data);
   });
 
   //? CLIP ROUTES ?//
@@ -295,7 +280,7 @@ async function init() {
             } else {
               event.condition.broadcaster_user_id = updatedChannel.twitch_user_id;
             }
-            let response = await subscribeTwitchEvent(username, event.type, event.version, event.condition);
+            let response = await subscribeTwitchEvent(updatedChannel.twitch_user_id, event.type, event.version, event.condition);
           }
 
           let commandsJSON = COMMANDSJSON.commands;
@@ -406,13 +391,6 @@ async function init() {
     }
 
   })
-
-  //? DASHBOARD ROUTES ?//
-
-  app.get('/dashboard', async (req, res) => {
-    res.status(200).sendFile(`${htmlPath}dashboard.html`);
-  });
-
   //? BOT ROUTES ?//
 
   app.post('/bot/:action', async (req, res) => {
@@ -458,82 +436,10 @@ async function init() {
   });
 
   //? Trigger ROUTES ?//
+  app.use('/triggers', triggerRoutes)
 
   app.get('/overlays/triggers/:channel', async (req, res) => {
     res.sendFile(`${htmlPath}trigger.html`);
-  });
-
-  app.get('/trigger/manage/:channel', async (req, res) => {
-    let channel = req.params.channel;
-    res.sendFile(`${htmlPath}managetriggers.html`);
-  });
-
-  app.post('/trigger/upload/:channel', async (req, res) => {
-    try {
-      const { channel } = req.params;
-      if (!fs.existsSync(`${__dirname}/routes/public/uploads/triggers/${channel}`)) {
-        fs.mkdirSync(`${__dirname}/routes/public/uploads/triggers/${channel}`, { recursive: true });
-      }
-      const storage = multer.diskStorage({
-        destination: function (req, file, cb) {
-          cb(null, `${__dirname}/routes/public/uploads/triggers/${channel}`)
-        },
-        filename: function (req, file, cb) {
-          cb(null, `${req.body.triggerName}.${file.mimetype.split('/')[1]}`);
-        }
-      });
-      multer({
-        storage: storage, fileFilter: async (req, file, cb) => {
-          if (acceptableMimeTypes.includes(file.mimetype)) {
-            if (await triggerFileSchema.exists({ name: req.body.triggerName, fileType: file.mimetype })) {
-              cb(null, false);
-            } else {
-              cb(null, true);
-            }
-          } else {
-            cb(null, false);
-          }
-        }
-      }).single('trigger')(req, res, async (err) => {
-        if (err) {
-          console.log(err);
-          res.status(400).json({ message: 'Error uploading file', error: true });
-          return false;
-        }
-
-        if (!req.file) return res.status(400).json({ message: 'File type not supported or file with same name already exists', error: true });
-
-        if (req.file.size > 5000000) {
-          fs.rm(`${__dirname}/routes/public/uploads/triggers/${channel}/${req.file.filename}`, { recursive: false, force: true, maxRetries: 5 }, (err) => {
-            if (err) console.log({ err, where: 'server.js', for: 'trigger upload' });
-            return res.status(400).json({ message: 'File size should not exceed 5MB', error: true });
-          });
-        }
-
-        let exists = await triggerFileSchema.exists({ name: req.body.triggerName, fileType: req.file.mimetype });
-
-        if (exists) return res.status(400).json({ message: 'File with that name already exists', error: true });
-
-        const streamer = await STREAMERS.getStreamer(channel);
-
-        let fileNameUrlEncoded = encodeURIComponent(req.file.filename);
-        let fileData = {
-          name: req.body.triggerName,
-          fileName: req.file.filename,
-          fileSize: req.file.size,
-          fileType: req.file.mimetype,
-          fileUrl: `https://api.domdimabot.com/media/${channel}/${fileNameUrlEncoded}`,
-          channel: channel,
-          channelID: streamer.user_id,
-        }
-
-        let newFile = await new triggerFileSchema(fileData).save();
-
-        return res.status(200).json({ message: 'File uploaded', file: newFile, error: false });
-      });
-    } catch (error) {
-      console.log({ error, where: 'server.js', for: 'trigger upload' });
-    }
   });
 
   app.get('/media/:channel/:trigger', async (req, res) => {
@@ -688,15 +594,6 @@ async function init() {
 
   });
 
-  app.get('/triggers/:channel', async (req, res) => {
-    const { channel } = req.params;
-
-    let triggers = await triggerSchema.find({ channel: channel }, '_id name file type mediaType date cost cooldown volume');
-
-    res.status(200).json({ triggers });
-
-  });
-
   app.get('/trigger/files/:channel', async (req, res) => {
     const { channel } = req.params;
 
@@ -731,199 +628,7 @@ async function init() {
   });
 
   //? REDEMPTION ROUTES ?//
-  app.post('/:channel/create/reward', async (req, res) => {
-    const { channel } = req.params;
-    const { title, cost, skipQueue } = req.body;
-
-    const prompt = req.body.prompt || '';
-    const priceIncrease = req.body.priceIncrease || 0;
-    const rewardMessage = req.body.rewardMessage || '';
-    const returnToOriginalCost = req.body.returnToOriginalCost || false;
-
-    if (title.length > 45) return res.status(400).json({ message: 'Title too long', error: true });
-
-    let streamer = await STREAMERS.getStreamer(channel);
-
-    let body = req.body;
-    body.prompt = prompt;
-
-    let response = await fetch(`${getTwitchHelixURL()}/channel_points/custom_rewards?broadcaster_id=${streamer.user_id}`, {
-      method: 'POST',
-      headers: {
-        'Client-ID': process.env.CLIENT_ID,
-        'Authorization': `Bearer ${decrypt(streamer.token)}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    });
-
-    let data = await response.json();
-
-    if (data.error) return res.status(data.status).json(data);
-
-    let newReward = data.data[0];
-
-    const eventData = await subscribeTwitchEvent(channel, 'channel.channel_points_custom_reward_redemption.add', '1', { broadcaster_user_id: streamer.user_id, reward_id: newReward.id });
-
-    let rewardData = {
-      eventsubID: eventData.id,
-      channelID: streamer.user_id,
-      channel: channel,
-      rewardID: newReward.id,
-      rewardTitle: newReward.title,
-      rewardPrompt: newReward.prompt,
-      rewardOriginalCost: newReward.cost,
-      rewardCost: newReward.cost,
-      rewardIsEnabled: newReward.is_enabled,
-      rewardCostChange: priceIncrease,
-      rewardMessage,
-      returnToOriginalCost: returnToOriginalCost
-    }
-
-    if (body.rewardType) rewardData.rewardType = body.rewardType;
-    if (body.rewardDuration) rewardData.rewardDuration = body.rewardDuration;
-    if(body.is_global_cooldown_enabled) rewardData.cooldown = body.global_cooldown_seconds;
-
-    if (body.rewardDuration > 90) return res.status(400).json({ message: 'Duration should not exceed 30 days', error: true });
-
-    await new redemptionRewardSchema(rewardData).save();
-
-    res.status(200).json({ data, rewardData, error: false });
-  });
-
-  app.delete('/:channel/delete/reward/:id', async (req, res) => {
-    const { channel, id } = req.params;
-
-    let reward = await redemptionRewardSchema.findOne({ channel: channel, rewardID: id });
-
-    if (!reward) return res.status(404).json({ message: 'Reward not found', error: true });
-
-    let streamer = await STREAMERS.getStreamer(channel);
-
-    let response = await fetch(`${getTwitchHelixURL()}/channel_points/custom_rewards?broadcaster_id=${streamer.user_id}&id=${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Client-ID': process.env.CLIENT_ID,
-        'Authorization': `Bearer ${decrypt(streamer.token)}`,
-      }
-    });
-
-    if (response.error) return res.status(response.status).json(response);
-
-    if (response.status !== 204) {
-      console.log({ response, where: 'server.js', for: 'delete reward' })
-      return res.status(response.status).json({ message: 'Error deleting reward', error: true })
-    };
-
-    await unsubscribeTwitchEvent(reward.eventsubID);
-
-    await reward.deleteOne({ id: reward.id });
-
-    res.status(200).json({ message: 'Reward deleted', error: false });
-  });
-
-  app.patch('/rewards/edit/:channel/:id', async (req, res) => {
-    const { channel, id } = req.params;
-    const body = req.body;
-
-    if (body.title.length > 45) return res.status(400).json({ message: 'Title too long', error: true });
-
-    if (!body.prompt) {
-      body.prompt = '';
-    }
-
-    let reward = await redemptionRewardSchema.findOne({ channel: channel, rewardID: id });
-
-    if (!reward) return res.status(404).json({ message: 'Reward not found', error: true });
-
-    const streamer = await STREAMERS.getStreamer(channel);
-
-    let updateResponse = await fetch(`${getTwitchHelixURL()}/channel_points/custom_rewards?broadcaster_id=${streamer.user_id}&id=${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Client-ID': process.env.CLIENT_ID,
-        'Authorization': `Bearer ${decrypt(streamer.token)}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    });
-
-    let data = await updateResponse.json();
-
-    if (data.error) return res.status(data.status).json(data);
-
-    if(body.title) body.rewardTitle = body.title;
-    if(body.prompt) body.rewardPrompt = body.prompt;
-    if(body.cost) body.rewardCost = body.cost;
-    delete body.title;
-    delete body.prompt;
-    delete body.cost;
-
-    delete body.is_global_cooldown_enabled;
-    delete body.global_cooldown_seconds;
-
-    let updateResult = await redemptionRewardSchema.findByIdAndUpdate(reward._id, body, { new: true });
-
-    if (!updateResult) return res.status(400).json({ message: 'Error updating reward', error: true });
-
-    res.status(200).json({ data, error: false });
-
-  });
-
-  app.patch('/rewards/:channel/:id', async (req, res) => {
-    const { channel, id } = req.params;
-    let body = req.body;
-    let rewardIDtoUpdate = '';
-
-    const streamer = await STREAMERS.getStreamer(channel);
-
-    let rewardDB = await redemptionRewardSchema.findOne({rewardID: id});
-    if (!rewardDB) return res.status(404).json({ message: 'Reward not found', error: true });
-    rewardIDtoUpdate = await new mongoose.Types.ObjectId(rewardDB._id);
-
-    let twitchBody = body;
-    if (body.skipQueue) twitchBody.should_redemptions_skip_request_queue = body.skipQueue;
-
-    let resUpdate = await fetch(`${getTwitchHelixURL()}/channel_points/custom_rewards?broadcaster_id=${streamer.user_id}&id=${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Client-ID': process.env.CLIENT_ID,
-        'Authorization': `Bearer ${decrypt(streamer.token)}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    });
-
-    if(resUpdate.status !== 200) return res.status(resUpdate.status).json({ message: 'Error updating reward', error: true });
-
-    if(body.title) body.rewardTitle = body.title;
-    if(body.prompt) body.rewardPrompt = body.prompt;
-    if(body.cost) body.rewardCost = body.cost;
-    if(body.priceIncrease) body.rewardCostChange = body.priceIncrease;
-    delete body.title;
-    delete body.prompt;
-    delete body.cost;
-    delete body.priceIncrease;
-    delete body._id;
-
-    delete body.is_global_cooldown_enabled;
-    delete body.global_cooldown_seconds;
-
-    // console.log({rewardDB, rewardIDtoUpdate, body})
-
-    let updateResult = await redemptionRewardSchema.findByIdAndUpdate(rewardIDtoUpdate, body, {new: true});
-    
-    res.status(200).json({ message: 'Reward updated', data: updateResult, error: false });
-
-  })
-
-  app.get('/rewards/:type/:channel', async (req, res) => {
-    const { type, channel } = req.params;
-
-    let rewards = await redemptionRewardSchema.find({ channel: channel, rewardType: type }, '_id rewardID rewardTitle rewardPrompt rewardCost rewardCostChange rewardMessage returnToOriginalCost rewardIsEnabled skipQueue rewardType cooldown');
-
-    res.status(200).json({ rewards });
-  });
+  app.use('/rewards', rewardsRoutes);
 
   app.get('/logout', async (req, res) => {
     res.status(200).sendFile(`${htmlPath}logout.html`);
@@ -944,82 +649,7 @@ async function init() {
   });
 
   //? EVENTSUB ROUTES ?//
-  app.get('/eventsubs/:channelID', async (req, res) => {
-    const { channelID } = req.params;
-
-    let data = await eventsubSchema.find({ channelID: channelID }, '_id type version condition channelID enabled message endEnabled endMessage minViewers');
-
-    res.status(200).json(data);
-  });
-
-  app.get('/eventsub/:id', async (req, res) => {
-    const { id } = req.params;
-
-    if(!id) return res.status(400).json({ message: 'No id provided', error: true });
-    if(!mongoose.isValidObjectId(id)) return res.status(400).json({ message: 'Invalid id', error: true });
-
-    let data = await eventsubSchema.findById(id, '_id type version condition channelID enabled message endEnabled endMessage minViewers');
-
-    if(!data) return res.status(404).json({ message: 'Eventsub not found', error: true });
-
-    res.status(200).json({eventsub: data, error: false});
-  });
-
-  app.get('/eventsubs/:channelID/:type', async (req, res) => {
-    const { channelID, type } = req.params;
-
-    let data = await eventsubSchema.findOne({ channelID: channelID, type: type }, '_id type version condition channelID enabled message endEnabled endMessage minViewers');
-
-    if(!data) return res.status(404).json({ message: 'Eventsub not found', error: true });
-
-    res.status(200).json({eventsubs: data, error: false});
-  });
-
-  app.post('/eventsubs/:channelID', async (req, res) => {
-    const { channelID } = req.params;
-    const { type, version, condition } = req.body;
-
-    let streamer = await STREAMERS.getStreamerById(channelID);
-
-    if(!streamer) return res.status(404).json({ message: 'Streamer not found', error: true });
-
-    let response = await subscribeTwitchEvent(streamer.name, type, version, condition);
-
-    let newEventsubData = await eventsubSchema.findOne({ channelID: channelID, type: type });
-
-    res.status(200).json({error: false, message: 'Eventsub created', eventsub: newEventsubData, response});
-  });
-
-  app.delete('/eventsubs/:channelID/:id', async (req, res) => {
-    const { channelID, id } = req.params;
-
-    let eventsub = await eventsubSchema.findOne({ channelID: channelID, _id: id });
-
-    if(!eventsub) return res.status(404).json({ message: 'Eventsub not found', error: true });
-
-    let result = await unsubscribeTwitchEvent(eventsub.id);
-
-    if(result.error) return res.status(result.status).json(result);
-
-    return res.status(200).json({error: false, message: 'Eventsub deleted'});
-    
-  });
-
-  app.patch('/eventsubs/:channelID/:id', async (req, res) => {
-    const { channelID, id } = req.params;
-    let body = req.body;
-
-    let eventsub = await eventsubSchema.findOne({ channelID, _id: id});
-
-    if(!eventsub) return res.status(404).json({ message: 'Eventsub not found', error: true });
-
-    let update = await eventsubSchema.findOneAndUpdate({ channelID, _id: id}, body, { new: true });
-
-    if(!update) return res.status(400).json({ message: 'Error updating eventsub', error: true });
-
-    res.status(200).json({ message: 'Eventsub updated', error: false, eventsub: update });
-    
-  });
+  app.use('/eventsubs', eventsubRoute);
 
   //? Server ?//
   server.listen(PORT, () => {
