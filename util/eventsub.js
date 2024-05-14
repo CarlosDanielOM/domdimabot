@@ -1,6 +1,6 @@
 require('dotenv').config();
 const STREAMERS = require('../class/streamers')
-const { getStreamerHeader } = require('../util/headers')
+const { getStreamerHeader, getStreamerHeaderById } = require('../util/headers')
 const { getTwitchHelixURL } = require('../util/links')
 const { getAppToken } = require('../util/token')
 const eventsubSchema = require('../schemas/eventsub');
@@ -89,9 +89,9 @@ const SubscritpionsData = [
     }
 ];
 
-async function subscribeTwitchEvent(channel, type, version, condition) {
-    let streamer = await STREAMERS.getStreamer(channel);
-    let streamerHeaders = await getStreamerHeader(channel);
+async function subscribeTwitchEvent(channelID, type, version, condition) {
+    let streamer = await STREAMERS.getStreamerById(channelID);
+    let streamerHeaders = await getStreamerHeaderById(channelID);
     let appAccessToken = await getAppToken();
 
     streamerHeaders['Authorization'] = `Bearer ${appAccessToken}`;
