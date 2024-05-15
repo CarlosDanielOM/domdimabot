@@ -4,6 +4,10 @@ const router = express.Router();
 
 const eventsubSchema = require('../../schemas/eventsub');
 
+const STREAMERS = require('../../class/streamers');
+
+const {unsubscribeTwitchEvent, subscribeTwitchEvent} = require('../../util/eventsub');
+
 router.get('/:channelID', async (req, res) => {
     const { channelID } = req.params;
 
