@@ -71,6 +71,8 @@ router.post('/:channelID', async (req, res) => {
     const rewardMessage = body.message ? body.message : '';
     const returnToOriginalCost = body.returnToOriginalCost ? body.returnToOriginalCost : false;
 
+    console.log({evensubData})
+
     let rewardData = {
         eventsubID: evensubData.id,
         channelID: channelID,
