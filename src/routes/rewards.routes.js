@@ -102,7 +102,7 @@ router.post('/:channelID', async (req, res) => {
 router.delete('/channelID/:rewardID', async (req, res) => {
     const {channelID, rewardID} = req.params;
 
-    let reward = await rewardSchema.findOne({channelID: channelID, rewardID: rewardID});
+    let reward = await rewardSchema.findOne({channelID: channelID, _id: rewardID});
     if(!reward) return res.status(404).json({error: true, message: 'Reward not found'});
 
     let streamer = await STREAMERS.getStreamerById(channelID);
@@ -140,7 +140,7 @@ router.patch('/channelID/:rewardID', async (req, res) => {
 
     const streamer = await STREAMERS.getStreamerById(channelID);
 
-    let reward = await rewardSchema.findOne({channelID: channelID, rewardID: rewardID});
+    let reward = await rewardSchema.findOne({channelID: channelID, _id: rewardID});
     if(!reward) return res.status(404).json({error: true, message: 'Reward not found'});
 
     let twitchBody = body;
