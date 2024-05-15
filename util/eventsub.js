@@ -128,7 +128,7 @@ async function subscribeTwitchEvent(channelID, type, version, condition) {
         created_at: data.created_at,
         transport: data.transport,
         cost: data.cost,
-        channel: channel,
+        channel: streamer.name,
         channelID: streamer.user_id
     });
 
