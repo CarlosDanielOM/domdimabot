@@ -99,16 +99,12 @@ router.post('/:channelID', async (req, res) => {
     
 });
 
-router.delete('/channelID/:rewardID', async (req, res) => {
+router.delete('/:channelID/:rewardID', async (req, res) => {
     const {channelID, rewardID} = req.params;
-
-    console.log({channelID, rewardID})
     
     let reward = await rewardSchema.findOne({channelID: channelID, rewardID: rewardID});
     if(!reward) return res.status(404).json({error: true, message: 'Reward not found'});
 
-    console.log({reward})
-    
     let streamer = await STREAMERS.getStreamerById(channelID);
 
     let response = await fetch(`${getTwitchHelixURL()}/channel_points/custom_rewards?broadcaster_id=${channelID}&id=${rewardID}`, {
@@ -138,7 +134,7 @@ router.delete('/channelID/:rewardID', async (req, res) => {
     
 });
 
-router.patch('/channelID/:rewardID', async (req, res) => {
+router.patch('/:channelID/:rewardID', async (req, res) => {
     const {channelID, rewardID} = req.params;
     let body = req.body;
 
