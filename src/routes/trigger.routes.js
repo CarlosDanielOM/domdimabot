@@ -177,6 +177,7 @@ router.post('/:channelID', async (req, res) => {
 router.patch('/:channelID/:triggerID', async (req, res) => {
     const { channelID, triggerID } = req.params;
     const { name, cost, prompt, cooldown, volume } = req.body;
+    let body = req.body;
 
     let trigger = await triggerSchema.findOne({ _id: triggerID, channelID: channelID });
     if(!trigger) return res.status(404).json({ error: true, message: 'Trigger not found' });
