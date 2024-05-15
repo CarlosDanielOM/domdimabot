@@ -127,7 +127,7 @@ router.post('/:channelID', async (req, res) => {
     const { name, file, type, mediaType, cost, prompt, fileID, cooldown, volume } = req.body;
     let body = req.body;
 
-    let streamer = STREAMERS.getStreamerById(channelID);
+    let streamer = await STREAMERS.getStreamerById(channelID);
     if(!streamer) return res.status(404).json({ error: true, message: 'Streamer not found' });
 
     let exists = triggerFileSchema.exists({name: file, fileType: mediaType, channelID: channelID});
