@@ -26,7 +26,7 @@ const rewardsRoutes = require('./routes/rewards.routes.js');
 
 const CHANNEL = require('../functions/channel');
 
-const { SubscritpionsData, subscribeTwitchEvent } = require('../util/eventsub.js');
+const { SubscritpionsData, subscribeTwitchEvent, getEventsubs } = require('../util/eventsub.js');
 
 const downloadPath = `${__dirname}/routes/public/downloads/`;
 const htmlPath = `${__dirname}/routes/public/`;
@@ -88,6 +88,11 @@ async function init() {
     })
     
     res.status(200).json({ message: 'Commands created', error: false });
+  });
+
+  app.get('/dev/eventsubs', async (req, res) => {
+    let eventsubs = await getEventsubs();
+    res.status(200).json(eventsubs);
   });
   
 
