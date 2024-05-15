@@ -57,13 +57,13 @@ router.post('/:channelID', async (req, res) => {
         body: JSON.stringify(twitchBody)
     })
 
-    let res = await response.json();
-    if(res.error) {
-        console.log({error: true, message: 'Error creating reward', response: res, channelID});
-        return res.status(response.status).json({error: true, message: res.message});
+    let results = await response.json();
+    if(results.error) {
+        console.log({error: true, message: 'Error creating reward', response: results, channelID});
+        return res.status(response.status).json({error: true, message: results.message});
     }
 
-    let newReward = res.data[0];
+    let newReward = results.data[0];
 
     const evensubData = await subscribeTwitchEvent(channelID, 'channel.channel_points_custom_reward_redemption.add', '1', {broadcaster_user_login: channelID, reward_id: newReward.id});
 
