@@ -65,13 +65,11 @@ router.post('/:channelID', async (req, res) => {
 
     let newReward = results.data[0];
 
-    const evensubData = await subscribeTwitchEvent(channelID, 'channel.channel_points_custom_reward_redemption.add', '1', {broadcaster_user_login: channelID, reward_id: newReward.id});
+    const evensubData = await subscribeTwitchEvent(channelID, 'channel.channel_points_custom_reward_redemption.add', '1', {broadcaster_user_id: channelID, reward_id: newReward.id});
 
     const priceIncrease = body.priceIncrease ? body.priceIncrease : 0;
     const rewardMessage = body.message ? body.message : '';
     const returnToOriginalCost = body.returnToOriginalCost ? body.returnToOriginalCost : false;
-
-    console.log({evensubData})
 
     let rewardData = {
         eventsubID: evensubData.id,
