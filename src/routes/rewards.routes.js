@@ -12,7 +12,7 @@ const rewardSchema = require('../../schemas/redemptionreward')
 router.get('/:channelID', async (req, res) => {
     const { channelID } = req.params;
 
-    let rewards = await redemptionRewardSchema.find({ channelID: channelID }, '_id rewardID rewardTitle rewardPrompt rewardCost rewardCostChange rewardMessage returnToOriginalCost rewardIsEnabled skipQueue rewardType cooldown');
+    let rewards = await rewardSchema.find({ channelID: channelID }, '_id rewardID rewardTitle rewardPrompt rewardCost rewardCostChange rewardMessage returnToOriginalCost rewardIsEnabled skipQueue rewardType cooldown');
 
     res.status(200).json({ rewards });
 });
@@ -20,7 +20,7 @@ router.get('/:channelID', async (req, res) => {
 router.get('/:channelID/:type', async (req, res) => {
     const { type, channelID } = req.params;
 
-    let rewards = await redemptionRewardSchema.find({ channelID: channelID, rewardType: type }, '_id rewardID rewardTitle rewardPrompt rewardCost rewardCostChange rewardMessage returnToOriginalCost rewardIsEnabled skipQueue rewardType cooldown');
+    let rewards = await rewardSchema.find({ channelID: channelID, rewardType: type }, '_id rewardID rewardTitle rewardPrompt rewardCost rewardCostChange rewardMessage returnToOriginalCost rewardIsEnabled skipQueue rewardType cooldown');
 
     res.status(200).json({ rewards });
 });
