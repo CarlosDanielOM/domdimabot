@@ -145,6 +145,13 @@ router.patch('/channelID/:rewardID', async (req, res) => {
 
     let twitchBody = body;
     if(body.skipQueue) twitchBody.should_redemptions_skip_request_queue = body.skipQueue;
+    if(body.cooldown && body.cooldown > 0) {
+        twitchBody.is_global_cooldown_enabled = true;
+        twitchBody.global_cooldown_seconds = body.cooldown;
+    } else {
+        twitchBody.is_global_cooldown_enabled = false;
+        twitchBody.global_cooldown_seconds = 0;
+    }
 
     let response = await fetch(`${getTwitchHelixURL()}/channel_points/custom_rewards?broadcaster_id=${channelID}&id=${rewardID}`, {
         method: 'PATCH',
@@ -175,9 +182,9 @@ router.patch('/channelID/:rewardID', async (req, res) => {
     delete body.is_global_cooldown_enabled;
     delete body.global_cooldown_seconds;
 
-    await reward.updateOne(body, {new: true});
+    let updated = await reward.updateOne(body, {new: true});
 
-    res.status(200).json({error: false, message: 'Reward updated successfully'});
+    res.status(200).json({error: false, message: 'Reward updated successfully', reward: updated});
     
 });
 
