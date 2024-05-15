@@ -133,7 +133,7 @@ router.post('/:channelID', async (req, res) => {
     let exists = triggerFileSchema.exists({name: file, fileType: mediaType, channelID: channelID});
     if(!exists) return res.status(404).json({ error: true, message: 'File not found' });
 
-    body.tilte = name;
+    body.title = name;
     delete body.name;
     if(!body.rewardType) body.rewardType = 'trigger';
 
