@@ -149,7 +149,7 @@ router.post('/:channelID', async (req, res) => {
 
     if(response.error) {
         console.log({error: true, message: 'Error creating reward', response: response, channelID});
-        return res.status(response.status).json({error: true, message: response.message});
+        return res.status(500).json({error: true, message: response.message});
     }
 
     let rewardData = response.rewardData;
