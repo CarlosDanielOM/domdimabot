@@ -19,11 +19,15 @@ let client;
 
 async function eventsubHandler(subscriptionData, eventData) {
     let streamer = await streamers.getStreamerById(eventData.broadcaster_user_id);
-    if(!streamer) return;
+    if(!streamer) {
+        streamer = await streamers.getStreamerById(eventData.to_broadcaster_user_id);
+        if(!streamer) return;
+    };
     client = await CLIENT.getClient();
     let { type, version, status, cost, id } = subscriptionData;
     let eventsubData = await eventsubSchema.findOne({ type, channelID: eventData.broadcaster_user_id});
     if(!eventsubData) {
+        eventsubData = await eventsubSchema.findOne({ type, channelID: eventData.to_broadcaster_user_id });
         if(!eventsubData) { 
             eventsubData = {
                 enabled: true,
@@ -79,7 +83,7 @@ async function eventsubHandler(subscriptionData, eventData) {
             if(!eventsubData.message || eventsubData.message == '' || eventsubData.message == null) {
                 eventsubData.message = `Hey! $(twitch channel) is being raided by $(raid channel) with $(raid viewers) viewers!`
             }
-            raidHandler(client, eventData, eventsubData)
+            await raidHandler(client, eventData, eventsubData)
             break;
         case 'channel.ban':
             if(!eventData.is_permanent) {

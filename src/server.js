@@ -15,8 +15,6 @@ const { encrypt, decrypt } = require('../util/crypto');
 
 const channelSchema = require('../schemas/channel.schema');
 const commandSchema = require('../schemas/command');
-const triggerSchema = require('../schemas/trigger');
-const triggerFileSchema = require('../schemas/triggerfile');
 const { getUrl } = require('../util/dev.js');
 
 //* ROUTES
