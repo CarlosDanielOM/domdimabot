@@ -17,7 +17,7 @@ async function validateAuthToken(token) {
 }
 
 function generateToken(data) {
-    return jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '1h' });
+    return jwt.sign(data, process.env.JWT_SECRET);
 }
 
 module.exports = {
