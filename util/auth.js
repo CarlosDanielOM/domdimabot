@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 async function validateToken(token) {
     let headers = {
         Authorization: `Bearer ${token}`,
@@ -9,6 +11,16 @@ async function validateToken(token) {
     return response.data;
 }
 
+async function validateAuthToken(token) {
+
+}
+
+function generateToken(data) {
+    return jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '1h' });
+}
+
 module.exports = {
-    validateToken
+    validateToken,
+    validateAuthToken,
+    generateToken
 }

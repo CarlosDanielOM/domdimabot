@@ -12,6 +12,7 @@ const STREAMERS = require('../class/streamers.js');
 const CLIENT = require('../util/client.js');
 
 const { encrypt, decrypt } = require('../util/crypto');
+const jwt = require('../util/auth.js')
 
 const channelSchema = require('../schemas/channel.schema');
 const commandSchema = require('../schemas/command');
@@ -21,6 +22,8 @@ const { getUrl } = require('../util/dev.js');
 const eventsubRoute = require('./routes/eventsub.routes.js');
 const triggerRoutes = require('./routes/trigger.routes.js');
 const rewardsRoutes = require('./routes/rewards.routes.js');
+
+const authMiddleware = require('../middlewares/auth..js');
 
 const CHANNEL = require('../functions/channel');
 
@@ -195,12 +198,6 @@ async function init() {
     res.status(200).sendFile(`${__dirname}/routes/public/downloads/${channel}-clip.mp4`);
   });
 
-  //? Just so I can show saved clips
-  app.get('/video/:channel/:clip', (req, res) => {
-    const { channel, clip } = req.params;
-    res.status(200).sendFile(`${__dirname}/routes/public/downloads/${channel}-clip-${clip}.mp4`);
-  });
-
   //? SPEACH ROUTES ?//
 
   app.get('/speach/:channel', (req, res) => {
@@ -351,10 +348,13 @@ async function init() {
 
     let exists = await channelSchema.findOne({ twitch_user_id: id });
 
+    let token = jwt.generateToken(id);
+
     if (exists) {
       res.status(200).json({
         message: 'User already exists',
         exists: true,
+        token,
       });
       return false;
     } else {
@@ -370,6 +370,7 @@ async function init() {
         res.status(200).json({
           message: 'User created',
           saved: true,
+          token,
         });
       } else {
         res.status(200).json({
@@ -396,7 +397,7 @@ async function init() {
   })
   //? BOT ROUTES ?//
 
-  app.post('/bot/:action', async (req, res) => {
+  app.post('/bot/:action', authMiddleware, async (req, res) => {
     const action = req.params.action;
     const { id } = req.body;
 
