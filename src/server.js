@@ -23,7 +23,7 @@ const eventsubRoute = require('./routes/eventsub.routes.js');
 const triggerRoutes = require('./routes/trigger.routes.js');
 const rewardsRoutes = require('./routes/rewards.routes.js');
 
-const authMiddleware = require('../middlewares/auth..js');
+const authMiddleware = require('../middlewares/auth.js');
 
 const CHANNEL = require('../functions/channel');
 
