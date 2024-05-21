@@ -97,6 +97,7 @@ async function textConvertor(channelID, eventData, message, rewardData = {}) {
                 break;
             case 'raid':
                 if (!special[2]) break;
+                let raiderChannelData = await functions.getChannel(eventData.from_broadcaster_user_id);
                 switch (special[2]) {
                     case 'channel':
                         let raidChannel = eventData.from_broadcaster_user_name;
@@ -105,6 +106,18 @@ async function textConvertor(channelID, eventData, message, rewardData = {}) {
                     case 'viewers':
                         let viewers = eventData.viewers;
                         message = message.replace(special[0], viewers);
+                        break;
+                    case 'game': 
+                        let game = raiderChannelData.game_name;
+                        message = message.replace(special[0], game);
+                        break;
+                    case 'title':
+                        let title = raiderChannelData.title;
+                        message = message.replace(special[0], title);
+                        break;
+                    case 'language':
+                        let language = raiderChannelData.broadcaster_language;
+                        message = message.replace(special[0], language);
                         break;
                 }
                 break;
