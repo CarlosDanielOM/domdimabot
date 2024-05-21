@@ -14,16 +14,18 @@ let commandOptions = {
     clips: true
 };
 
-async function shoutout(channel, streamer, modID) {
+async function shoutout(channel, raider, modID) {
     let soCD = shoutouts;
     let channelID = await getUserID(channel);
-    let streamerID = await getUserID(streamer);
-    if (!channelID || !streamerID) { console.log({ channelID, streamerID, where: 'shoutout', for: channel }); return { clip: null } };
-    let streamerUserData = await getUser(streamerID);
+    let radierID = await getUserID(raider);
+    if (!channelID || !radierID) { console.log({ channelID, radierID, where: 'shoutout', for: channel }); return { clip: null } };
+
+    let streamerUserData = await getUser(radierID);
     if (streamerUserData.error) { console.log({ streamerUserData, where: 'shoutout', for: channel }); return { clip: null } };
-    let streamerChannel = await getChannel(streamerID);
-    let clips = await getClips(streamerID);
-    let clip = await showClip(channel, clips, streamerChannel, streamerUserData);
+    
+    let streamerChannel = await getChannel(radierID);
+    let clips = await getClips(radierID);
+    let clip = await showClip(channel, clips, streamerUserData, streamerChannel);
     streamerChannel = {
         name: streamerChannel.broadcaster_name,
         login: streamerChannel.broadcaster_login,
@@ -36,7 +38,7 @@ async function shoutout(channel, streamer, modID) {
 
     if (!soCD.hasCooldown(channel)) {
         soCD.setCooldown(channel, 120);
-        makeShoutout(channelID, streamerID, modID);
+        makeShoutout(channelID, radierID, modID);
         return { soClip: clip, cooldown: false }
     }
 
