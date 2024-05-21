@@ -37,7 +37,7 @@ async function raid(client, eventData, eventsubData, clipEnabled = false) {
     let clips = await getClips(raiderID);
     if (!clips) {
         console.log({ clips, where: 'raid', for: channelID });
-        return false;
+        return client.say(channelName, `${raiderName} has no clips available.`)
     };
 
     let clip = await showClip(channelName, clips, raiderData, raiderChannelData);
