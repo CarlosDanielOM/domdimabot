@@ -1,5 +1,7 @@
-async function getUserColor() {
-    let response = await fetch(`${this.helixURL}/chat/color?user_id=${this.streamerID}`, {
+let {getTwitchHelixURL} = require('../../util/links')
+
+async function getUserColor(userID) {
+    let response = await fetch(`${getTwitchHelixURL()}/chat/color?user_id=${userID}`, {
         method: 'GET',
         headers: this.botHeaders
     });

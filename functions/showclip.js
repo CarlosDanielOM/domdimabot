@@ -7,9 +7,7 @@ async function showClip(channel, clipData, streamerData, streamerChannelData) {
     if (!streamerData || streamerData === undefined || streamerData.length === 0) return { error: 'No data', reason: 'No Streamer data was provided to the function' };
     let streamerID = streamerChannelData.id;
 
-    await CHAT.init(channel, null);
-    await CHAT.setStreamerID(streamerID);
-    let streamerColor = await CHAT.getUserColor();
+    let streamerColor = await CHAT.getUserColor(streamerID);
 
     let random = Math.floor(Math.random() * clipData.length);
     let clip = clipData[random];
