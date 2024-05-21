@@ -83,7 +83,9 @@ async function eventsubHandler(subscriptionData, eventData) {
             if(!eventsubData.message || eventsubData.message == '' || eventsubData.message == null) {
                 eventsubData.message = `Hey! $(twitch channel) is being raided by $(raid channel) with $(raid viewers) viewers!`
             }
-            await raidHandler(client, eventData, eventsubData)
+            let clipEnabled = false;
+            if(eventsubData.clipEnabled) clipEnabled = true;
+            await raidHandler(client, eventData, eventsubData, clipEnabled);
             break;
         case 'channel.ban':
             if(!eventData.is_permanent) {
