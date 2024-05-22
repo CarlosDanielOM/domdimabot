@@ -22,6 +22,7 @@ const { getUrl } = require('../util/dev.js');
 const eventsubRoute = require('./routes/eventsub.routes.js');
 const triggerRoutes = require('./routes/trigger.routes.js');
 const rewardsRoutes = require('./routes/rewards.routes.js');
+const commandRoutes = require('./routes/command.routes.js');
 
 const authMiddleware = require('../middlewares/auth.js');
 
@@ -470,6 +471,9 @@ async function init() {
 
   //? REDEMPTION ROUTES ?//
   app.use('/rewards', rewardsRoutes);
+
+  //? COMMANDS ROUTES ?//
+  app.use('/commands', commandRoutes)
 
   app.get('/logout', async (req, res) => {
     res.status(200).sendFile(`${htmlPath}logout.html`);
