@@ -39,6 +39,12 @@ router.post('/upload/:channelID', async (req, res) => {
 
     if(!streamer) return res.status(404).json({ error: true, message: 'Streamer not found' });
 
+    let MB = 5;
+    if(streamer.premium_plus) MB = 20;
+    if(streamer.premium) MB = 10;
+    
+    const MAX_FILE_SIZE = MB * 1024 * 1024;
+
     if(!fs.existsSync(`${__dirname}/public/uploads/triggers/${streamer.name}`)) {
         fs.mkdirSync(`${__dirname}/public/uploads/triggers/${streamer.name}`);
     }
@@ -49,7 +55,8 @@ router.post('/upload/:channelID', async (req, res) => {
         },
         filename: (req, file, cb) => {
             cb(null, `${req.body.triggerName}.${file.mimetype.split('/')[1]}`);
-        }
+        },
+        limits: { fileSize: MAX_FILE_SIZE }
     });
 
     multer({
@@ -77,21 +84,6 @@ router.post('/upload/:channelID', async (req, res) => {
 
         if(!req.file) {
             return res.status(400).json({ error: true, message: 'Invalid file type or file with same name already exists' });
-        }
-
-        let maxFileSize = 0;
-
-        if(streamer.premium_plus) {
-            maxFileSize = 20857600;
-        } else if(streamer.premium) {
-            maxFileSize = 10428800;
-        } else {
-            maxFileSize = 5000000;
-        }
-
-        if(req.file.size > maxFileSize) {
-            fs.unlinkSync(`${__dirname}/public/uploads/triggers/${streamer.name}/${req.body.triggerName}.${req.file.mimetype.split('/')[1]}`);
-            return res.status(400).json({ error: true, message: 'File size too large' });
         }
 
         let exists = await triggerFileSchema.exists({
