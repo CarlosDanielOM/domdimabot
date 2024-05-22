@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 const { getSpotifyURL, getSpotifyAuthURL } = require('../../../util/links')
 
+const STREAMERS = require('../../../class/streamers');
+
 const crypto = require('../../../util/crypto');
 const channelSchema = require('../../../schemas/channel.schema');
 const accountSchema = require('../../../schemas/accounts');
