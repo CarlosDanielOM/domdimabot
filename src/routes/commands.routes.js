@@ -12,7 +12,7 @@ router.post('/:channelID/song-request', async (req, res) => {
     let streamer = await STREAMERS.getStreamerById(channelID);
     if(!streamer) return res.status(404).json({error: true, message: 'Streamer not found'});
 
-    let exists = await commandSchema.exists({cmd: 'ssr', channelID});
+    let exists = await commandSchema.exists({name: 'Song Request', channelID});
     if(exists) return res.json({error: true, message: 'Command already exists'});
     
     let command = new commandSchema({
@@ -32,6 +32,16 @@ router.post('/:channelID/song-request', async (req, res) => {
     });
 
     await command.save();
+});
+
+router.delete('/:channelID/song-request', async (req, res) => {
+    const { channelID } = req.params;
+
+    let exists = await commandSchema.exists({name: 'Song Request', channelID});
+    if(!exists) return res.json({error: true, message: 'Command not found'});
+
+    await commandSchema.deleteOne({name: 'Song Request', channelID});
+    res.json({error: false, message: 'Command deleted'});
 });
 
 module.exports = router;
