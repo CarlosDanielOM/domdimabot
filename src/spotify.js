@@ -7,6 +7,7 @@ const {getSpotifyURL} = require('../util/links')
 const db = require('./db');
 
 const STREAMERS = require('../class/streamers');
+const accountSchema = require('../schemas/accounts');
 
 const authRoutes = require('./routes/spotify/auth.routes')
 const songRoutes = require('./routes/spotify/song.routes')
@@ -36,6 +37,28 @@ async function init() {
     app.listen(3434, _ => {
         console.log('Server running on port 3434');
     })
+    setInterval(async () => {
+        let accounts = await accountSchema.find({user_type: 'spotify'});
+        accounts.forEach(async account => {
+            let userID = account.user_id;
+
+            let response = await fetch('https://spotify.domdimabot.com/auth/refresh', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({user_id: userID})
+            });
+            
+            let data = await response.json();
+
+            if(data.error) {
+                console.log(data.message);
+                return;
+            }
+        });
+    }, 3000);
 }
+
 
 init();
