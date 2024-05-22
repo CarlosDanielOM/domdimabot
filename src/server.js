@@ -22,7 +22,7 @@ const { getUrl } = require('../util/dev.js');
 const eventsubRoute = require('./routes/eventsub.routes.js');
 const triggerRoutes = require('./routes/trigger.routes.js');
 const rewardsRoutes = require('./routes/rewards.routes.js');
-const commandRoutes = require('./routes/command.routes.js');
+const commandRoutes = require('./routes/commands.routes.js');
 
 const authMiddleware = require('../middlewares/auth.js');
 
