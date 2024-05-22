@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
 
     let body = new URLSearchParams({
         code,
-        redirect_uri: 'http://localhost:3434/auth',
+        redirect_uri: 'https://spotify.domdimabot.com/auth',
         grant_type
     });
 
