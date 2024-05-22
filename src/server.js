@@ -96,7 +96,6 @@ async function init() {
     res.status(200).json(eventsubs);
   });
   
-
   app.post('/dev/create/command/:channel', async (req, res) => {
     const { channel } = req.params;
     let streamer = await STREAMERS.getStreamer(channel);
@@ -440,7 +439,7 @@ async function init() {
   });
 
   //? Trigger ROUTES ?//
-  app.use('/triggers', triggerRoutes)
+  app.use('/triggers', triggerRoutes);
 
   app.get('/overlays/triggers/:channel', async (req, res) => {
     res.sendFile(`${htmlPath}trigger.html`);

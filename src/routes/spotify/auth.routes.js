@@ -62,7 +62,7 @@ router.get('/', async (req, res) => {
 
     await account.save();
 
-    let patchUser = await fetch('http://localhost:3434/auth?user_id=' + user, {
+    let patchUser = await fetch('https://spotify.domdimabot.com/auth?user_id=' + user, {
         method: 'PATCH',
     });
 

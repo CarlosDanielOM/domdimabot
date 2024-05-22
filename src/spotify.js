@@ -22,7 +22,7 @@ async function init() {
     app.get('/login', (req, res) => {
         const scopes = 'user-read-email user-read-playback-state user-modify-playback-state user-read-currently-playing';
         let state = req.query.user_id;
-        let redirect_uri = 'http://localhost:3434/auth';
+        let redirect_uri = 'https://spotify.domdimabot.com/auth';
         let clientID = process.env.SPOTIFY_CLIENT_ID;
 
         res.redirect(`https://accounts.spotify.com/authorize?response_type=code&client_id=${clientID}&scope=${encodeURIComponent(scopes)}&redirect_uri=${encodeURIComponent(redirect_uri)}&state=${state}`)
