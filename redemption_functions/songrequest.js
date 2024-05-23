@@ -1,4 +1,4 @@
-const rewardSchema = require('../schemas/reward');
+const rewardSchema = require('../schemas/redemptionreward');
 
 async function songRequestFun(eventData, reward) {
     let userInput = eventData.user_input;
