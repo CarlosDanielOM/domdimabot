@@ -74,7 +74,7 @@ router.get('/', async (req, res) => {
         return res.json({error: true, message: 'creating user failed'})
     };
 
-    res.redirect(`https://domdimabot.com/dashboard`);
+    res.redirect(`https://domdimabot.com/dashboard?alert=Spotfiy%20Account%20Connected`);
 
 })
 
