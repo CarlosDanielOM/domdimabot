@@ -74,7 +74,7 @@ router.get('/', async (req, res) => {
         return res.json({error: true, message: 'creating user failed'})
     };
 
-    res.json({error: false, message: 'Success'});
+    res.redirect(`https://domdimabot.com/dashboard`);
 
 })
 
