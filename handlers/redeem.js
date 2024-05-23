@@ -3,6 +3,7 @@ const triggerSchema = require('../schemas/trigger');
 const triggerFileSchema = require('../schemas/triggerfile');
 const rewardSchema = require('../schemas/redemptionreward');
 const vipRedemtionFun = require('../redemption_functions/vip');
+const songRequestFun = require('../redemption_functions/songrequest');
 const customRedemptionReward = require('../redemption_functions/custom');
 const { getUrl } = require('../util/dev');
 
@@ -17,6 +18,9 @@ async function redeem(client, eventData) {
     const { broadcaster_user_id, broadcaster_user_login, user_id, user_login, user_input } = eventData;
     const { reward } = eventData;
 
+    let rewardData = await rewardSchema.findOne({ channelID: broadcaster_user_id, rewardID: reward.id });
+
+    if (!rewardData) return { error: true, message: 'No reward data found' };
     let vipMatch = reward.title.match(/VIP/);
 
     if (vipMatch) {
@@ -25,6 +29,14 @@ async function redeem(client, eventData) {
         let message = await textConvertor(broadcaster_user_id, eventData,result.rewardMessage, reward )
         client.say(broadcaster_user_login, `${message.message}`);
         return { error: false, message: 'VIP set' };
+    }
+
+    if(rewardData.rewardType == 'song') {
+        let result = await songRequestFun(eventData, reward);
+        if (result.error) return client.say(broadcaster_user_login, `${result.message}`);
+        let message = await textConvertor(broadcaster_user_id, eventData,result.rewardMessage, reward)
+        client.say(broadcaster_user_login, `${message.message}`);
+        return { error: false, message: 'Song Requested' };
     }
 
     let trigger = await triggerSchema.findOne({ channelID: broadcaster_user_id, name: reward.title, type: 'redemption' }, 'file mediaType volume rewardID');
