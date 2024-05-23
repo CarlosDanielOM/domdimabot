@@ -1,5 +1,9 @@
+const rewardSchema = require('../schemas/reward');
+
 async function songRequestFun(eventData, reward) {
     let userInput = eventData.user_input;
+    let rewardData = await rewardSchema.findOne({ channelID: eventData.broadcaster_user_id, rewardID: reward.id });
+    if (!rewardData) return { error: true, message: 'No reward data found' };
 
     if (!userInput) return { error: true, message: 'No user input' };
 
@@ -18,7 +22,9 @@ async function songRequestFun(eventData, reward) {
 
     if (data.error) return { error: true, message: data.message };
 
-    return { error: false, message: 'Song queued' };
+    let rewardMessage = rewardData.rewardMessage;
+
+    return { error: false, message: 'Song queued', rewardMessage };
     
 }
 

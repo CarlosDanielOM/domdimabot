@@ -34,7 +34,7 @@ async function redeem(client, eventData) {
     if(rewardData.rewardType == 'song') {
         let result = await songRequestFun(eventData, reward);
         if (result.error) return client.say(broadcaster_user_login, `${result.message}`);
-        let message = await textConvertor(broadcaster_user_id, eventData,result.rewardMessage, reward)
+        let message = await textConvertor(broadcaster_user_id, eventData, result.rewardMessage, reward)
         client.say(broadcaster_user_login, `${message.message}`);
         return { error: false, message: 'Song Requested' };
     }
