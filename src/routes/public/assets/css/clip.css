@@ -86,7 +86,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    transition: background-color 1.5s ease-in-out, transform 1s ease-in-out, opacity 1.5s ease-in-out, backdrop-filter 1.5s ease-in-out;
+    transition: background-color 1.5s ease-in-out, transform 1s ease-in-out, opacity 1.5s ease-in-out;
     overflow: hidden;
     text-align: center;
     border-radius: 0 15px 15px 0;
