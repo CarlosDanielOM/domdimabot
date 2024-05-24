@@ -11,6 +11,7 @@ const accountSchema = require('../schemas/accounts');
 
 const authRoutes = require('./routes/spotify/auth.routes')
 const songRoutes = require('./routes/spotify/song.routes')
+const userRoutes = require('./routes/spotify/user.routes')
 
 async function init() {
     await db.init();
@@ -33,6 +34,9 @@ async function init() {
 
     //? SONG ROUTES
     app.use('/song', songRoutes);
+    
+    //? USER ROUTES
+    app.use('/user', userRoutes)
     
     app.listen(3434, _ => {
         console.log('Server running on port 3434');
