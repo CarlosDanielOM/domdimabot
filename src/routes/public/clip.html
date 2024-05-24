@@ -69,10 +69,12 @@
                 profileImg.setAttribute('id', 'profile_img');
                 let rgb = hexToRgb(data.streamerColor);
                 if (rgb.r <= 40 && rgb.g <= 40 && rgb.b <= 40) {
-                    rightContainer.style.background = 'rgba(204,204,204, 0.5)';
+                    rightContainer.style.background = 'rgba(204,204,204, 0.2)';
+                    imgContainer.style.border = '1px solid #000';
                 } else {
-                    rightContainer.style.background = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.1)`;
+                    rightContainer.style.background = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.2)`;
                     rightContainer.style.color = '#000000';
+                    imgContainer.style.border = `1px solid rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.2)`;
                 }
                 imgContainer.appendChild(profileImg);
             }
