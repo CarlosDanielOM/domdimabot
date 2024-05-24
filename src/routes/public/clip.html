@@ -17,17 +17,19 @@
         <div class="img" id="img">
         </div>
         <div class="right-container" id="right">
-            <div class="streamer-info">
-                <div class="streamer-info__name">
-                    <h2 id="streamer_name"></h2>
+            <div class="back" id="back">
+                <div class="streamer-info">
+                    <div class="streamer-info__name">
+                        <h2 id="streamer_name"></h2>
+                    </div>
                 </div>
-            </div>
-            <div class="stream-description">
-                <h4 id="stream_description"></h4>
-            </div>
-            <div class="stream-info">
-                <div class="stream-info__game">
-                    <h3 id="stream_game"></h3>
+                <div class="stream-description">
+                    <h4 id="stream_description"></h4>
+                </div>
+                <div class="stream-info">
+                    <div class="stream-info__game">
+                        <h3 id="stream_game"></h3>
+                    </div>
                 </div>
             </div>
         </div>
@@ -70,12 +72,12 @@
                 let rgb = hexToRgb(data.streamerColor);
                 if (rgb.r <= 40 && rgb.g <= 40 && rgb.b <= 40) {
                     rightContainer.style.background = 'rgba(204,204,204, 0.2)';
-                    rightContainer.style.backdropFilter = 'blur(10px)';
+                    // rightContainer.style.backdropFilter = 'blur(10px)';
                     imgContainer.style.border = '3px solid #000';
                 } else {
                     rightContainer.style.background = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.2)`;
                     rightContainer.style.color = '#000000';
-                    rightContainer.style.backdropFilter = 'blur(10px)';
+                    // rightContainer.style.backdropFilter = 'blur(10px)';
                     imgContainer.style.border = `3px solid rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 1)`;
                 }
                 imgContainer.appendChild(profileImg);

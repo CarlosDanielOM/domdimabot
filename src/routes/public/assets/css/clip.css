@@ -94,6 +94,12 @@ body {
     padding: 5px 5px 5px 55px;
 }
 
+.right-container .back {
+    width: 100%;
+    height: 100%;
+    background-color: #000;   
+}
+
 .right-container h2 {
     font-size: 1.8em;
     color: #b9b9b9;
