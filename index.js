@@ -2,7 +2,6 @@ require('dotenv').config();
 const db = require('./src/db');
 const httpServer = require('./src/server');
 const eventsub = require('./src/eventsub');
-const bot = require('./src/bot');
 const STREAMERS = require('./class/streamers');
 const CLIENT = require('./util/client.js');
 const { refreshAllTokens, getNewAppToken } = require('./util/token');
@@ -17,7 +16,6 @@ async function initialize() {
 
         await httpServer.init();
         eventsub.init();
-        await bot.init();
         await dev.refreshAllTokens(refreshAllTokens);
     } catch (error) {
         console.log(error);
