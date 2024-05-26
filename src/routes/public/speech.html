@@ -15,7 +15,7 @@
         let channel = window.location.pathname.split('/')[2];
         console.log(channel)
         let lastMsgID = '';
-        const socket = io.connect('http://localhost:3000/', {
+        const socket = io.connect('https://api.domdimabot.com/', {
             reconnection: true,
             transports: ['websocket']
         });
@@ -27,7 +27,7 @@
             if (lastMsgID !== data.id) {
                 lastMsgID = data.id;
                 console.log(data);
-                audioPlayer.src = `http://localhost:3000/speach/${channel}/${data.id}`;
+                audioPlayer.src = `https://api.domdimabot.com/speach/${channel}/${data.id}`;
                 audioPlayer.play();
                 // audioPlayer.autoplay = true;
                 // voices.appendChild(audioPlayer);
