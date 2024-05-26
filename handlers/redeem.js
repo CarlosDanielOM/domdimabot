@@ -70,7 +70,7 @@ async function redeem(client, eventData) {
             prompt: customReward.rewardPrompt,
             cost: newCost,
         }
-        let response = await fetch(`${getUrl()}/rewards/${broadcaster_user_login}/${trigger.rewardID}`, {
+        let response = await fetch(`${getUrl()}/rewards/${broadcaster_user_id}/${trigger.rewardID}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',

@@ -17,7 +17,7 @@ async function resetRedemptionCosts(client, channelId) {
             prompt: reward.rewardPrompt,
             cost: reward.rewardOriginalCost,
         }
-        let response = await fetch(`${getUrl()}/rewards/${channel.name}/${reward.rewardID}`, {
+        let response = await fetch(`${getUrl()}/rewards/${channel.twitch_user_id}/${reward.rewardID}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
