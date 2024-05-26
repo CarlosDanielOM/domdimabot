@@ -236,8 +236,6 @@ async function init() {
     const msgID = req.body.msgID;
     const tts = new gtts(speach, 'es');
 
-    console.log({ speach, msgID });
-
     tts.save(`${__dirname}/routes/public/speach/${msgID}.mp3`, (err, result) => {
       if (err) {
         console.log(err);
