@@ -316,7 +316,13 @@ async function message(client, channel, tags, message) {
                 if (dct.error) return client.say(channel, `${dct.message}`);
                 client.say(channel, dct.message);
                 break;
+            case 'spotifySongRequest': 
+                let ssr = await commands.spotifySongRequest(channel, argument, userlevel);
+                if (ssr.error) return client.say(channel, `${ssr.message}`);
+                client.say(channel, ssr.message);
+                break;
             default:
+                console.log('Hola')
                 let cmdHandler = await commandHandler(channel, tags, command, argument, userlevel);
                 if (!cmdHandler.exists) return;
                 if (cmdHandler.error) return client.say(channel, `${cmdHandler.reason}`);
@@ -335,29 +341,29 @@ async function message(client, channel, tags, message) {
 module.exports = message;
 
 function giveUserLevel(channel, tags) {
-    let userlevel = 0;
+    let userlevel = 1;
     if (tags.subscriber) {
-        userlevel = tags['badge-info'].subscriber;
+        userlevel = tags['badge-info'].subscriber + 1;
     }
 
     if (tags.vip) {
-        userlevel = 4;
+        userlevel = 5;
     }
 
     if (tags.subscriber) {
         if (tags['badge-info-raw'].split('/')[0] === 'founder') {
-            userlevel = 5;
+            userlevel = 6;
         }
     }
 
     if (tags.mod) {
-        userlevel = 6;
+        userlevel = 7;
     }
 
     //* TODO- CHECK IF USER IS EDITOR and set userlevel to 7
 
     if (tags.username === channel) {
-        userlevel = 8;
+        userlevel = 10;
     }
 
     return userlevel;

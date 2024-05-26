@@ -4,27 +4,29 @@ const STREAMERS = require('../class/streamers');
 const commandTimerSchema = require('../schemas/command_timer')
 
 commandPermissionLevels = {
-    0: 'everyone',
-    1: 'tier1',
-    2: 'tier2',
-    3: 'tier3',
-    4: 'vip',
-    5: 'founder',
-    6: 'mod',
-    7: 'editor',
-    8: 'broadcaster'
+    1: 'everyone',
+    2: 'tier1',
+    3: 'tier2',
+    4: 'tier3',
+    5: 'vip',
+    6: 'founder',
+    7: 'mod',
+    8: 'editor',
+    9: 'admin',
+    10: 'broadcaster'
 }
 
 commandPermissions = {
-    'everyone': 0,
-    'tier1': 1,
-    'tier2': 2,
-    'tier3': 3,
-    'vip': 4,
-    'founder': 5,
-    'mod': 6,
-    'editor': 7,
-    'broadcaster': 8
+    'everyone': 1,
+    'tier1': 2,
+    'tier2': 3,
+    'tier3': 4,
+    'vip': 5,
+    'founder': 6,
+    'mod': 7,
+    'editor': 8,
+    'admin': 9,
+    'broadcaster': 10
 }
 
 const cmdOptionsExistsRegex = new RegExp(/^\-([a-z]+\=[a-zA-Z0-9]+)(?:\W)?(.*)?$/);
@@ -44,7 +46,7 @@ async function command(action, channel, argument, type = null) {
         cooldown: 10,
         channel: channel,
         channelID: streamer.user_id,
-        userLevel: 0,
+        userLevel: 1,
         userLevelName: 'everyone',
         func: null,
         message: null

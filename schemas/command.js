@@ -14,6 +14,7 @@ const commandSchema = new Schema({
     count: { type: Number, default: 0 },
     userLevelName: { type: String, default: 'everyone' },
     userLevel: { type: Number, default: 0 },
+    permissions: { type: Object, default: {} },
     enabled: { type: Boolean, default: true },
     paused: { type: Boolean, default: false },
     channel: String,

@@ -234,7 +234,8 @@ async function init() {
     const channel = req.params.channel;
     const speach = req.body.speach;
     const msgID = req.body.msgID;
-    const tts = new gtts(speach, 'es');
+    const lang = req.body.lang ?? 'es';
+    const tts = new gtts(speach, lang);
 
     tts.save(`${__dirname}/routes/public/speach/${msgID}.mp3`, (err, result) => {
       if (err) {

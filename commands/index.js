@@ -25,6 +25,7 @@ const removeVIPCommand = require('./removevip');
 const createTimerCommand = require('./createtimercomand');
 const deleteTimerCommand = require('./deletetimercommand');
 const editTimerCommand = require('./edittimercommand');
+const spotifySongRequest = require('./spotifysongrequest');
 
 module.exports = {
     shoutout,
@@ -54,5 +55,6 @@ module.exports = {
     unVIP: removeVIPCommand,
     createTimerCommand,
     deleteTimerCommand,
-    editTimerCommand
+    editTimerCommand,
+    spotifySongRequest
 }

@@ -12,35 +12,42 @@ router.post('/:channelID/song-request', async (req, res) => {
     let streamer = await STREAMERS.getStreamerById(channelID);
     if(!streamer) return res.status(404).json({error: true, message: 'Streamer not found'});
 
-    let exists = await commandSchema.exists({name: 'Song Request', channelID});
+    let exists = await commandSchema.exists({func: 'spotifySongRequest', channelID});
     if(exists) return res.json({error: true, message: 'Command already exists'});
     
     let command = new commandSchema({
-        name: 'Song Request',
+        name: 'Spotify Song Request',
         cmd: 'ssr',
-        func: 'songRequest',
+        func: 'spotifySongRequest',
         channelID,
         channel: streamer.name,
         userLevelName: 'everyone',
-        userLevel: 0,
+        userLevel: 1,
+        permissions: {
+            play: 7,
+            pause: 7,
+            skip: 7
+        },
         enabled: true,
         description: 'Request a song to play in the stream.',
         cooldown: 10,
         type: 'command',
         reserved: true,
-        message: 'Song request sent!',
+        message: 'Song requested!',
     });
 
     await command.save();
+
+    res.json({error: false, message: 'Command created'});
 });
 
 router.delete('/:channelID/song-request', async (req, res) => {
     const { channelID } = req.params;
 
-    let exists = await commandSchema.exists({name: 'Song Request', channelID});
+    let exists = await commandSchema.exists({func: 'spotifySongRequest', channelID});
     if(!exists) return res.json({error: true, message: 'Command not found'});
 
-    await commandSchema.deleteOne({name: 'Song Request', channelID});
+    await commandSchema.deleteOne({func: 'spotifySongRequest', channelID});
     res.json({error: false, message: 'Command deleted'});
 });
 

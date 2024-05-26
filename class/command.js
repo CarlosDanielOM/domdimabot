@@ -9,18 +9,19 @@ class COMMAND {
     commandType = 'command';
     commandEnabled = true;
     commandChannel = null;
-    commandUserLevel = 0;
+    commandUserLevel = 1;
     commandUserLevelName = 'everyone';
     commandPermissionLevels = {
-        0: 'everyone',
-        1: 'tier 1',
-        2: 'tier 2',
-        3: 'tier 3',
-        4: 'vip',
-        5: 'founder',
-        6: 'moderator',
-        7: 'editor',
-        8: 'broadcaster'
+        1: 'everyone',
+        2: 'tier 1',
+        3: 'tier 2',
+        4: 'tier 3',
+        5: 'vip',
+        6: 'founder',
+        7: 'moderator',
+        8: 'editor',
+        9: 'admin',
+        10: 'broadcaster'
     }
     commandCreatedAt = null;
     commandDate = {
