@@ -7,6 +7,8 @@ const fs = require('fs');
 const http = require('http');
 const axios = require('axios');
 const cors = require('cors');
+const gtts = require('gtts');
+const md = require('mp3-duration')
 
 const STREAMERS = require('../class/streamers.js');
 const CLIENT = require('../util/client.js');
@@ -37,6 +39,8 @@ const COMMANDSJSON = require('../config/reservedcommands.json');
 
 let io;
 
+let speachMap = new Map();
+
 async function init() {
   const PORT = process.env.PORT || 3000;
 
@@ -52,6 +56,17 @@ async function init() {
   io.of(/^\/speach\/\w+$/).on('connection', (socket) => {
     const channel = socket.nsp.name.split('/')[2];
     io.of(`/clip/${channel}`).emit('prepare-speach');
+  });
+
+  io.of(/^\/speech\/\w+$/).on('finished', (socket) => {
+    const channel = socket.nsp.name.split('/')[2];
+    let channelMap = speachMap.get(channel);
+    console.log({ channelMap , channel })
+    channelMap.shift();
+    if(channelMap.length === 0) return false;
+    let newID = channelMap[0];
+    speachMap.set(channel, channelMap);
+    io.of(`/speach/${channel}`).emit('speach', { id });
   });
 
   io.of(/^\/sumimetro\/\w+\/\w+$/).on('connection', (socket) => {
@@ -80,6 +95,16 @@ async function init() {
 
   //? DEV ROUTES ?//
 
+  app.post('/dev/speach', (req, res) => {
+    let text = req.body.text;
+    let lang = req.body.lang;
+    let tts = new gtts(text, lang);
+    
+    tts.save(`${__dirname}/routes/public/speach/speach.mp3`);
+
+    res.status(200).json({ message: 'Speach created', error: false });
+  });
+  
   app.post('/dev/create/commands', async (req, res) => {
     let streamers = await STREAMERS.getStreamers();
 
@@ -209,12 +234,85 @@ async function init() {
     const channel = req.params.channel;
     const speach = req.body.speach;
     const msgID = req.body.msgID;
+    const tts = new gtts(speach, 'es');
 
-    io.of(`/speach/${channel}`).emit('speach', { message: speach, id: msgID });
+    console.log({ speach, msgID });
+
+    tts.save(`${__dirname}/routes/public/speach/${msgID}.mp3`, (err, result) => {
+      if (err) {
+        console.log(err);
+        return false;
+      }
+    
+      if(!speachMap.has(channel)) {
+        speachMap.set(channel, []);
+      }
+      
+      let channelMap = speachMap.get(channel);
+      if(channelMap.length === 0) {
+        md(`${__dirname}/routes/public/speach/${msgID}.mp3`, (err, duration) => {
+          io.of(`/speach/${channel}`).emit('speach', { id: msgID });
+          setTimeout(() => {
+            fetch(`${getUrl()}/speach/send/${channel}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ id: msgID })
+            });
+          }, duration * 1000);
+        });
+      }
+      channelMap.push(msgID);
+      speachMap.set(channel, channelMap);
+    });
+
+    // io.of(`/speach/${channel}`).emit('speach', { message: speach, id: msgID });
 
     res.status(200).json({ message: `Playing speach on ${channel} channel` });
   });
 
+  app.post('/speach/send/:channel', (req, res) => {
+    const channel = req.params.channel;
+    const id = req.body.id;
+
+    let channelMap = speachMap.get(channel);
+    if(channelMap.length === 0) return false;
+    let newID = channelMap.shift();
+
+    speachMap.set(channel, channelMap);
+    
+    md(`${__dirname}/routes/public/speach/${newID}.mp3`, (err, duration) => {
+      io.of(`/speach/${channel}`).emit('speach', { id: newID });
+      setTimeout(() => {
+        fs.unlinkSync(`${__dirname}/routes/public/speach/${newID}.mp3`);
+      }, (duration * 1000) - 1000);
+      setTimeout(() => {
+        fetch(`${getUrl()}/speach/send/${channel}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ id: newID })
+        });
+      }, duration * 1000);
+    });
+
+    res.status(200).json({ message: `Playing speach on ${channel} channel` });
+  });
+
+  app.get('/speech/:channel', (req, res) => {
+    const channel = req.params.channel;
+    res.status(200).sendFile(`${__dirname}/routes/public/speech.html`);
+  });
+  
+  app.get('/speach/:channel/:id', (req, res) => {
+    const { channel, id } = req.params;
+    res.header('Content-Type', 'audio/mpeg');
+    res.header('Content-Disposition', `attachment; filename=${id}.mp3`)
+    res.header('Content-Transfer-Encoding', 'binary')
+    res.status(200).sendFile(`${__dirname}/routes/public/speach/${id}.mp3`);
+  });
 
   //? AUTH ROUTES
 

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speach Nuevo</title>
+</head>
+<body>
+    <div id="voices">
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    <script>
+        let audioPlayer = new Audio();
+        let voices = document.getElementById('voices');
+        let channel = window.location.pathname.split('/')[2];
+        console.log(channel)
+        let lastMsgID = '';
+        const socket = io.connect('http://localhost:3000/', {
+            reconnection: true,
+            transports: ['websocket']
+        });
+        const channelSocket = io(`/speach/${channel}`, {
+            forceNew: true,
+            transports: ['websocket']
+        });
+        channelSocket.on('speach', (data) => {
+            if (lastMsgID !== data.id) {
+                lastMsgID = data.id;
+                console.log(data);
+                audioPlayer.src = `http://localhost:3000/speach/${channel}/${data.id}`;
+                audioPlayer.play();
+                // audioPlayer.autoplay = true;
+                // voices.appendChild(audioPlayer);
+            }
+        });
+    </script>
+</body>
+</html>
