@@ -23,7 +23,7 @@ router.get('/find', async (req, res) => {
         }
     });
 
-    console.log({response});
+    console.log({response, account, access_token});
 
     let data = await response.json();
 
