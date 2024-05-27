@@ -97,6 +97,8 @@ router.patch('/', async (req, res) => {
         },
     });
 
+    console.log({response, where: 'spotify/auth.routes.js patch'})
+    
     let data = await response.json();
 
     user.user_id = data.id;
