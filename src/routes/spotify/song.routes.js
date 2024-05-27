@@ -23,6 +23,8 @@ router.get('/find', async (req, res) => {
         }
     });
 
+    console.log({response});
+
     let data = await response.json();
 
     if(data.error) {
