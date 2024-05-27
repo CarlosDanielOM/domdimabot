@@ -322,7 +322,6 @@ async function message(client, channel, tags, message) {
                 client.say(channel, ssr.message);
                 break;
             default:
-                console.log('Hola')
                 let cmdHandler = await commandHandler(channel, tags, command, argument, userlevel);
                 if (!cmdHandler.exists) return;
                 if (cmdHandler.error) return client.say(channel, `${cmdHandler.reason}`);
