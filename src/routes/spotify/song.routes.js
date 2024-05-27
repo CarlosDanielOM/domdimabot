@@ -47,6 +47,8 @@ router.post('/queue', async (req, res) => {
     let body = req.body;
     let channelID = body.channelID;
     let song = body.song;
+
+    console.log({body})
     
     let account = await accountSchema.findOne({channelID, user_type: 'spotify'});
     if(!account) return res.status(404).json({error: true, message: 'Account not found'});
