@@ -38,6 +38,8 @@ router.get('/', async (req, res) => {
         body: body
     });
 
+    console.log({response, where: 'spotify/auth.routes.js'})
+
     let data = await response.json();
 
     if(data.error) {
@@ -68,6 +70,8 @@ router.get('/', async (req, res) => {
         method: 'PATCH',
     });
 
+    console.log({patchUser, where: 'spotify/auth.routes.js'})
+    
     let patchData = await patchUser.json();
     if(patchData.error) {
         await account.deleteOne({channelID: user, user_type: 'spotify'});
