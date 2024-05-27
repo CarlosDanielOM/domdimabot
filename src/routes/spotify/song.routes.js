@@ -16,7 +16,7 @@ router.get('/find', async (req, res) => {
 
     let access_token = crypto.decrypt(account.user_token);
 
-    console.log({access_token, song, channelID})
+    console.log({access_token, song, channelID});
 
     let response = await fetch(`${getSpotifyURL()}/search?q=${encodeURIComponent(song)}&type=track`, {
         headers: {
@@ -24,8 +24,6 @@ router.get('/find', async (req, res) => {
             'Content-Type': 'application/json',
         }
     });
-
-    console.log({response: await response.text(), data: await response.json()});
 
     if(response.status == 403) {
         return res.status(403).json({error: true, message: 'Forbidden'});
@@ -57,8 +55,6 @@ router.post('/queue', async (req, res) => {
 
     let findSongResponse = await fetch(`http://localhost:3434/song/find?song=${song}&channelID=${channelID}`);
 
-    console.log({findSongResponse, where: 'spotify/song.routes.js'});
-
     let songData = await findSongResponse.json();
 
     if(songData.error) return res.status(400).json({error: true, message: songData.message});
@@ -75,8 +71,6 @@ router.post('/queue', async (req, res) => {
     });
     
     if(response.status == 204) return res.json({error: false, message: 'Song queued'});
-    
-    console.log({response});
     
     let data = await response.json();
     
