@@ -23,7 +23,7 @@ router.get('/find', async (req, res) => {
         }
     });
 
-    console.log({headerList: response.headers, response: response.status, responseText: response.text(), responseJSON: response.json(), responseBody: response.body});
+    console.log({headerList: response.headers, response: response.status, responseText: await response.text(), responseJSON: await response.json(), responseBody: response.body});
 
     if(response.status == 403) {
         return res.status(403).json({error: true, message: 'Forbidden'});
