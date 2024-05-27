@@ -16,6 +16,8 @@ router.get('/find', async (req, res) => {
 
     let access_token = crypto.decrypt(account.user_token);
 
+    console.log({access_token, song, channelID})
+
     let response = await fetch(`${getSpotifyURL()}/search?q=${encodeURIComponent(song)}&type=track`, {
         headers: {
             'Authorization': `Bearer ${access_token}`,
@@ -23,7 +25,7 @@ router.get('/find', async (req, res) => {
         }
     });
 
-    console.log({headerList: response.headers, response: response.status, responseText: await response.text(), responseJSON: await response.json(), responseBody: response.body});
+    console.log({response: await response.text()});
 
     if(response.status == 403) {
         return res.status(403).json({error: true, message: 'Forbidden'});
@@ -48,8 +50,6 @@ router.post('/queue', async (req, res) => {
     let channelID = body.channelID;
     let song = body.song;
 
-    console.log({body})
-    
     let account = await accountSchema.findOne({channelID, user_type: 'spotify'});
     if(!account) return res.status(404).json({error: true, message: 'Account not found'});
 
@@ -57,7 +57,7 @@ router.post('/queue', async (req, res) => {
 
     let findSongResponse = await fetch(`http://localhost:3434/song/find?song=${song}&channelID=${channelID}`);
 
-    console.log({findSongResponse});
+    console.log({findSongResponse, where: 'spotify/song.routes.js'});
 
     let songData = await findSongResponse.json();
 
