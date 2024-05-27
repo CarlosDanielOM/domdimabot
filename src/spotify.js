@@ -53,6 +53,11 @@ async function init() {
                 },
                 body: JSON.stringify({user_id: userID})
             });
+
+            if(response.status !== 200) {
+                console.log({response});
+                return
+            }
             
             let data = await response.json();
 

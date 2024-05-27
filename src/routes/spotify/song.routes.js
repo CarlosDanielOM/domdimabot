@@ -16,8 +16,6 @@ router.get('/find', async (req, res) => {
 
     let access_token = crypto.decrypt(account.user_token);
 
-    console.log({access_token, song, channelID});
-
     let response = await fetch(`${getSpotifyURL()}/search?q=${encodeURIComponent(song)}&type=track`, {
         headers: {
             'Authorization': `Bearer ${access_token}`,

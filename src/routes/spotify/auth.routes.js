@@ -38,8 +38,6 @@ router.get('/', async (req, res) => {
         body: body
     });
 
-    console.log({response, where: 'spotify/auth.routes.js'})
-
     let data = await response.json();
 
     if(data.error) {
@@ -70,8 +68,6 @@ router.get('/', async (req, res) => {
         method: 'PATCH',
     });
 
-    console.log({patchUser, where: 'spotify/auth.routes.js'})
-    
     let patchData = await patchUser.json();
     if(patchData.error) {
         await account.deleteOne({channelID: user, user_type: 'spotify'});
@@ -91,13 +87,22 @@ router.patch('/', async (req, res) => {
 
     let access_token = crypto.decrypt(user.user_token);
 
-    let response = await fetch('https://api.spotify.com/v1/me', {
-        headers: {
-            'Authorization': `Bearer ${access_token}`
-        },
-    });
+    let response;
 
-    console.log({response, where: 'spotify/auth.routes.js patch'})
+    try{
+        response = await fetch('https://api.spotify.com/v1/me', {
+            headers: {
+                'Authorization': `Bearer ${access_token}`
+            },
+        });
+    } catch(e) {
+        console.log(e);
+        return res.json({error: true, message: 'Error fetching user data'});
+    }
+
+    if(response.status == 403) {
+        return res.json({error: true, message: 'Forbidden'});
+    }
     
     let data = await response.json();
 
