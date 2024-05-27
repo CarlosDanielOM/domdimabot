@@ -18,8 +18,6 @@ async function songRequestFun(eventData, reward) {
         })
     })
 
-    if (response.status != 200) { console.log({response}) };
-
     let data = await response.json();
 
     if (data.error) return { error: true, message: data.message };
