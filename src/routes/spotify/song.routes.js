@@ -25,6 +25,10 @@ router.get('/find', async (req, res) => {
 
     console.log({response, account, access_token});
 
+    if(response.status == 403) {
+        return res.status(403).json({error: true, message: 'Forbidden'});
+    }
+    
     let data = await response.json();
 
     if(data.error) {
