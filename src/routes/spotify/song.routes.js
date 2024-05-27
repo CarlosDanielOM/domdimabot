@@ -49,6 +49,8 @@ router.post('/queue', async (req, res) => {
 
     let findSongResponse = await fetch(`http://localhost:3434/song/find?song=${song}&channelID=${channelID}`);
 
+    console.log({findSongResponse});
+
     let songData = await findSongResponse.json();
 
     if(songData.error) return res.status(400).json({error: true, message: songData.message});
@@ -65,6 +67,8 @@ router.post('/queue', async (req, res) => {
     });
     
     if(response.status == 204) return res.json({error: false, message: 'Song queued'});
+    
+    console.log({response});
     
     let data = await response.json();
     
