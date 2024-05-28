@@ -494,7 +494,7 @@ async function init() {
   })
   //? BOT ROUTES ?//
 
-  app.post('/bot/:action', authMiddleware, async (req, res) => {
+  app.post('/bot/:action', async (req, res) => {
     const action = req.params.action;
     const { id } = req.body;
 
