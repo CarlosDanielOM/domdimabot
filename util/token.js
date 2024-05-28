@@ -29,7 +29,7 @@ async function refreshAllTokens() {
                 channel.token = tokenEncrypt;
                 channel.refresh_token = refresh_tokenEncrypt;
 
-                await channelSchema.findOneAndUpdate({ name: channel.name }, { twitch_user_token: channel.token, twitch_user_refresh_token: channel.refresh_token });
+                await channelSchema.findOneAndUpdate({ name: channel.name }, { twitch_user_token: channel.token, twitch_user_refresh_token: channel.refresh_token, refreshedAt: Date.now() });
             }
         } catch (error) {
             console.error(`Error processing ${streamer}:`, error);
