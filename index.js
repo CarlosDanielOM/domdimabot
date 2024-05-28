@@ -6,6 +6,7 @@ const STREAMERS = require('./class/streamers');
 const CLIENT = require('./util/client.js');
 const { refreshAllTokens, getNewAppToken } = require('./util/token');
 const dev = require('./util/dev');
+const bot = require('./src/bot');
 
 async function initialize() {
     try {
@@ -16,6 +17,7 @@ async function initialize() {
 
         await httpServer.init();
         eventsub.init();
+        bot.init();
         await dev.refreshAllTokens(refreshAllTokens);
     } catch (error) {
         console.log(error);

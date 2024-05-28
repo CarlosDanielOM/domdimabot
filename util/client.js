@@ -23,12 +23,20 @@ async function connectChannels() {
     const joinableChannels = await STREAMERS.getStreamersNames();
 
     joinableChannels.forEach(async (channel) => {
-        client.join(channel);
+        try {
+            await client.join(channel);
+        } catch (error) {
+            console.error('Error connecting to channel:', error);
+        }
     });
 };
 
 function connectChannel(channel) {
-    client.join(channel);
+    try {
+        client.join(channel);
+    } catch (error) {
+        console.error('Error connecting to channel:', error);
+    }
 };
 
 function disconnectChannel(channel) {
