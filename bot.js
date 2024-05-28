@@ -19,4 +19,4 @@ initialize();
 
 setInterval(async () => {
     await STREAMERS.updateStreamers();
-}, 1000 * 60 * 60 * 3);
+}, 1000 * 60 * 30);

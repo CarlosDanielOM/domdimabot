@@ -22,7 +22,7 @@ async function refreshAllTokens() {
                     CLIENT.disconnectChannel(channel.name);
                     let nullToken = { iv: null, content: null };
                     let nullRefreshToken = { iv: null, content: null };
-                    await channelSchema.findOneAndUpdate({ name: channel.name }, { actived: false, twitch_user_token: nullToken, twitch_user_refresh_token: nullRefreshToken });
+                    await channelSchema.findOneAndUpdate({ name: channel.name }, { actived: false, twitch_user_token: nullToken, twitch_user_refresh_token: nullRefreshToken, refreshedAt: Date.now()});
                     return console.log('Error on refreshAllTokens: tokenEncrypt or refresh_tokenEncrypt is null')
                 };
 
