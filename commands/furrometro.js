@@ -1,3 +1,7 @@
+const dragonflydb = require('../util/database/dragonflydb');
+
+let client;
+
 let furrymeter = new Map();
 
 let supremeFurry = 0;
@@ -5,6 +9,7 @@ let supremeFurry = 0;
 let furryDay = new Date().getDay();
 
 async function furrometro(channel, username, argument, userlevel) {
+    client = await dragonflydb.getClient();
     if (furryDay != new Date().getDay()) {
         furrymeter = new Map();
         supremeFurry = 0;

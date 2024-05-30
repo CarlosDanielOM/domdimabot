@@ -7,12 +7,14 @@ const CLIENT = require('./util/client.js');
 const { refreshAllTokens, getNewAppToken } = require('./util/token');
 const dev = require('./util/dev');
 const bot = require('./src/bot');
+const DragonflyDB = require('./util/database/dragonflydb');
 
 async function initialize() {
     try {
         await CLIENT.clientConnect();
 
         await db.init();
+        await DragonflyDB.init();
         await STREAMERS.init();
 
         await httpServer.init();
