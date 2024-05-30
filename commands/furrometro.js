@@ -23,6 +23,13 @@ async function furrometro(channel, username, argument, userlevel) {
     if (exists) {
         supremeFurry = parseInt(exists);
     }
+
+    if(argument) {
+        exists = await client.get(`${channel}:furrymeter:${argument.toLowerCase()}`);
+        if(exists) {
+            return {error: false, message: `${argument} el dia de hoy tiene un nivel de furro del ${exists}%`};
+        }
+    }
     
     let rand = Math.floor(Math.random() * 101);
         
