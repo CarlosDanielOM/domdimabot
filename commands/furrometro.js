@@ -2,42 +2,34 @@ const dragonflydb = require('../util/database/dragonflydb');
 
 let client;
 
-let furrymeter = new Map();
-
 let supremeFurry = 0;
-
-let furryDay = new Date().getDay();
 
 async function furrometro(channel, username, argument, userlevel) {
     client = await dragonflydb.getClient();
+    let furryDay = await client.get(`${channel}:furryDay`);
+    furryDay = parseInt(furryDay);
     if (furryDay != new Date().getDay()) {
-        furrymeter = new Map();
-        supremeFurry = 0;
-        furryDay = new Date().getDay();
-    }
-    if (argument == 'reset' && userlevel >= 6) {
-        furrymeter = new Map();
-        supremeFurry = 0;
-        return { error: false, message: `El furrometro ha sido reseteado por ${username}` };
-    } else if (argument == 'reset' && userlevel < 6) {
-        return { error: true, reason: 'No tienes permisos para resetear el furrometro' };
+        client.del(`${channel}:furrymeter`);
+        client.set(`${channel}:supremeFurry`, 0);
+        client.set(`${channel}:furryDay`, furryDay);
     }
 
-    if(furrymeter.has(argument.toLowerCase())) {
-        let furryValue = furrymeter.get(argument.toLowerCase());
-        return { error: false, message: `El dia de hoy ${argument} es ${furryValue}% furro!` }
+    let exists = await client.get(`${channel}:furrymeter:${username.toLowerCase()}`);
+    if(exists) {
+        return {error: false, message: `${username} el dia de hoy tiene un nivel de furro del ${exists}%`};
     }
 
-    if (furrymeter.has(username.toLowerCase())) {
-        let furryValue = furrymeter.get(username.toLowerCase());
-        return { error: false, message: `El dia de hoy ${username} es ${furryValue}% furro!` };
+    exists = await client.get(`${channel}:supremeFurry`);
+    if (exists) {
+        supremeFurry = parseInt(exists);
     }
-
-    let rand = Math.floor(Math.random() * 100) + 1;
-
+    
+    let rand = Math.floor(Math.random() * 101);
+        
     if (rand > supremeFurry) {
         supremeFurry = rand;
-
+        await client.set(`${channel}:supremeFurry`, supremeFurry, { EX: 60 * 60 * 8 });
+    
         await fetch(`https://api.domdimabot.com/overlays/${channel}/furry`, {
             method: 'POST',
             headers: {
@@ -49,11 +41,11 @@ async function furrometro(channel, username, argument, userlevel) {
             }),
         });
     }
-
-    furrymeter.set(username.toLowerCase(), rand);
-
+    
+    client.set(`${channel}:furrymeter:${username.toLowerCase()}`, rand, { EX: 60 * 60 * 8});
+    
     return { error: false, message: `${username} tiene un nivel de furro del ${rand}%` };
-
+    
 }
 
 module.exports = furrometro;
