@@ -12,12 +12,14 @@ const md = require('mp3-duration')
 
 const STREAMERS = require('../class/streamers.js');
 const CLIENT = require('../util/client.js');
+const dragonFlyDB = require('../util/database/dragonflydb');
 
 const { encrypt, decrypt } = require('../util/crypto');
 const jwt = require('../util/auth.js')
 
 const channelSchema = require('../schemas/channel.schema');
 const commandSchema = require('../schemas/command');
+const countdownTimerSchema = require('../schemas/countdowntimer');
 const { getUrl } = require('../util/dev.js');
 
 //* ROUTES
@@ -25,6 +27,7 @@ const eventsubRoute = require('./routes/eventsub.routes.js');
 const triggerRoutes = require('./routes/trigger.routes.js');
 const rewardsRoutes = require('./routes/rewards.routes.js');
 const commandRoutes = require('./routes/commands.routes.js');
+const countdownTimerRoutes = require('./routes/countdowntimer.routes.js');
 
 const authMiddleware = require('../middlewares/auth.js');
 
@@ -38,6 +41,9 @@ const htmlPath = `${__dirname}/routes/public/`;
 const COMMANDSJSON = require('../config/reservedcommands.json');
 
 let io;
+let cache;
+
+let timerMap = new Map();
 
 let speachMap = new Map();
 
@@ -47,6 +53,8 @@ async function init() {
   const app = express();
   const server = http.createServer(app);
   io = await socketio(server);
+
+  cache = await dragonFlyDB.getClient();
 
   io.of(/^\/clip\/\w+$/).on('connection', (socket) => {
     const channel = socket.nsp.name.split('/')[2];
@@ -85,6 +93,37 @@ async function init() {
     io.of(`/overlays/${channel}/furry`).emit('active');
   });
 
+  io.of(/^\/countdowntimer\/\w+$/).on('connection', async (socket) => {
+    const channel = socket.nsp.name.split('/')[2];
+
+    let timer;
+
+    timer = await cache.get(`${channel}:countdown:timer`);
+
+    if(!timer) {
+      timer = await countdownTimerSchema.findOne({ channel, active: true });
+      if (!timer) return false;
+
+      timer = {
+        time: timer.time,
+        paused: timer.paused,
+      }
+
+      timer = JSON.stringify(timer);
+
+      cache.set(`${channel}:countdown:timer`, timer, { EX: 60 * 60 * 24 * 2});
+    }
+
+    timer = JSON.parse(timer);
+    
+    let data = {
+      time: timer.time,
+      paused: timer.paused,
+    }
+    
+    io.of(`/countdowntimer/${channel}`).emit('active', data);
+  });
+  
   //* Routes *//
   let soSent = [];
 
@@ -593,6 +632,112 @@ async function init() {
   //? EVENTSUB ROUTES ?//
   app.use('/eventsubs', eventsubRoute);
 
+  //? COUNTDOWN TIMER ROUTES ?//
+  app.use('/countdowntimer', countdownTimerRoutes)
+
+  app.post('/countdowntimer/:channelID/timer/resume', async (req, res) => {
+    const { channelID } = req.params;
+
+    let streamer = await STREAMERS.getStreamerById(channelID);
+    
+    let countdownTimer = await countdownTimerSchema.findOne({ channelID: channelID, active: true });
+
+    if (!countdownTimer) {
+      return res.status(400).json({ error: true, message: 'No active countdown timer found' });
+    }
+
+    countdownTimer.paused = false;
+    countdownTimer.resumedAt = Date.now();
+    
+    await countdownTimer.save();
+
+    io.of(`/countdowntimer/${streamer.name}`).emit('resume');
+    
+    return res.status(200).json({ error: false, message: 'Timer resumed' });    
+    
+  });
+
+  app.post('/countdowntimer/:channelID/timer/pause', async (req, res) => {
+    const { channelID } = req.params;
+    let streamer = await STREAMERS.getStreamerById(channelID);
+    
+    let countdownTimer = await countdownTimerSchema.findOne({ channelID: channelID, active: true });
+
+    if (!countdownTimer) {
+      return res.status(400).json({ error: true, message: 'No active countdown timer found' });
+    }
+
+    if(countdownTimer.paused) {
+      return res.status(400).json({ error: true, message: 'Timer already paused' });
+    }
+
+    countdownTimer.paused = true;
+    countdownTimer.pausedAt = Date.now();
+
+    let countdownTimerGone = Math.floor((countdownTimer.pausedAt - countdownTimer.resumedAt) / 1000);
+    countdownTimer.time -= countdownTimerGone;
+
+    if (countdownTimer.time < 0) {
+      countdownTimer.time = 0;
+    }
+    
+    await countdownTimer.save();
+
+    cache.set(`${streamer.name}:countdown:timer`, JSON.stringify({ time: countdownTimer.time, paused: countdownTimer.paused }), { EX: 60 * 60 * 24 * 2 });
+
+    io.of(`/countdowntimer/${streamer.name}`).emit('pause');
+    
+    return res.status(200).json({ error: false, message: 'Timer paused' });
+  });
+
+  app.post('/countdowntimer/:channelID/timer/add', async (req, res) => {
+    const { channelID } = req.params;
+    let streamer = await STREAMERS.getStreamerById(channelID);
+    let body = req.body;
+
+    let countdownTimer = await countdownTimerSchema.findOne({ channelID: channelID, active: true });
+
+    if (!countdownTimer) {
+      return res.status(400).json({ error: true, message: 'No active countdown timer found' });
+    }
+
+    countdownTimer.time += Number(body.time);
+
+    await countdownTimer.save();
+
+    cache.set(`${streamer.name}:countdown:timer`, JSON.stringify({ time: countdownTimer.time, paused: countdownTimer.paused }), { EX: 60 * 60 * 24 * 2 });
+
+    io.of(`/countdowntimer/${streamer.name}`).emit('add', { time: body.time });
+    
+    return res.status(200).json({ error: false, message: 'Time added' });
+  });
+
+  app.post('/countdowntimer/:channelID/timer/substract', async (req, res) => {
+    const { channelID } = req.params;
+    let streamer = await STREAMERS.getStreamerById(channelID);
+    let body = req.body;
+
+    let countdownTimer = await countdownTimerSchema.findOne({ channelID: channelID, active: true });
+
+    if (!countdownTimer) {
+      return res.status(400).json({ error: true, message: 'No active countdown timer found' });
+    }
+
+    countdownTimer.time -= Number(body.time);
+
+    if (countdownTimer.time < 0) {
+      countdownTimer.time = 0;
+    }
+
+    await countdownTimer.save();
+
+    cache.set(`${streamer.name}:countdown:timer`, JSON.stringify({ time: countdownTimer.time, paused: countdownTimer.paused }), { EX: 60 * 60 * 24 * 2 });
+
+    io.of(`/countdowntimer/${streamer.name}`).emit('substract', { time: body.time });
+    
+    return res.status(200).json({ error: false, message: 'Time substracted' });
+  });
+  
   //? Server ?//
   server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

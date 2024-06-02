@@ -26,6 +26,7 @@ const createTimerCommand = require('./createtimercomand');
 const deleteTimerCommand = require('./deletetimercommand');
 const editTimerCommand = require('./edittimercommand');
 const spotifySongRequest = require('./spotifysongrequest');
+const countdownTimer = require('./countdowntimer');
 
 module.exports = {
     shoutout,
@@ -56,5 +57,6 @@ module.exports = {
     createTimerCommand,
     deleteTimerCommand,
     editTimerCommand,
-    spotifySongRequest
+    spotifySongRequest,
+    countdownTimer,
 }

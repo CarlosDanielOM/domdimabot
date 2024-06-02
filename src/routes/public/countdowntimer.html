@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CountDown</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #fff
+        }
+
+        .timer {
+            font-size: 4rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="timer">
+        <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    <script>
+        let channel = window.location.pathname.split('/')[2];
+
+        let hourElement = document.getElementById('hours');
+        let minuteElement = document.getElementById('minutes');
+        let secondElement = document.getElementById('seconds');
+
+        let countdownTimer;
+
+        let hours = 0;
+        let minutes = 0;
+        let seconds = 0;
+
+        let hour = 3600;
+        let minute = 60;
+
+        let paused = false;
+        let time = 0;
+
+        let channelSocket = io(`/countdowntimer/${channel}`);
+
+        channelSocket.on('connect', () => {
+            console.log('Conectado al canal');
+        });
+
+        channelSocket.on('add', (data) => {
+            let timeToAdd = data.time;
+            time += Number(timeToAdd);
+
+            hours = Math.floor(time / hour);
+            minutes = Math.floor((time % hour) / minute);
+            seconds = time % minute;
+
+            hourElement.innerText = hours.toString().padStart(2, '0');
+            minuteElement.innerText = minutes.toString().padStart(2, '0');
+            secondElement.innerText = seconds.toString().padStart(2, '0');
+
+        });
+
+        channelSocket.on('substract', (data) => {
+            let timeToSubtract = data.time;
+            time -= Number(timeToSubtract);
+
+            hours = Math.floor(time / hour);
+            minutes = Math.floor((time % hour) / minute);
+            seconds = time % minute;
+
+            hourElement.innerText = hours.toString().padStart(2, '0');
+            minuteElement.innerText = minutes.toString().padStart(2, '0');
+            secondElement.innerText = seconds.toString().padStart(2, '0');
+        });
+
+        channelSocket.on('active', (data) => {
+            paused = data.paused
+            if(time > 0) return;
+            
+            time = data.time;
+
+            hours = Math.floor(time / hour);
+            minutes = Math.floor((time % hour) / minute);
+            seconds = time % minute;
+
+            hourElement.innerText = hours.toString().padStart(2, '0');
+            minuteElement.innerText = minutes.toString().padStart(2, '0');
+            secondElement.innerText = seconds.toString().padStart(2, '0');
+
+
+            startTimer();
+            
+        });
+        
+        channelSocket.on('pause', () => {
+            paused = true;
+            console.log('Pausado')
+        });
+
+        channelSocket.on('resume', (data) => {
+            paused = false;
+            console.log('Reanudado')
+        });
+        
+        function startTimer() {
+            setInterval(() => {
+                if (paused) return;
+                --time;
+                if (seconds > 0) {
+                    seconds--;
+                } else {
+                    if (minutes > 0) {
+                        minutes--;
+                        seconds = 59;
+                    } else {
+                        if (hours > 0) {
+                            hours--;
+                            minutes = 59;
+                            seconds = 59;
+                        } else {
+                            hours = 0;
+                            minutes = 0;
+                            seconds = 0;
+                        }
+                    }
+                }
+
+                hourElement.innerText = hours.toString().padStart(2, '0');
+                minuteElement.innerText = minutes.toString().padStart(2, '0');
+                secondElement.innerText = seconds.toString().padStart(2, '0');
+            }, 1000);
+        }
+        
+    </script>
+</body>
+</html>

@@ -15,6 +15,8 @@ const startTimerCommands = require('../timer_functions/starttimers');
 const stopTimerCommands = require('../timer_functions/stoptimer');
 const defaultMessages = require('../util/defaultmessage');
 
+const countdowntimerCommand = require('../commands/countdowntimer');
+
 let client;
 
 async function eventsubHandler(subscriptionData, eventData) {
@@ -44,6 +46,7 @@ async function eventsubHandler(subscriptionData, eventData) {
                 eventsubData.message = '$(user) has followed the channel! Welcome!';
             };
             defaultMessages(client, eventData, eventsubData.message);
+            countdowntimerCommand(eventData.broadcaster_user_login, 'follows', 10);
             break;
         case 'stream.online':
             if(eventsubData.message == '' || eventsubData.message == null) {

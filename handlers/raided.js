@@ -1,6 +1,7 @@
 const shoutout = require('../functions/shoutout')
 const announcement = require('../functions/announcement')
 const textConvertor = require('./text')
+const countdowntimerCommand = require('../commands/countdowntimer')
 
 const { getClips, showClip, getChannel, getUser } = require('../functions')
 
@@ -8,6 +9,8 @@ const { getClips, showClip, getChannel, getUser } = require('../functions')
 const modID = '698614112';
 
 async function raid(client, eventData, eventsubData, clipEnabled = false) {
+    countdowntimerCommand(eventData.to_broadcaster_user_login, 'raids', 10);
+    countdowntimerCommand(eventData.to_broadcaster_user_login, `viewers ${eventData.viewers}`, 10);
     if (eventsubData.minViewers > eventData.viewers) return;
     let channelID = eventData.to_broadcaster_user_id;
     let channelName = eventData.to_broadcaster_user_login;

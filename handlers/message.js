@@ -321,6 +321,11 @@ async function message(client, channel, tags, message) {
                 if (ssr.error) return client.say(channel, `${ssr.message}`);
                 client.say(channel, ssr.message);
                 break;
+            case 'countdownTimer':
+                let countdownTimer = await commands.countdownTimer(channel, argument, userlevel);
+                if (countdownTimer.error) return client.say(channel, `${countdownTimer.message}`);
+                client.say(channel, countdownTimer.message);
+                break;
             default:
                 let cmdHandler = await commandHandler(channel, tags, command, argument, userlevel);
                 if (!cmdHandler.exists) return;

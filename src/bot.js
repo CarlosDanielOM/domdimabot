@@ -6,6 +6,8 @@ const messages = require('../handlers/message');
 const redeem = require('../handlers/redeem');
 const raid = require('../handlers/raided');
 
+const countdowntimerCommand = require('../commands/countdowntimer');
+
 let client = null;
 
 let newChatter = false;
@@ -21,15 +23,19 @@ async function init() {
         switch (tier) {
             case 'Prime':
                 tier = 'Prime';
+                countdowntimerCommand(channel.replace('#', ''), 'tier1', 10);
                 break;
             case '1000':
                 tier = '1';
+                countdowntimerCommand(channel.replace('#', ''), 'tier1', 10);
                 break;
             case '2000':
                 tier = '2';
+                countdowntimerCommand(channel.replace('#', ''), 'tier2', 10);
                 break;
             case '3000':
                 tier = '3';
+                countdowntimerCommand(channel.replace('#', ''), 'tier3', 10);
                 break;
         }
 
@@ -66,6 +72,7 @@ async function init() {
 
     client.on('cheer', (channel, tags, message) => {
         client.say(channel, `Gracias por los ${tags.bits} bits ${tags['display-name']}!`)
+        countdowntimerCommand(channel.replace('#', ''), `bits ${tags.bits}`, 10);
     });
 
 }
