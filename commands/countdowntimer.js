@@ -11,15 +11,15 @@ const { getUrl } = require('../util/dev');
 let cache;
 
 async function countdownTimer(channel, argument, userLevel) {
-    let commandInfo = await commandSchema.findOne({ channelID: channel, name: 'Countdown Timer' });
-
+    let streamer = await streamers.getStreamer(channel);
+    
+    let commandInfo = await commandSchema.findOne({ channelID: streamer.user_id, name: 'Countdown Timer' });
+    
     if (!commandInfo) return {error: true, message: 'Command not found'};
-
+    
     if (commandInfo.userLevel > userLevel) return {error: true, message: 'You do not have permission to use this command'};
     
     cache = await dragonflyDB.getClient();
-    
-    let streamer = await streamers.getStreamer(channel); 
     
     let countdownTimer = await cache.get(`${channel}:countdown:timer`);
     let countdownTimerConfig = await cache.get(`${channel}:countdown:config`);
