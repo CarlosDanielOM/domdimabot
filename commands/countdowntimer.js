@@ -99,11 +99,11 @@ async function countdownTimer(channel, argument, userLevel) {
             return {error: false, message: data.message};
             break;
         case 'bits':
-            let bitAmount = argument[1] ?? 100;
+            let bitAmount = argument[1] ?? 1;
 
             let bitTime = countdownTimerConfig.bits;
             
-            let timeAmount = Math.floor((bitAmount / 100) * bitTime);
+            let timeAmount = Math.floor((bitTime / 100) * bitAmount);
 
             response = await fetch(`${getUrl()}/countdowntimer/${streamer.user_id}/timer/add`, {
                 method: 'POST',

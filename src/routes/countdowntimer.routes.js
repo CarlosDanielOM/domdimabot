@@ -34,6 +34,7 @@ router.post('/:channelID/timer', async (req, res) => {
         channelID: channelID,
         startTime: body.startTime,
         time: body.startTime,
+        paused: true
     });
 
     await timer.save();
