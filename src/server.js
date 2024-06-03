@@ -646,6 +646,10 @@ async function init() {
       return res.status(400).json({ error: true, message: 'No active countdown timer found' });
     }
 
+    if(!countdownTimer.paused) {
+      return res.status(400).json({ error: true, message: 'Timer already running' });
+    }
+
     countdownTimer.paused = false;
     countdownTimer.resumedAt = Date.now();
     
