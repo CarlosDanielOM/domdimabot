@@ -77,7 +77,7 @@ async function OnlyEmotes(channel, argument, userLevel = 1) {
 
     res = {
         error: false,
-        message: `Modo solo emotes ${active ? 'activado' : 'desactivado'} ${seconds > 0 ? 'por ' + seconds + 'segundos' : ''}.`
+        message: `Modo solo emotes ${active ? 'activado' : 'desactivado'} ${seconds > 0 ? 'por ' + seconds + ' segundos' : ''}.`
     }
 
     return res;
