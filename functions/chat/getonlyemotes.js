@@ -1,13 +1,17 @@
-async function getOnlyEmotes() {
-    let params = `?broadcaster_id=${this.userID}`
+const {getTwitchHelixURL} = require('../../util/links')
+const {getStreamerHeaderById} = require('../../util/headers');
 
-    if (this.modID) {
-        params += `&moderator_id=${this.modID}`
+async function getOnlyEmotes(channelID, modID = 698614112) {
+    let params = `?broadcaster_id=${channelID}`
+    let headers = await getStreamerHeaderById(channelID);
+
+    if (modID) {
+        params += `&moderator_id=${modID}`
     }
 
-    let response = await fetch(`${this.helixURL}/chat/settings${params}`, {
+    let response = await fetch(`${getTwitchHelixURL()}/chat/settings${params}`, {
         method: 'GET',
-        headers: this.streamerHeaders,
+        headers: headers
     });
 
     let data = await response.json();
