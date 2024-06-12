@@ -21,7 +21,7 @@ async function furrometro(channel, username, argument, userlevel) {
 
     exists = await client.get(`${channel}:supremeFurry`);
     if (exists) {
-        supremeFurry = parseInt(exists);
+        supremeFurry = Number(exists);
     }
 
     if(argument) {

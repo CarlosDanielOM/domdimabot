@@ -22,7 +22,7 @@ async function init() {
     });
 }
 
-async function getClient() {
+function getClient() {
     return client;
 }
 

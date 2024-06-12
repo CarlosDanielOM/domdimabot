@@ -22,7 +22,7 @@
             "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Anuncia algo en el canal | Ejemplo: !anuncio <mensaje> | Ejemplo: !anuncio Hola como estas | El mensaje no puede ser mayor a 300 caracteres | El mensaje solo se podra ver en navegadores WEB y no en Movil"
         },
         {
@@ -34,7 +34,7 @@
             "cooldown": 10,
             "userLevelName": "mod",
             "enabled": true,
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Es otra forma de lanzar un shoutout pero sin activar el shoutout y la respuesta es por texto en vez de por anuncio para que los que esten en movil puedan ver el mensaje",
             "showClip": true
         },
@@ -47,7 +47,7 @@
             "cooldown": 10,
             "userLevelName": "mod",
             "enabled": true,
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Menciona a un usuario y si tienes activado lo de los clips mandara un clip al canal",
             "showClip": false
         },
@@ -60,7 +60,7 @@
             "cooldown": 10,
             "userLevelName": "mod",
             "enabled": true,
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Crea una prediccion con la siguiente sintaxis: !predi <titulo>;<opcion1>/<opcion2>;<tiempo en segundos> | Ejemplo: !predi ¿Ganara el streamer?;Si/No;60 | El tiempo maximo es de 5 minutos y minimo de 30 segundos | El titulo no puede ser mayor a 30 caracteres | Las opciones no pueden ser mayor a 20 caracteres | Minimo 2 opciones y maximo 10 opciones y deben ser separadas por /"
         },
         {
@@ -72,7 +72,7 @@
             "cooldown": 10,
             "userLevelName": "mod",
             "enabled": true,
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Termina la prediccion actual y da el resultado ganador | Ejemplo: !endpredi <numero de opcion> | Ejemplo: !endpredi 1 | El numero de opcion debe ser el numero de la opcion ganadora"
         },
         {
@@ -84,7 +84,7 @@
             "cooldown": 10,
             "userLevelName": "mod",
             "enabled": true,
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Cancela la prediccion actual | Ejemplo: !cancelpredi | No necesita argumentos | Solo funciona si la prediccion esta activa o si esta bloqueada"
         },
         {
@@ -96,7 +96,7 @@
             "cooldown": 10,
             "userLevelName": "mod",
             "enabled": true,
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Bloquea la prediccion actual lo cual inhabilita que los usuarios puedan votar | Ejemplo: !lockpredi | No necesita argumentos | Solo funciona si la prediccion esta activa"
         },
         {
@@ -108,7 +108,7 @@
             "cooldown": 10,
             "userLevelName": "mod",
             "enabled": true,
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Crea una encuesta con la siguiente sintaxis: !poll <titulo>;<opcion1>/<opcion2>;<tiempo en segundos> | Ejemplo: !poll ¿Ganara el streamer?;Si/No;60 | El tiempo maximo es de 5 minutos y minimo de 30 segundos | El titulo no puede ser mayor a 25 caracteres | Las opciones no pueden ser mayor a 25 caracteres | Minimo 2 opciones y maximo 5 opciones y deben ser separadas por /"
         },
         {
@@ -120,7 +120,7 @@
             "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Termina la encuesta actual | Ejemplo: !endpoll | No necesita argumentos | Solo funciona si la encuesta esta activa"
         },
         {
@@ -132,7 +132,7 @@
             "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Cancela la encuesta actual | Ejemplo: !cancelpoll | No necesita argumentos | Solo funciona si la encuesta esta activa"
         },
         {
@@ -144,7 +144,7 @@
             "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Cambia el juego actual | Ejemplo: !game <nombre del juego> | Ejemplo: !game Fortnite"
         },
         {
@@ -156,7 +156,7 @@
             "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Cambia el titulo actual | Ejemplo: !title <titulo> | Ejemplo: !title Hola como estas"
         },
         {
@@ -228,7 +228,7 @@
             "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Activa o desactiva el modo solo emotes | Ejemplo: !onlyemotes | Ejemplo de respuesta: El modo solo emotes esta activado | No necesita argumentos"
         },
         {
@@ -240,7 +240,7 @@
             "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Crea un comando personalizado con la siguiente sintaxis: !cc <nombre del comando> <funcion del comando> | Ejemplo: !cc <nombre del comando> <respuesta que dara el comando> | Ejemplo: !cc discord Sigueme en mi discord: discord.cdom201.com | Ejemplo de uso: !discord | Ejemplo de respuesta: Sigueme en mi discord: discord.cdom201.com | El nombre del comando no puede tener espacios ni contener caracteres especiales y no puede ser mayor a 20 caracteres | La funcion del comando no puede ser mayor a 300 caracteres | se le puede pasar opciones de configuracion antes del nombre del comando | Ejemplo: !cc -cd=10 -ul=mod <nombre del comando> <funcion del comando> | Ejemplo: !cc -cd=10 -ul=mod discord Sigueme en mi discord: discord.cdom201.com | Las opciones de configuracion son: -cd=cooldown, -ul=userlevel, -enabled=enabled, -desc=description | Las opciones de configuracion son opcionales | Si no se pasa ninguna opcion de configuracion se usaran las opciones por defecto | Si se pasa una opcion de configuracion se usara esa opcion de configuracion | Si se pasan varias opciones de configuracion se usaran todas las opciones de configuracion que se pasaron"
         },
         {
@@ -252,7 +252,7 @@
             "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Elimina un comando personalizado | Ejemplo: !dc <nombre del comando> | Ejemplo: !dc discord | Ejemplo de respuesta: El comando !discord ha sido eliminado"
         },
         {
@@ -264,7 +264,7 @@
             "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Edita un comando personalizado con la siguiente sintaxis: !ec <nombre del comando> <funcion del comando> | Ejemplo: !ec <nombre del comando> <respuesta que dara el comando> | Ejemplo: !ec discord Sigueme en mi discord: discord.cdom201.com | Ejemplo de uso: !discord | Ejemplo de respuesta: Sigueme en mi discord: discord.cdom201.com | El nombre del comando no puede tener espacios ni contener caracteres especiales y no puede ser mayor a 20 caracteres | La funcion del comando no puede ser mayor a 300 caracteres | se le puede pasar opciones de configuracion antes del nombre del comando | Ejemplo: !ec -cd=10 -ul=mod <nombre del comando> <funcion del comando> | Ejemplo: !ec -cd=10 -ul=mod discord Sigueme en mi discord: discord.cdom201.com | Las opciones de configuracion son: -cd=cooldown, -ul=userlevel, -enabled=enabled, -desc=description | Las opciones de configuracion son opcionales | Si no se pasa ninguna opcion de configuracion se usaran las opciones por defecto | Si se pasa una opcion de configuracion se usara esa opcion de configuracion | Si se pasan varias opciones de configuracion se usaran todas las opciones de configuracion que se pasaron"
         },
         {
@@ -328,7 +328,7 @@
             "enabled": false,
             "cooldown": 10,
             "userLevelName": "mod",
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Limpia el chat | Ejemplo: !clearchat | Ejemplo de respuesta: Chat limpiado por <Mod> | No necesita argumentos"
         },
         {
@@ -340,7 +340,7 @@
             "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Activa un comando | Ejemplo: !enable <nombre del comando> | Ejemplo: !enable discord | Ejemplo de respuesta: El comando !discord ha sido activado"
         },
         {
@@ -352,7 +352,7 @@
             "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Desactiva un comando | Ejemplo: !disable <nombre del comando> | Ejemplo: !disable discord | Ejemplo de respuesta: El comando !discord ha sido desactivado"
         },
         {
@@ -364,7 +364,7 @@
             "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Haces que un comando ya hecho se pueda llamar a si solo cada cierta cantidad de minutos | Ejemplo: !cct <nombre del comando> <tiempo en minutos> | Ejemplo: !cct discord 5 | Ejemplo de respuesta: El comando !discord se activara cada 5 minutos | El tiempo en minutos no puede ser mayor a 60 minutos | El tiempo en minutos no puede ser menor a 1 minuto | Se le tiene que pasar un nombre de comando ya hecho como argumento | Se le tiene que pasar un tiempo en minutos como argumento | Si el temporizador ya existe se le dira que ya existe | Si el comando no existe se le dira que no existe"
         },
         {
@@ -376,7 +376,7 @@
             "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Edita el tiempo de ejecucion de un temporadizador ya hecho | Ejemplo: !ect <nombre del comando> <tiempo en minutos> | Ejemplo: !ect discord 10 | Ejemplo de respuesta: El comando !discord ahora se activara cada 10 minutos | El tiempo en minutos no puede ser mayor a 60 minutos | El tiempo en minutos no puede ser menor a 1 minuto | Se le tiene que pasar un nombre de comando ya hecho como argumento | Se le tiene que pasar un tiempo en minutos como argumento | Si el temporizador no existe se le dira que no existe"
         },
         {
@@ -388,7 +388,7 @@
             "enabled": true,
             "cooldown": 10,
             "userLevelName": "mod",
-            "userLevel": 6,
+            "userLevel": 7,
             "description": "Elimina un temporadizador ya hecho | Ejemplo: !dct <nombre del comando> | Ejemplo: !dct discord | Ejemplo de respuesta: El temporizador del comando !discord ha sido eliminado | Se le tiene que pasar un nombre de comando ya hecho como argumento | Si el temporizador no existe se le dira que no existe"
         }
     ]
