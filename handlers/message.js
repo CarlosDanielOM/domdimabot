@@ -6,6 +6,7 @@ const CHANNEL = require('../functions/channel/index.js');
 const ChatLog = require('../schemas/chat_log.schema.js');
 const commandSchema = require('../schemas/command.js');
 const STREAMER = require('../class/streamers.js');
+const dragonFlyDB = require('../util/database/dragonflydb.js');
 
 const COOLDOWNS = require('../class/cooldown.js');
 
@@ -22,6 +23,7 @@ let user;
 let channelInstances = new Map();
 
 async function message(client, channel, tags, message) {
+    let cache = dragonFlyDB.getClient();
     let streamer = await STREAMER.getStreamer(channel);
     let commandCD = 10;
     let userlevel = giveUserLevel(channel, tags);
@@ -31,11 +33,11 @@ async function message(client, channel, tags, message) {
         username: tags['display-name'],
     }
 
-    let chatLog = await ChatLog.create(chatBody);
+    // let chatLog = await ChatLog.create(chatBody);
 
-    if (!chatLog) {
-        console.log('Error al guardar el mensaje en la base de datos.');
-    }
+    // if (!chatLog) {
+    //     console.log('Error al guardar el mensaje en la base de datos.');
+    // }
 
     let hasLink = message.match(linkRegex);
     if (hasLink && !tags.mod && !tags.username === channel && !tags.username === 'cdom201' && !tags.username === 'domdimabot') {
@@ -61,17 +63,21 @@ async function message(client, channel, tags, message) {
 
     if (!command) return;
 
-    let commandData = await commandSchema.findOne({ channelID: streamer.user_id, cmd: command, enabled: true }, 'name type cooldown userLevel func');
-
-    if (!commandData) return;
-    if (commandData.enabled === false) return;
+    let commandFunc = await cache.get(`${channel}:commands:${command}`);
+    if(!commandFunc) {
+        let commandData = await commandSchema.findOne({ channelID: streamer.user_id, cmd: command, enabled: true }, 'name type cooldown userLevel func');
+        if (!commandData) return;
+        if (commandData.enabled === false) return;
+        await cache.set(`${channel}:commands:${command}`, commandData.func, {EX: 60 * 60});
+        commandFunc = commandData.func;
+    }
 
     if (channelInstance.hasCooldown(command)) {
         onCooldown = true;
     }
 
     if (!onCooldown) {
-        switch (commandData.func) {
+        switch (commandFunc) {
             case 'ruletarusa':
                 if ((tags.username !== channel) && !tags.mod) { isMod = false; }
                 let ruletarusa = await commands.ruletarusa(channel, tags['display-name'], modID, isMod);
@@ -195,9 +201,8 @@ async function message(client, channel, tags, message) {
                 client.say(channel, mecabe.message);
                 break;
             case 'onlyemotes':
-                if (!isMod) return client.say(channel, `No tienes permisos para usar este comando.`);
-                let onlyEmotes = await commands.onlyEmotes(channel, modID);
-                if (onlyEmotes.error) return client.say(channel, `${onlyEmotes.reason}`);
+                let onlyEmotes = await commands.onlyEmotes(channel, argument, userlevel);
+                if (onlyEmotes.error) return client.say(channel, `${onlyEmotes.message}`);
                 client.say(channel, onlyEmotes.message);
                 break;
             case 'awynowo':
