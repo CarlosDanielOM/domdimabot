@@ -3,8 +3,10 @@ const channelSchema = require('../schemas/channel.schema');
 const appConfigSchema = require('../schemas/app_config');
 const { encrypt, decrypt } = require('./crypto');
 const CLIENT = require('./client');
+const dragonFlyDB = require('./database/dragonflydb');
 
 async function refreshAllTokens() {
+    let cache = dragonFlyDB.getClient();
     await STREAMER.updateStreamers();
     const streamers = await STREAMER.getStreamersNames();
 
@@ -13,7 +15,7 @@ async function refreshAllTokens() {
             let channel = await STREAMER.getStreamer(streamer);
 
             if (channel.refresh_token.iv == '' || channel.refresh_token.content == '') {
-                console.log(`Error on refreshAllTokens: ${streamer} refresh_token is null`)
+                console.log(`Error on refreshAllTokens: ${streamer} refresh_token is null for ${streamer}`)
                 return;
             } else {
                 const { tokenEncrypt, refresh_tokenEncrypt } = await refreshToken(decrypt(channel.refresh_token));
@@ -23,7 +25,7 @@ async function refreshAllTokens() {
                     let nullToken = { iv: null, content: null };
                     let nullRefreshToken = { iv: null, content: null };
                     await channelSchema.findOneAndUpdate({ name: channel.name }, { actived: false, twitch_user_token: nullToken, twitch_user_refresh_token: nullRefreshToken, refreshedAt: Date.now()});
-                    return console.log('Error on refreshAllTokens: tokenEncrypt or refresh_tokenEncrypt is null')
+                    return console.log('Error on refreshAllTokens: tokenEncrypt or refresh_tokenEncrypt is null for', channel.name);
                 };
 
                 channel.token = tokenEncrypt;

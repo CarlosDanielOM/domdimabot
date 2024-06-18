@@ -14,6 +14,13 @@ async function textConvertor(channelID, eventData, message, rewardData = {}) {
             case 'user':
                 message = message.replace(special[0], eventData.user_name);
                 break;
+            case 'touser':
+                if (eventData.user_input) {
+                    message = message.replace(special[0], eventData.user_input);
+                } else {
+                    message = message.replace(special[0], eventData.user_name);
+                }
+                break;
             case 'random':
                 let maxNumber = special[2] || 100;
                 let random = Math.floor(Math.random() * maxNumber) + 1;
@@ -125,7 +132,11 @@ async function textConvertor(channelID, eventData, message, rewardData = {}) {
                 if (!special[2]) break;
                 switch (special[2]) {
                     case 'time':
-                        if(eventData.is_permanent) break;
+                        if(eventData.is_permanent) {
+                            message = message.replace(special[0], 'permanently');
+                            break;
+                        
+                        };
                         let start = eventData.banned_at;
                         let end = eventData.ends_at;
                         let startDate = new Date(start);

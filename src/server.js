@@ -143,7 +143,6 @@ async function init() {
 
     res.status(200).json({ message: 'Speach created', error: false });
   });
-  
   app.post('/dev/create/commands', async (req, res) => {
     let streamers = await STREAMERS.getStreamers();
 
@@ -740,6 +739,11 @@ async function init() {
     io.of(`/countdowntimer/${streamer.name}`).emit('substract', { time: body.time });
     
     return res.status(200).json({ error: false, message: 'Time substracted' });
+  });
+  
+  //? SPINNER ROUTES ?//
+  app.get('/spinner/:channel/:spinner', async (req, res) => {
+    res.sendFile(`${htmlPath}spinner-default.html`);
   });
   
   //? Server ?//

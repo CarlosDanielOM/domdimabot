@@ -1,14 +1,18 @@
 const channelSchema = require('../schemas/channel.schema');
 const { decrypt } = require('../util/crypto');
 
+const { getClient } = require('../util/database/dragonflydb');
+
 class STREAMERS {
     constructor() {
         this.streamerData = new Map();
+        this.cache = getClient();
     }
-
+    
     async init() {
         try {
             await this.getStreamersFromDB();
+            this.cache = getClient();
             console.log('Streamers initialized successfully.');
         } catch (error) {
             console.error('Error initializing streamers:', error);
@@ -17,6 +21,7 @@ class STREAMERS {
 
     async getStreamersFromDB() {
         try {
+            this.cache = getClient();
             const result = await channelSchema.find({ actived: true }, 'name twitch_user_id twitch_user_token twitch_user_refresh_token actived premium premium_plus refreshedAt');
 
             result.map((item) => {
@@ -30,6 +35,15 @@ class STREAMERS {
                     premium_plus: item.premium_plus,
                     refreshedAt: item.refreshedAt,
                 }
+                let cacheData = {
+                    name: item.name,
+                    user_id: item.twitch_user_id,
+                    token: decrypt(item.twitch_user_token),
+                    refresh_token: decrypt(item.twitch_user_refresh_token),
+                    premium: item.premium ? 1 : 0,
+                    premium_plus: item.premium_plus ? 1 : 0,
+                }
+                this.cache.hSet(`${item.name}:streamer:data`, cacheData, { EX: 60 * 60 * 4});
                 this.streamerData.set(data.name, data);
             });
         } catch (error) {

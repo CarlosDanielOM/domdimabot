@@ -1,6 +1,7 @@
 const COMMAND = require('../class/command');
 const CHANNEL = require('../functions/channel')
 const STREAMERS = require('../class/streamers')
+const COMMANDS = require('../commands');
 
 let specialCommandsFunc = (/\$\(([a-z]+)\s?([a-z0-9]+)?\s?([a-zA-Z0-9\s]+)?\)/g);
 
@@ -98,6 +99,33 @@ async function specialCommands(tags, argument, cmdFunc, count = 0, channel) {
                         if (updatedTitle.error) cmdFunc = cmdFunc.replace(special[0], updatedTitle.reason);
                         else cmdFunc = cmdFunc.replace(special[0], title);
                         if (!argument) break;
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 'start':
+                if (!special[2]) break;
+                switch (special[2]) {
+                    case 'prediction':
+                        let prediction = special[3] || argument;
+                        let predictionData = await COMMANDS.prediction('CREATE', channel, prediction);
+                        if(predictionData.error) {
+                            cmdFunc = cmdFunc.replace(special[0], predictionData.reason);
+                        }
+                        else {
+                            cmdFunc = cmdFunc.replace(special[0], predictionData.message);
+                        }
+                        break;
+                    case 'poll':
+                        let poll = special[3] || argument;
+                        let pollData = await COMMANDS.poll('CREATE', channel, poll);
+                        if(pollData.error) {
+                            cmdFunc = cmdFunc.replace(special[0], pollData.reason);
+                        }
+                        else {
+                            cmdFunc = cmdFunc.replace(special[0], pollData.message);
+                        }
                         break;
                     default:
                         break;

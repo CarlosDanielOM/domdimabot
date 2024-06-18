@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .spin {
+            animation: spin 2s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="spinner"></canvas>
+        <button id="spinButton">Spin</button>
+        <p id="result"></p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script>
+        window.onload = () => {
+            // let values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+            let values = ['shotgun', 'pistol', 'rifle', 'sniper', 'grenade', 'knife', 'axe', 'hammer', 'bat', 'sword', 'bow', 'crossbow', 'spear', 'club', 'staff', 'wand', 'dagger', 'mace', 'flail', 'scythe', 'whip', 'boomerang', 'shuriken', 'nunchaku', 'kunai', 'sai', 'tonfa', 'chakram', 'katar', 'trident', 'halberd', 'pike', 'lance', 'sickle', 'saber', 'rapier', 'cutlass', 'broadsword', 'katana', 'falchion', 'scimitar', 'machete', 'gladius', 'estoc', 'flamberge', 'claymore', 'zweihander', 'morningstar', 'warhammer', 'battleaxe', 'greataxe', 'greatsword', 'longsword', 'shortsword', 'bastardsword', 'flailsword', 'scythesword', 'whipsword', 'boomerangsword', 'shurikensword', 'nunchakusword', 'kunaisword', 'saisword', 'tonfasword', 'chakramsword', 'katarsword', 'tridentsword', 'halberdsword', 'pikesword', 'lancesword', 'sicklesword', 'sabersword', 'rapiersword', 'cutlasssword', 'broadswordsword', 'katanasword', 'falchionsword', 'scimitarsword', 'machetesword', 'gladiussword', 'estocsword', 'flambergesword', 'claymoresword', 'zweihandersword', 'morningstarsword', 'warhammersword', 'battleaxesword', 'greataxesword', 'greatswordsword', 'longswordsword', 'shortswordsword', 'bastardswordsword', 'flailswordsword', 'scytheswordsword', 'whipswordsword', 'boomerangswordsword', 'shurikenswordsword', 'nunchakuswordsword', 'kunaiswordsword', 'saiswordsword', 'tonfaswordsword', 'chakramswordsword', 'katarswordsword', 'tridentswordsword', 'halberdswordsword', 'pikeswordsword', 'l'];
+            let colors = [];
+            let degrees = Array(values.length).fill(1);
+            let totalSlices = values.length;
+
+            values.forEach((value, index) => {
+                const red = Math.floor(Math.random() * 256);
+                const green = Math.floor(Math.random() * 256);
+                const blue = Math.floor(Math.random() * 256);
+                colors.push(`rgb(${red}, ${green}, ${blue})`);
+            });
+            
+            const ctx = document.getElementById('spinner').getContext('2d');
+            const spinnerChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: values,
+                    datasets: [{
+                        data: degrees,
+                        backgroundColor: colors
+                    }]
+                },
+                options: {
+                    animation: {
+                        duration: 0
+                    },
+                    rotation: 0
+                }
+            });
+
+            const spinButton = document.getElementById('spinButton');
+            const result = document.getElementById('result');
+
+            spinButton.addEventListener('click', () => {
+                const duration = Math.random() * 4 + 3;
+                const randomAngle = Math.floor(Math.random() * 360);
+                console.log({randomAngle})
+
+                const animationDuration = duration * 1000;
+                const animationStep = 18;
+                const totalSteps = animationDuration / animationStep;
+                const startAngle = spinnerChart.options.rotation;
+                const endAngle = randomAngle + 360 * 10;
+                const angleIncrement = (endAngle - startAngle) / totalSteps;
+
+                console.log({startAngle, endAngle, angleIncrement, totalSteps})
+
+                let currentStep = 0;
+
+                const spinAnimation = setInterval(() => {
+                    if (currentStep >= totalSteps) {
+                        clearInterval(spinAnimation);
+                        const finalAngle = endAngle % 360;
+                        const sliceAngle = 360 / totalSlices;
+                        const selectedSlice = Math.floor(finalAngle / sliceAngle);
+                        console.log({finalAngle, sliceAngle, selectedSlice})
+                        result.innerText = `Selected: ${values[selectedSlice]}`;
+                    } else {
+                        spinnerChart.options.rotation -= angleIncrement;
+                        spinnerChart.update();
+                        currentStep++;
+                    }
+                }, animationStep);
+            });
+        }
+    </script>
+</body>
+</html>
