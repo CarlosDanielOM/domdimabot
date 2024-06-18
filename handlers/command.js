@@ -3,7 +3,7 @@ const CHANNEL = require('../functions/channel')
 const STREAMERS = require('../class/streamers')
 const COMMANDS = require('../commands');
 
-let specialCommandsFunc = (/\$\(([a-z]+)\s?([a-z0-9]+)?\s?([a-zA-Z0-9\s]+)?\)/g);
+let specialCommandsFunc = (/\$\(([a-z]+)\s?([a-z0-9]+)?\s?([a-zA-Z0-9?;\/\s]+)?\)/g);
 
 async function commandHandler(channel, tags, command, argument, userLevel) {
     let streamer = await STREAMERS.getStreamer(channel);
