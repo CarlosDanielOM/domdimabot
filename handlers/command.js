@@ -119,7 +119,7 @@ async function specialCommands(tags, argument, cmdFunc, count = 0, channel) {
                         break;
                     case 'poll':
                         let poll = special[3] || argument;
-                        let pollData = await COMMANDS.poll('CREATE', channel, poll);
+                        let pollData = await COMMANDS.poll('CREATE', channel, poll, true);
                         if(pollData.error) {
                             cmdFunc = cmdFunc.replace(special[0], pollData.reason);
                         }
