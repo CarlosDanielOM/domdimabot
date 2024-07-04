@@ -11,8 +11,8 @@ class STREAMERS {
     
     async init() {
         try {
-            await this.getStreamersFromDB();
             this.cache = getClient();
+            await this.getStreamersFromDB();
             console.log('Streamers initialized successfully.');
         } catch (error) {
             console.error('Error initializing streamers:', error);

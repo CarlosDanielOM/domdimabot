@@ -44,10 +44,12 @@
     <script>
         window.onload = () => {
             // let values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-            let values = ['shotgun', 'pistol', 'rifle', 'sniper', 'grenade', 'knife', 'axe', 'hammer', 'bat', 'sword', 'bow', 'crossbow', 'spear', 'club', 'staff', 'wand', 'dagger', 'mace', 'flail', 'scythe', 'whip', 'boomerang', 'shuriken', 'nunchaku', 'kunai', 'sai', 'tonfa', 'chakram', 'katar', 'trident', 'halberd', 'pike', 'lance', 'sickle', 'saber', 'rapier', 'cutlass', 'broadsword', 'katana', 'falchion', 'scimitar', 'machete', 'gladius', 'estoc', 'flamberge', 'claymore', 'zweihander', 'morningstar', 'warhammer', 'battleaxe', 'greataxe', 'greatsword', 'longsword', 'shortsword', 'bastardsword', 'flailsword', 'scythesword', 'whipsword', 'boomerangsword', 'shurikensword', 'nunchakusword', 'kunaisword', 'saisword', 'tonfasword', 'chakramsword', 'katarsword', 'tridentsword', 'halberdsword', 'pikesword', 'lancesword', 'sicklesword', 'sabersword', 'rapiersword', 'cutlasssword', 'broadswordsword', 'katanasword', 'falchionsword', 'scimitarsword', 'machetesword', 'gladiussword', 'estocsword', 'flambergesword', 'claymoresword', 'zweihandersword', 'morningstarsword', 'warhammersword', 'battleaxesword', 'greataxesword', 'greatswordsword', 'longswordsword', 'shortswordsword', 'bastardswordsword', 'flailswordsword', 'scytheswordsword', 'whipswordsword', 'boomerangswordsword', 'shurikenswordsword', 'nunchakuswordsword', 'kunaiswordsword', 'saiswordsword', 'tonfaswordsword', 'chakramswordsword', 'katarswordsword', 'tridentswordsword', 'halberdswordsword', 'pikeswordsword', 'l'];
+            let values = ['shotgun', 'pistol', 'rifle', 'sniper', 'grenade', 'knife', 'axe', 'hammer', 'bat', 'sword'];
             let colors = [];
             let degrees = Array(values.length).fill(1);
             let totalSlices = values.length;
+
+            let score = 0;
 
             values.forEach((value, index) => {
                 const red = Math.floor(Math.random() * 256);
@@ -97,9 +99,11 @@
                     if (currentStep >= totalSteps) {
                         clearInterval(spinAnimation);
                         const finalAngle = endAngle % 360;
+                        score += finalAngle;
+                        score = score % 360;
                         const sliceAngle = 360 / totalSlices;
-                        const selectedSlice = Math.floor(finalAngle / sliceAngle);
-                        console.log({finalAngle, sliceAngle, selectedSlice})
+                        const selectedSlice = Math.floor(score / sliceAngle);
+                        console.log({finalAngle, sliceAngle, selectedSlice, score})
                         result.innerText = `Selected: ${values[selectedSlice]}`;
                     } else {
                         spinnerChart.options.rotation -= angleIncrement;
