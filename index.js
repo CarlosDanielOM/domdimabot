@@ -15,12 +15,8 @@ async function initialize() {
 
         await db.init();
         await DragonflyDB.init();
-        await STREAMERS.init();
 
         await httpServer.init();
-        eventsub.init();
-        bot.init();
-        await dev.refreshAllTokens(refreshAllTokens);
     } catch (error) {
         console.log(error);
     }
@@ -30,13 +26,3 @@ async function initialize() {
 }
 
 initialize();
-
-setInterval(async () => {
-    await dev.refreshAllTokens(refreshAllTokens);
-    console.log('Refreshed tokens');
-}, 1000 * 60 * 60 * 3);
-
-setInterval(async () => {
-    await getNewAppToken();
-    console.log('Refreshed app token');
-}, 1000 * 60 * 60 * 24);
