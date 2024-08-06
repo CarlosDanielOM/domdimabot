@@ -745,6 +745,14 @@ async function init() {
   app.get('/spinner/:channel/:spinner', async (req, res) => {
     res.sendFile(`${htmlPath}spinner-default.html`);
   });
+
+  app.post('/trigger/:channelID', async (req, res) => {
+    const { channelID } = req.params;
+    const body = req.body;
+
+    io.of(`/overlays/triggers/${channelID}`).emit('trigger', body.triggerData);
+    
+  });
   
   //? Server ?//
   server.listen(PORT, () => {
