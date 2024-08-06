@@ -749,9 +749,8 @@ async function init() {
   app.post('/trigger/:channelID', async (req, res) => {
     const { channelID } = req.params;
     const body = req.body;
-    console.log({ channelID, body });
 
-    io.of(`/overlays/triggers/${channelID}`).emit('trigger', body.triggerData);
+    io.of(`/overlays/triggers/${channelID}`).emit('trigger', body);
     
   });
   
