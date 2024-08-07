@@ -163,6 +163,8 @@ router.patch('/:channelID/:rewardID', async (req, res) => {
         body: JSON.stringify(twitchBody)
     })
 
+    console.log({response: response, body: body});
+
     if(response.status !== 200) return res.status(response.status).json({error: true, message: 'Error updating reward'});
 
     if(body.title) body.rewardTitle = body.title;
