@@ -139,6 +139,7 @@ router.patch('/:channelID/:rewardID', async (req, res) => {
     let body = req.body;
 
     const streamer = await STREAMERS.getStreamerById(channelID);
+    console.log({streamer: streamer});
 
     let reward = await rewardSchema.findOne({channelID: channelID, rewardID: rewardID});
     if(!reward) return res.status(404).json({error: true, message: 'Reward not found'});
