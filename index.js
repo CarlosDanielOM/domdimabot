@@ -17,6 +17,7 @@ async function initialize() {
         await DragonflyDB.init();
 
         await httpServer.init();
+
     } catch (error) {
         console.log(error);
     }

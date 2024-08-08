@@ -1,32 +1,29 @@
-const redis = require('redis');
+require('dotenv').config();
+const redis = require('ioredis');
 
 let client;
 
-async function init() {
-    client = new redis.createClient({
-        url: process.env.DRAGONFLYDB_URL,
-    })
-
-    client.connect();
-
-    client.on('connect', () => {
-        console.log('Connected to DragonflyDB');
-    });
-
-    client.on('error', (error) => {
-        console.log('Error connecting to DragonflyDB: ', error);
-    });
-
-    client.on('end', () => {
-        console.log('Disconnected from DragonflyDB');
-    });
-}
-
-function getClient() {
-    return client;
-}
-
 module.exports = {
-    init,
-    getClient,
-};
+    init: async () => {
+        client = new redis({
+            port: process.env.DRAGONFLY_PORT,
+            host: process.env.DRAGONFLY_HOST
+        })
+
+        client.on('connect', _ => {
+            console.log(`Connected to DragonFlyDB`);
+        })
+
+        client.on('error', error => {
+            console.log(`Error connecting to DragonFlyDB: ${error}`)
+        })
+
+        client.on('end', () => {
+            console.log('Disconected from DragonFlyDB');
+        })
+
+    },
+    getClient: () => {
+        return client
+    },
+}

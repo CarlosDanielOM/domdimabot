@@ -134,6 +134,12 @@ async function init() {
 
   //? DEV ROUTES ?//
 
+  app.get('/dev', async (req, res) => {
+    let data = await cache.hget('cdom201:streamer:data', 'token')
+    
+    res.status(200).send(data);
+  });
+
   app.post('/dev/speach', (req, res) => {
     let text = req.body.text;
     let lang = req.body.lang;
