@@ -157,7 +157,7 @@ router.patch('/:channelID/:rewardID', async (req, res) => {
         method: 'PATCH',
         headers: {
             'Client-ID': process.env.CLIENT_ID,
-            'Authorization': `Bearer ${decrypt(streamer.token)}`,
+            'Authorization': `Bearer ${streamer.token}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(twitchBody)

@@ -1,102 +1,194 @@
-const channelSchema = require('../schemas/channel.schema');
-const { decrypt } = require('../util/crypto');
+const channelSchema = require('../schema/channel');
+const {decrypt} = require('../util/crypto');
 
-const { getClient } = require('../util/database/dragonflydb');
+const {getClient} = require('../util/database/dragonflydb');
 
 class STREAMERS {
     constructor() {
-        this.streamerData = new Map();
         this.cache = getClient();
     }
-    
+
     async init() {
-        try {
-            this.cache = getClient();
-            await this.getStreamersFromDB();
-            console.log('Streamers initialized successfully.');
-        } catch (error) {
-            console.error('Error initializing streamers:', error);
-        }
-    };
+        this.cache = getClient();
+        await this.getStreamersFromDB();
+        console.log('Streamers loaded to cache')
+    }
 
     async getStreamersFromDB() {
         try {
             this.cache = getClient();
-            const result = await channelSchema.find({ actived: true }, 'name twitch_user_id twitch_user_token twitch_user_refresh_token actived premium premium_plus refreshedAt');
+            const result = await channelSchema.find({actived: true}, 'name twitch_user_id twitch_user_token twitch_user_refresh_token actived premium premium_plus refreshedAt');
 
-            result.map((item) => {
+            for(let i = 0; i < result.length; i++) {
                 let data = {
-                    name: item.name,
-                    user_id: item.twitch_user_id,
-                    token: item.twitch_user_token,
-                    refresh_token: item.twitch_user_refresh_token,
-                    active: item.actived,
-                    premium: item.premium,
-                    premium_plus: item.premium_plus,
-                    refreshedAt: item.refreshedAt,
+                    name: result[i].name,
+                    user_id: result[i].twitch_user_id,
+                    token: decrypt(result[i].twitch_user_token),
+                    refresh_token: decrypt(result[i].twitch_user_refresh_token),
+                    actived: result[i].actived ? 'true' : 'false',
+                    premium: result[i].premium ? 'true' : 'false',
+                    premium_plus: result[i].premium_plus ? 'true' : 'false',
                 }
-                let cacheData = {
-                    name: item.name,
-                    user_id: item.twitch_user_id,
-                    token: decrypt(item.twitch_user_token),
-                    refresh_token: decrypt(item.twitch_user_refresh_token),
-                    premium: item.premium ? 1 : 0,
-                    premium_plus: item.premium_plus ? 1 : 0,
-                }
-                this.cache.hSet(`${item.name}:streamer:data`, cacheData, { EX: 60 * 60 * 4});
-                this.streamerData.set(data.name, data);
-            });
+                
+                await this.cache.hset(`${result[i].name}:streamer:data`, data);
+            }
+            
         } catch (error) {
-            console.error('Error on getStreamersFromDB:', error)
-            throw error;
+            console.error(`Error getting streamers from DB: ${error}`);
+        }
+    }
+
+    async getStreamerFromDBByName(name) {
+        try {
+            this.cache = getClient();
+            const streamer = await channelSchema.findOne({name: name}, 'name twitch_user_id twitch_user_token twitch_user_refresh_token actived premium premium_plus refreshedAt');
+
+            if (streamer) {
+                let data = {
+                    name: streamer.name,
+                    user_id: streamer.twitch_user_id,
+                    token: decrypt(streamer.twitch_user_token),
+                    refresh_token: decrypt(streamer.twitch_user_refresh_token),
+                    actived: streamer.actived ? 'true' : 'false',
+                    premium: streamer.premium ? 'true' : 'false',
+                    premium_plus: streamer.premium_plus ? 'true' : 'false',
+                }
+
+                await this.cache.hset(`${streamer.name}:streamer:data`, data);
+            }
+        } catch (error) {
+            console.error(`Error getting streamer ${name} from DB: ${error}`);
+        }
+    }
+
+    async getStreamerFromDBById(id) {
+        try {
+            this.cache = getClient();
+            const streamer = await channelSchema.findOne({twitch_user_id: id}, 'name twitch_user_id twitch_user_token twitch_user_refresh_token actived premium premium_plus refreshedAt');
+
+            if (streamer) {
+                let data = {
+                    name: streamer.name,
+                    user_id: streamer.twitch_user_id,
+                    token: decrypt(streamer.twitch_user_token),
+                    refresh_token: decrypt(streamer.twitch_user_refresh_token),
+                    actived: streamer.actived ? 'true' : 'false',
+                    premium: streamer.premium ? 'true' : 'false',
+                    premium_plus: streamer.premium_plus ? 'true' : 'false',
+                }
+                
+
+                await this.cache.hset(`${streamer.name}:streamer:data`, data);
+            }
+        } catch (error) {
+            console.error(`Error getting streamer ${id} from DB: ${error}`);
         }
     }
 
     async getStreamers() {
-        return this.streamerData;
+        const keys = await this.cache.keys('*:streamer:data');
+        let streamers = [];
+
+        for (const key of keys) {
+            streamers.push(await this.cache.hgetall(key));
+        }
+
+        return streamers;
     }
 
-    async getStreamer(name) {
-        return await this.streamerData.get(name);
+    getStreamerByName(name) {
+        return this.cache.hgetall(`${name}:streamer:data`);
     }
 
     async getStreamerById(id) {
+        const keys = await this.cache.keys('*:streamer:data');
         let streamer = null;
-        this.streamerData.forEach((data) => {
+
+        for (const key of keys) {
+            const data = await this.cache.hgetall(key);
             if (data.user_id === id) {
                 streamer = data;
+                break;
             }
-        });
+        }
+
         return streamer;
     }
 
-    async setStreamer(name, data) {
-        this.streamerData.set(name, data);
+    async setStreamer(streamer) {
+        try {
+            await this.cache.hset(`${streamer.name}:streamer:data`, streamer);
+        } catch (error) {
+            console.error(`Error setting streamer ${streamer.name}: ${error}`);
+        }
     }
 
-    async getStreamersNames() {
-        const allNames = Array.from(this.streamerData.keys());
-        return allNames;
+    async deleteStreamer(name) {
+        try {
+            await this.cache.del(`${name}:streamer:data`);
+        } catch (error) {
+            console.error(`Error deleting streamer ${name}: ${error}`);
+        }
     }
 
+    async getStreamerNames() {
+        const keys = await this.cache.keys('*:streamer:data');
+        let names = [];
+
+        keys.forEach(key => {
+            names.push(key.split(':')[0]);
+        });
+
+        return names;
+    }
+    
     async updateStreamers() {
-        await this.getStreamersFromDB();
+        try {
+            await this.getStreamersFromDB();
+            console.log('Streamers updated');
+        } catch (error) {
+            console.error(`Error updating streamers: ${error}`);
+        }
     }
 
-    async getStreamerToken(name) {
-        let data = await this.getStreamer(name);
-        return decrypt({ content: data.token.content, iv: data.token.iv }).toString();
+    async updateStreamerByName(name) {
+        try {
+            await this.getStreamerFromDBByName(name);
+            console.log(`Streamer ${name} updated`);
+        } catch (error) {
+            console.error(`Error updating streamer ${name}: ${error}`);
+        }
+    }
+
+    async updateStreamerById(id) {
+        try {
+            await this.getStreamerFromDBById(id);
+            console.log(`Streamer ${id} updated`);
+        } catch (error) {
+            console.error(`Error updating streamer ${id}: ${error}`);
+        }
+    }
+    
+    async getStreamerTokenByName(name) {
+        const streamer = await this.getStreamerByName(name);
+        return streamer.token;
     }
 
     async getStreamerTokenById(id) {
-        let data = await this.getStreamerById(id);
-        return decrypt({ content: data.token.content, iv: data.token.iv }).toString();
+        const streamer = await this.getStreamerById(id);
+        return streamer.token;
     }
 
-    async getStreamerRefreshToken(name) {
-        let data = await this.getStreamer(name);
-        return decrypt({ content: data.refresh_token.content, iv: data.refresh_token.iv }).toString();
+    async getStreamerRefreshTokenByName(name) {
+        const streamer = await this.getStreamerByName(name);
+        return streamer.refresh_token;
     }
+
+    async getStreamerRefreshTokenById(id) {
+        const streamer = await this.getStreamerById(id);
+        return streamer.refresh_token;
+    }
+    
 }
 
 module.exports = new STREAMERS();
