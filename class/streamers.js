@@ -105,7 +105,6 @@ class STREAMERS {
         
         const keys = await cache.keys('*:streamer:data');
         let streamer = null;
-        console.log(keys);
         for (const key of keys) {
             const data = await cache.hgetall(key);
             if (data.user_id === id) {

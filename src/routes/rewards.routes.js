@@ -51,7 +51,7 @@ router.post('/:channelID', async (req, res) => {
         method: 'POST',
         headers: {
             'Client-ID': process.env.CLIENT_ID,
-            'Authorization': `Bearer ${decrypt(streamer.token)}`,
+            'Authorization': `Bearer ${(streamer.token)}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(twitchBody)
@@ -111,7 +111,7 @@ router.delete('/:channelID/:rewardID', async (req, res) => {
         method: 'DELETE',
         headers: {
             'Client-ID': process.env.CLIENT_ID,
-            'Authorization': `Bearer ${decrypt(streamer.token)}`
+            'Authorization': `Bearer ${(streamer.token)}`
         }
     });
 
@@ -139,7 +139,6 @@ router.patch('/:channelID/:rewardID', async (req, res) => {
     let body = req.body;
 
     const streamer = await STREAMERS.getStreamerById(channelID);
-    console.log({streamer: streamer});
 
     let reward = await rewardSchema.findOne({channelID: channelID, rewardID: rewardID});
     if(!reward) return res.status(404).json({error: true, message: 'Reward not found'});
@@ -163,8 +162,6 @@ router.patch('/:channelID/:rewardID', async (req, res) => {
         },
         body: JSON.stringify(twitchBody)
     })
-
-    console.log({response: response, body: body});
 
     if(response.status !== 200) return res.status(response.status).json({error: true, message: 'Error updating reward'});
 
