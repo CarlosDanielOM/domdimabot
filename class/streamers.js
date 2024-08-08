@@ -101,11 +101,13 @@ class STREAMERS {
     }
 
     async getStreamerById(id) {
-        const keys = await this.cache.keys('*:streamer:data');
+        let cache = getClient();
+        
+        const keys = await cache.keys('*:streamer:data');
         let streamer = null;
-
+        console.log(keys);
         for (const key of keys) {
-            const data = await this.cache.hgetall(key);
+            const data = await cache.hgetall(key);
             if (data.user_id === id) {
                 streamer = data;
                 break;

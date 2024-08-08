@@ -136,6 +136,22 @@ async function init() {
 
   app.get('/dev', async (req, res) => {
     let data = await cache.hget('cdom201:streamer:data', 'token')
+    const keys = await cache.keys('*:streamer:data');
+        let streamer = null;
+
+        console.log(keys)
+        let id = '533538623'
+        
+        for (const key of keys) {
+          console.log(key)
+            const data = await cache.hgetall(key);
+            if (data.user_id === id) {
+                streamer = data;
+                break;
+            }
+        }
+
+        console.log(streamer);
     
     res.status(200).send(data);
   });
