@@ -1,4 +1,4 @@
-const channelSchema = require('../schema/channel');
+const channelSchema = require('../schemas/channel.schema');
 const {decrypt} = require('../util/crypto');
 
 const {getClient} = require('../util/database/dragonflydb');

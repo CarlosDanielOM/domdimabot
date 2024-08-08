@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 
-const STREAMERS = require('../../class/streamers');
+const STREAMERS = require('../../class/streamers')
 const {getTwitchHelixURL} = require('../../util/links')
 const {decrypt} = require('../../util/crypto')
 const {unsubscribeTwitchEvent, subscribeTwitchEvent} = require('../../util/eventsub')
