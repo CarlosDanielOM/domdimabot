@@ -5,10 +5,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sumimetro Supremo</title>
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+        }
+
+        #container {
+            width: 350px;
+            height: 100px;
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 2rem;
+            text-align: center;
+            position: relative;
+            right: 0;
+        }
+
+        animate {
+            animation: rotation 5s infinite;
+            transition: all 0.5s;
+        }
+
+        @keyframes rotation {
+            0% {
+                right: -400px;
+            }
+            50% {
+                right: 0px;
+            }
+            100% {
+                right: 400px;
+            }
+        }
+    </style>
 </head>
 
 <body style="color: white;">
-    <h1 id="supremo"></h1>
+    <div id="container">
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
     <script>
         const type = window.location.pathname.split('/')[2];
@@ -17,12 +56,45 @@
         const socket = io.connect('https://api.domdimabot.com/', { reconnection: true, transports: ['websocket'] });
         const supremoSocket = io(`/sumimetro/${type}/${channel}`, { reconnection: true, transports: ['websocket'] });
 
+        let animationFrame = null;
+        let animation = false;
+        let container = document.getElementById('container');
+
         supremoSocket.on('sumimetro', (data) => {
             let { username, value } = data;
-            console.log(data);
+            let h1 = document.createElement('h1');
             let text = `${username}: ${value}%`;
             let title = `${type.toUpperCase()} Supremo`;
-            document.getElementById('supremo').innerHTML = text;
+            h1.innerHTML = text;
+            h1.id = 'supremo';
+
+            if(username.length > 7) {
+                // document.getElementById('supremo').classList.add('animate');
+                container.innerHTML = '';
+                animationFrame = setInterval(() => {
+                    let h1 = document.createElement('h1');
+                    let text = `${username}: ${value}%`;
+                    let title = `${type.toUpperCase()} Supremo`;
+                    h1.innerHTML = text;
+                    h1.id = 'supremo';
+                    h1.style.animation = 'rotation 5s';
+                    h1.style.right = '-400px'
+                    container.appendChild(h1);
+                    setTimeout(() => {
+                        container.removeChild(h1);
+                    }, 4500);
+                }, 4000);
+                animation = true;
+            } else {
+                // document.getElementById('supremo').classList.remove('animate');
+                container.innerHTML = '';
+                container.appendChild(h1);
+                if(animation) {
+                    clearInterval(animationFrame);
+                    animation = false;
+                }
+            }
+            
         })
 
         supremoSocket.on('active', () => {
