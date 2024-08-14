@@ -77,10 +77,26 @@ async function init() {
     io.of(`/speach/${channel}`).emit('speach', { id });
   });
 
-  io.of(/^\/sumimetro\/\w+\/\w+$/).on('connection', (socket) => {
+  io.of(/^\/sumimetro\/\w+\/\w+$/).on('connection', async (socket) => {
+    let cacheClient = dragonFlyDB.getClient();
     const type = socket.nsp.name.split('/')[2];
     const channel = socket.nsp.name.split('/')[3];
     io.of(`/sumimetro/${type}/${channel}`).emit('active');
+
+    if(type == 'sumiso') {
+      let value = await cacheClient.hget(`${channel}:sumimetro:submissive`, 'value');
+      let username = await cacheClient.hget(`${channel}:sumimetro:submissive`, 'username');
+
+      io.of(`/sumimetro/${type}/${channel}`).emit('sumimetro', { username, value });
+    }
+
+    if(type == 'dominante') {
+      let value = await cacheClient.hget(`${channel}:sumimetro:dominant`, 'value');
+      let username = await cacheClient.hget(`${channel}:sumimetro:dominant`, 'username');
+
+      io.of(`/sumimetro/${type}/${channel}`).emit('sumimetro', { username, value });
+    }
+    
   });
 
   io.of(/^\/overlays\/triggers\/\w+$/).on('connection', (socket) => {

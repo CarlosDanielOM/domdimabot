@@ -70,6 +70,10 @@
 
             if(username.length > 7) {
                 // document.getElementById('supremo').classList.add('animate');
+                if(animation) {
+                    clearInterval(animationFrame);
+                    animation = false;
+                }
                 container.innerHTML = '';
                 animationFrame = setInterval(() => {
                     let h1 = document.createElement('h1');
