@@ -14,13 +14,13 @@ let header = {
 }
 
 async function getStreamerHeader(streamer) {
-    let streamerToken = await STREAMER.getStreamerToken(streamer);
+    let streamerToken = await STREAMER.getStreamerTokenByName(streamer);
     header.Authorization = `Bearer ${streamerToken}`;
     return header;
 }
 
 async function getBotHeader() {
-    let botToken = await STREAMER.getStreamerToken('domdimabot');
+    let botToken = await STREAMER.getStreamerTokenByName('domdimabot');
     botHeaders.Authorization = `Bearer ${botToken}`;
     return botHeaders;
 }
